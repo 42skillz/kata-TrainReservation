@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1F6CFC8E-CA97-4694-AE77-FA9D922E4099}</ProjectGuid>
+    <ProjectGuid>{9D20346D-AD57-40AA-A438-59D8245F8AA3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TrainReservation.Domain</RootNamespace>
-    <AssemblyName>TrainReservation.Domain</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>Value</RootNamespace>
+    <AssemblyName>Value</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -36,24 +36,21 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IProvideBookingReferences.cs" />
-    <Compile Include="IProvideTrainData.cs" />
+    <Compile Include="EquatableByValue.cs" />
+    <Compile Include="SetByValue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reservation.cs" />
-    <Compile Include="ReservationRequest.cs" />
-    <Compile Include="Seat.cs" />
-    <Compile Include="TicketOffice.cs" />
-    <Compile Include="Value\EquatableByValue.cs" />
-    <Compile Include="Value\ListByValue.cs" />
-    <Compile Include="Value\SetByValue.cs" />
-    <Compile Include="Value\ValueType.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Value\Value.csproj" />
+    <Compile Include="ValueType.cs" />
+    <Compile Include="ListByValue.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>

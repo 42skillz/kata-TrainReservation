@@ -2,13 +2,13 @@
 {
     public class Seat
     {
-        public string Coach { get; private set; }
-        public int SeatNumber { get; private set; }
+        public string Coach { get; }
+        public int SeatNumber { get; }
 
         public Seat(string coach, int seatNumber)
         {
-            this.Coach = coach;
-            this.SeatNumber = seatNumber;
+            Coach = coach;
+            SeatNumber = seatNumber;
         }
 
         public override int GetHashCode()
@@ -21,9 +21,9 @@
         /// </summary>
         public override bool Equals(object obj)
         {
-            Seat other = obj as Seat;
+            var other = obj as Seat;
 
-            return this.Coach == other.Coach && this.SeatNumber == other.SeatNumber;
+            return Coach == other.Coach && SeatNumber == other.SeatNumber;
         }
     }
 }

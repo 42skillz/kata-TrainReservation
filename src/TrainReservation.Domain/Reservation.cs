@@ -5,15 +5,15 @@ namespace TrainReservation
 {
     public class Reservation
     {
-        public string TrainId { get; private set; }
-        public string BookingId { get; private set; }
-        public List<Seat> Seats { get; private set; }
+        public string TrainId { get; }
+        public string BookingId { get; }
+        public List<Seat> Seats { get; }
 
         public Reservation(string trainId, string bookingId, List<Seat> seats)
         {
-            this.TrainId = trainId;
-            this.BookingId = bookingId;
-            this.Seats = seats;
+            TrainId = trainId;
+            BookingId = bookingId;
+            Seats = seats;
         }
     }
 }

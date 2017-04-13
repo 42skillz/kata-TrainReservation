@@ -2,13 +2,13 @@
 {
     public class ReservationRequest
     {
-        public string TrainId { get; private set; }
-        public int SeatCount { get; private set; }
+        public string TrainId { get; }
+        public int SeatCount { get; }
 
         public ReservationRequest(string trainId, int seatCount)
         {
-            this.TrainId = trainId;
-            this.SeatCount = seatCount;
+            TrainId = trainId;
+            SeatCount = seatCount;
         }
     }
 }
