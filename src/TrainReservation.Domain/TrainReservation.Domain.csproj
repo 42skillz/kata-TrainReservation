@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4FE3D69C-3DE0-40B5-BDDA-0AA082A8763E}</ProjectGuid>
+    <ProjectGuid>{1F6CFC8E-CA97-4694-AE77-FA9D922E4099}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TrainReservation</RootNamespace>
-    <AssemblyName>TrainReservation</AssemblyName>
+    <RootNamespace>TrainReservation.Domain</RootNamespace>
+    <AssemblyName>TrainReservation.Domain</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

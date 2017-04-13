@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using KataTrainReservation;
 
-namespace KataTrainReservation
+namespace TrainReservation
 {
     public class Reservation
     {
