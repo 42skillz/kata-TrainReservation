@@ -16,7 +16,7 @@ namespace TrainReservation.Tests
             // setup mocks
             var expectedBookingId = "75bcd15";
             var bookingReferenceProvider = Substitute.For<IProvideBookingReferences>();
-            bookingReferenceProvider.GetBookingReference().Returns(expectedBookingId);
+            bookingReferenceProvider.GetBookingReference().Returns(new BookingReference(expectedBookingId));
 
             var trainId = "express_2000";
             var trainDataProvider = Substitute.For<IProvideTrainData>();
@@ -27,7 +27,7 @@ namespace TrainReservation.Tests
             var reservation = ticketOffice.MakeReservation(new ReservationRequest(trainId, 3));
 
             Check.That(reservation.TrainId).IsEqualTo(trainId);
-            Check.That(reservation.BookingId).IsEqualTo(expectedBookingId);
+            Check.That(reservation.BookingReference.Value).IsEqualTo(expectedBookingId);
             Check.That(reservation.Seats).ContainsExactly(new Seat("A", 1), new Seat("A", 2), new Seat("A", 3));
         }
 
@@ -37,7 +37,7 @@ namespace TrainReservation.Tests
             // setup mocks
             var expectedBookingId = "75bcd15";
             var bookingReferenceProvider = Substitute.For<IProvideBookingReferences>();
-            bookingReferenceProvider.GetBookingReference().Returns(expectedBookingId);
+            bookingReferenceProvider.GetBookingReference().Returns(new BookingReference(expectedBookingId));
 
             var trainId = "express_2000";
             var trainDataProvider = Substitute.For<IProvideTrainData>();
@@ -48,10 +48,10 @@ namespace TrainReservation.Tests
             var reservation = ticketOffice.MakeReservation(new ReservationRequest(trainId, 1));
 
             Check.That(reservation.TrainId).IsEqualTo(trainId);
-            Check.That(reservation.BookingId).IsEqualTo(expectedBookingId);
+            Check.That(reservation.BookingReference.Value).IsEqualTo(expectedBookingId);
             Check.That(reservation.Seats).ContainsExactly(new Seat("A", 2));
 
-            trainDataProvider.Received().MarkSeatsAsReserved(trainId, new BookingReference(reservation.BookingId), new List<Seat>(){new Seat("A", 2)});
+            trainDataProvider.Received().MarkSeatsAsReserved(trainId, reservation.BookingReference, reservation.Seats);
         }
     }
 }

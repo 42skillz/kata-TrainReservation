@@ -30,6 +30,8 @@ namespace TrainReservation.Domain
     public class BookingReference : ValueType<BookingReference>
     {
         private readonly string bookingReference;
+        public string Value { get { return this.bookingReference; } }
+
         private static readonly BookingReference nullReference = new BookingReference(string.Empty);
 
         public BookingReference(string bookingReference)

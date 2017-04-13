@@ -2,6 +2,6 @@
 {
     public interface IProvideBookingReferences
     {
-        string GetBookingReference();
+        BookingReference GetBookingReference();
     }
 }

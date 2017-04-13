@@ -30,6 +30,9 @@ namespace TrainReservation.Domain
             if (reservedSeats.Count > 0)
             {
                 var bookingReference = bookingReferenceProvider.GetBookingReference();
+
+                this.trainDataProvider.MarkSeatsAsReserved(request.TrainId, bookingReference, reservedSeats);
+
                 return new Reservation(request.TrainId, bookingReference, reservedSeats);
             }
 
