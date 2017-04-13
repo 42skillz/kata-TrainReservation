@@ -40,12 +40,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BookingReference.cs" />
     <Compile Include="IProvideBookingReferences.cs" />
     <Compile Include="IProvideTrainData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reservation.cs" />
     <Compile Include="ReservationRequest.cs" />
     <Compile Include="Seat.cs" />
+    <Compile Include="SeatWithBookingReference.cs" />
     <Compile Include="TicketOffice.cs" />
     <Compile Include="Value\EquatableByValue.cs" />
     <Compile Include="Value\ListByValue.cs" />

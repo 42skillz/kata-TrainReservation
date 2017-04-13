@@ -12,7 +12,6 @@ namespace TrainReservation
 
         public Reservation(string trainId, string bookingReference, List<Seat> seats) : this(trainId, new BookingReference(bookingReference), seats)
         {
-            
         }
 
         public Reservation(string trainId, BookingReference bookingReference, List<Seat> seats)

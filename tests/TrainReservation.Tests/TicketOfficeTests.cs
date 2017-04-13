@@ -51,6 +51,7 @@ namespace TrainReservation.Tests
             Check.That(reservation.BookingReference.Value).IsEqualTo(expectedBookingId);
             Check.That(reservation.Seats).ContainsExactly(new Seat("A", 2));
 
+            // Check that the train data mock has been called to persist this reservation
             trainDataProvider.Received().MarkSeatsAsReserved(trainId, reservation.BookingReference, reservation.Seats);
         }
     }

@@ -31,7 +31,7 @@ namespace TrainReservation.Domain
             {
                 var bookingReference = bookingReferenceProvider.GetBookingReference();
 
-                this.trainDataProvider.MarkSeatsAsReserved(request.TrainId, bookingReference, reservedSeats);
+                trainDataProvider.MarkSeatsAsReserved(request.TrainId, bookingReference, reservedSeats);
 
                 return new Reservation(request.TrainId, bookingReference, reservedSeats);
             }
