@@ -11,6 +11,11 @@
             SeatNumber = seatNumber;
         }
 
+        public override string ToString()
+        {
+            return $"{this.Coach}{this.SeatNumber}";
+        }
+
         public override int GetHashCode()
         {
             return base.GetHashCode();
