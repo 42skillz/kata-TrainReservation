@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using KataTrainReservation;
+﻿using KataTrainReservation;
 
 namespace TrainReservation.Domain
 {
@@ -16,27 +15,20 @@ namespace TrainReservation.Domain
 
         public Reservation MakeReservation(ReservationRequest request)
         {
-            var reservedSeats = new List<Seat>();
+            var train = trainDataProvider.GetTrain(request.TrainId);
+            var option = train.Reserve(request.SeatCount);
 
-            var seats = trainDataProvider.GetSeats(request.TrainId);
-            foreach (var seatWithBookingReference in seats)
-            {
-                if (seatWithBookingReference.IsAvailable())
-                {
-                    reservedSeats.Add(seatWithBookingReference.Seat);
-                }
-            }
-
-            if (reservedSeats.Count > 0)
+            if (option.Fullfiled)
             {
                 var bookingReference = bookingReferenceProvider.GetBookingReference();
 
-                trainDataProvider.MarkSeatsAsReserved(request.TrainId, bookingReference, reservedSeats);
-
-                return new Reservation(request.TrainId, bookingReference, reservedSeats);
+                trainDataProvider.MarkSeatsAsReserved(request.TrainId, bookingReference, option.ReservedSeats);
+                return new Reservation(request.TrainId, bookingReference, option.ReservedSeats);
             }
-
-            return new Reservation(request.TrainId, string.Empty, reservedSeats);
+            else
+            {
+                return new Reservation(request.TrainId);
+            }
         }
     }
 }

@@ -1,24 +1,29 @@
 ﻿using System.Collections.Generic;
-using KataTrainReservation;
 using TrainReservation.Domain;
+using Value;
 
 namespace TrainReservation
 {
-    public class Reservation
+    public class Reservation : ValueType<Reservation>
     {
         public string TrainId { get; }
         public BookingReference BookingReference { get; }
-        public List<Seat> Seats { get; }
+        public Seats Seats { get; }
 
-        public Reservation(string trainId, string bookingReference, List<Seat> seats) : this(trainId, new BookingReference(bookingReference), seats)
+        public Reservation(string trainId, BookingReference bookingReference, Seats seats)
+        {
+            this.TrainId = trainId;
+            this.BookingReference = bookingReference;
+            this.Seats = seats;
+        }
+
+        public Reservation(string trainId) : this(trainId, BookingReference.Null, new Seats())
         {
         }
 
-        public Reservation(string trainId, BookingReference bookingReference, List<Seat> seats)
+        protected override IEnumerable<object> GetAllAttributesToBeUsedForEquality()
         {
-            TrainId = trainId;
-            BookingReference = bookingReference;
-            Seats = seats;
+            return new List<object>(){ this.TrainId, this.BookingReference, this.Seats };
         }
     }
 }
