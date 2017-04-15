@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using KataTrainReservation;
 using NFluent;
 using NSubstitute;
-using NSubstitute.Core;
 using NUnit.Framework;
 using TrainReservation.Domain;
 
@@ -58,14 +56,16 @@ namespace TrainReservation.Tests
 
         private static IProvideBookingReferences InstantiateBookingReferenceProviderMock(string[] expectedBookingIds)
         {
-            List<BookingReference> expectedBookingReferences = new List<BookingReference>();
+            var expectedBookingReferences = new List<BookingReference>();
             foreach (var bookingId in expectedBookingIds)
             {
                 expectedBookingReferences.Add(new BookingReference(bookingId));
             }
+
             var bookingReferenceProvider = Substitute.For<IProvideBookingReferences>();
 
-            bookingReferenceProvider.GetBookingReference().Returns(expectedBookingReferences.First(), expectedBookingReferences.GetRange(1, expectedBookingReferences.Count-1).ToArray());
+            bookingReferenceProvider.GetBookingReference()
+                .Returns(expectedBookingReferences.First(), expectedBookingReferences.GetRange(1, expectedBookingReferences.Count - 1).ToArray());
             return bookingReferenceProvider;
         }
 
@@ -93,7 +93,8 @@ namespace TrainReservation.Tests
 
             Check.That(reservation.TrainId).IsEqualTo(trainId);
             Check.That(reservation.BookingReference.Value).IsEqualTo(expectedBookingId);
-            Check.That(reservation.Seats).ContainsExactly(new Seat("A", 1), new Seat("A", 2), new Seat("A", 3), new Seat("A", 4), new Seat("A", 5), new Seat("A", 6), new Seat("A", 7));
+            Check.That(reservation.Seats)
+                .ContainsExactly(new Seat("A", 1), new Seat("A", 2), new Seat("A", 3), new Seat("A", 4), new Seat("A", 5), new Seat("A", 6), new Seat("A", 7));
         }
 
         [Test]
@@ -122,23 +123,21 @@ namespace TrainReservation.Tests
             // setup mocks
             var firstBookingId = "75bcd15";
             var secondBookingId = "9904fgG6";
-            
-            var bookingReferenceProvider = InstantiateBookingReferenceProviderMock(new []{ firstBookingId , secondBookingId });
+
+            var bookingReferenceProvider = InstantiateBookingReferenceProviderMock(new[] {firstBookingId, secondBookingId});
 
             var trainId = "express_2000";
             var trainDataProvider = Substitute.For<IProvideTrainData>();
             var train = TrainProviderHelper.GetTrainWith2CoachesAnd2IndividualSeatsAvailable(trainId);
             trainDataProvider.GetTrainSnapshot(trainId).Returns(train, train);
-            trainDataProvider.WhenForAnyArgs(x=>x.MarkSeatsAsReserved(trainId, Arg.Any<BookingReference>(), Arg.Any<Seats>()))
-                .Do( y => {
-                            // update train with Seats reservation
+            trainDataProvider.WhenForAnyArgs(x => x.MarkSeatsAsReserved(trainId, Arg.Any<BookingReference>(), Arg.Any<Seats>()))
+                .Do(y =>
+                {
+                    // update train with Seats reservation
                     foreach (var seat in y.Arg<Seats>())
                     {
-                        
                     }
-
-                    
-                        });
+                });
 
             // act
             // First reservation
@@ -148,7 +147,7 @@ namespace TrainReservation.Tests
             // Must be located in the remaining seat of 1st coach
             Check.That(firstReservation.TrainId).IsEqualTo(trainId);
             Check.That(firstReservation.BookingReference.Value).IsEqualTo(firstBookingId);
-            Check.That(firstReservation.Seats).ContainsExactly(new Seat("A",7));
+            Check.That(firstReservation.Seats).ContainsExactly(new Seat("A", 7));
 
             // Second reservation
             var secondReservation = ticketOffice.MakeReservation(new ReservationRequest(trainId, 1));

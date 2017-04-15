@@ -1,4 +1,4 @@
-﻿namespace KataTrainReservation
+﻿namespace TrainReservation.Domain
 {
     public class ReservationRequest
     {

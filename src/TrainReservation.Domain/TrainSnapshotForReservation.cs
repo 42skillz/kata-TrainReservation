@@ -28,7 +28,7 @@ namespace TrainReservation.Domain
                 return option;
             }
 
-            if (requestedSeatCount > MaxReservableSeatsFollowingThePolicy )
+            if (requestedSeatCount > MaxReservableSeatsFollowingThePolicy)
             {
                 return option;
             }
@@ -50,7 +50,7 @@ namespace TrainReservation.Domain
 
         public int OverallTrainCapacity => seatsWithBookingReferences.Count();
 
-        public int MaxReservableSeatsFollowingThePolicy => (int)Math.Round(OverallTrainCapacity * SeventyPercent);
+        public int MaxReservableSeatsFollowingThePolicy => (int) Math.Round(OverallTrainCapacity * SeventyPercent);
 
         public int AvailableSeatsCount
         {

@@ -1,6 +1,4 @@
-﻿using KataTrainReservation;
-
-namespace TrainReservation.Domain
+﻿namespace TrainReservation.Domain
 {
     public class TicketOffice
     {
