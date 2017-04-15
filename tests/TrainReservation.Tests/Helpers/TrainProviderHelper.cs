@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using TrainReservation.Domain;
 
-namespace TrainReservation.Tests
+namespace TrainReservation.Tests.Helpers
 {
     internal static class TrainProviderHelper
     {

@@ -1,5 +1,6 @@
 ﻿using NFluent;
 using NUnit.Framework;
+using TrainReservation.Tests.Helpers;
 
 namespace TrainReservation.Tests
 {

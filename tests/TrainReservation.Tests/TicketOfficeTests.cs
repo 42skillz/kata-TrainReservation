@@ -4,6 +4,7 @@ using NFluent;
 using NSubstitute;
 using NUnit.Framework;
 using TrainReservation.Domain;
+using TrainReservation.Tests.Helpers;
 
 namespace TrainReservation.Tests
 {
@@ -127,17 +128,7 @@ namespace TrainReservation.Tests
             var bookingReferenceProvider = InstantiateBookingReferenceProviderMock(new[] {firstBookingId, secondBookingId});
 
             var trainId = "express_2000";
-            var trainDataProvider = Substitute.For<IProvideTrainData>();
-            var train = TrainProviderHelper.GetTrainWith2CoachesAnd2IndividualSeatsAvailable(trainId);
-            trainDataProvider.GetTrainSnapshot(trainId).Returns(train, train);
-            trainDataProvider.WhenForAnyArgs(x => x.MarkSeatsAsReserved(trainId, Arg.Any<BookingReference>(), Arg.Any<Seats>()))
-                .Do(y =>
-                {
-                    // update train with Seats reservation
-                    foreach (var seat in y.Arg<Seats>())
-                    {
-                    }
-                });
+            var trainDataProvider = new TrainDataProviderMock(TrainProviderHelper.GetTrainWith2CoachesAnd2IndividualSeatsAvailable(trainId));
 
             // act
             // First reservation

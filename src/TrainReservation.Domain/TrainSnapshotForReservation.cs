@@ -33,7 +33,7 @@ namespace TrainReservation.Domain
                 return option;
             }
 
-            foreach (var seat in seatsWithBookingReferences)
+            foreach (var seat in SeatsWithBookingReferences)
             {
                 if (seat.IsAvailable)
                 {
@@ -48,7 +48,7 @@ namespace TrainReservation.Domain
             return option;
         }
 
-        public int OverallTrainCapacity => seatsWithBookingReferences.Count();
+        public int OverallTrainCapacity => SeatsWithBookingReferences.Count();
 
         public int MaxReservableSeatsFollowingThePolicy => (int) Math.Round(OverallTrainCapacity * SeventyPercent);
 
@@ -57,7 +57,7 @@ namespace TrainReservation.Domain
             get
             {
                 var availableSeatsCount = 0;
-                foreach (var seatWithBookingReference in seatsWithBookingReferences)
+                foreach (var seatWithBookingReference in SeatsWithBookingReferences)
                 {
                     if (seatWithBookingReference.IsAvailable)
                     {
@@ -67,6 +67,11 @@ namespace TrainReservation.Domain
 
                 return availableSeatsCount;
             }
+        }
+
+        public IEnumerable<SeatWithBookingReference> SeatsWithBookingReferences
+        {
+            get { return seatsWithBookingReferences; }
         }
     }
 }
