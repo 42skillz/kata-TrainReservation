@@ -19,25 +19,25 @@ namespace TrainReservation.Domain
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.seats.GetEnumerator();
+            return seats.GetEnumerator();
         }
 
         public IEnumerator<Seat> GetEnumerator()
         {
-            return this.seats.GetEnumerator();
+            return seats.GetEnumerator();
         }
 
         protected override IEnumerable<object> GetAllAttributesToBeUsedForEquality()
         {
-            return new List<object>() { new ListByValue<Seat>(this.seats) };
+            return new List<object>() {new ListByValue<Seat>(seats)};
         }
 
         public void Add(Seat seat)
         {
-            this.seats.Add(seat);
+            seats.Add(seat);
         }
 
-        public int Count => this.seats.Count;
+        public int Count => seats.Count;
     }
 
     public class Seat
@@ -53,7 +53,7 @@ namespace TrainReservation.Domain
 
         public override string ToString()
         {
-            return $"{this.Coach}{this.SeatNumber}";
+            return $"{Coach}{SeatNumber}";
         }
 
         public override int GetHashCode()

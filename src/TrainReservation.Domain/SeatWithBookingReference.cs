@@ -1,6 +1,4 @@
-﻿using KataTrainReservation;
-
-namespace TrainReservation.Domain
+﻿namespace TrainReservation.Domain
 {
     public class SeatWithBookingReference
     {
@@ -13,9 +11,6 @@ namespace TrainReservation.Domain
             BookingReference = bookingReference;
         }
 
-        public bool IsAvailable()
-        {
-            return BookingReference.Equals(BookingReference.Null);
-        }
+        public bool IsAvailable { get { return BookingReference.Equals(BookingReference.Null); } }
     }
 }

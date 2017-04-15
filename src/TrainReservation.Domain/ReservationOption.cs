@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using KataTrainReservation;
-
 namespace TrainReservation.Domain
 {
     public class ReservationOption
@@ -8,25 +5,30 @@ namespace TrainReservation.Domain
         private readonly string trainId;
         private readonly int requestSeatCount;
         private readonly Seats reservedSeats;
-        public bool Fullfiled { get; private set; }
-        public Seats ReservedSeats { get { return this.reservedSeats; } }
+        public bool IsFullfiled { get; private set; }
+        public Seats ReservedSeats { get { return reservedSeats; } }
 
         public ReservationOption(string trainId, int requestSeatCount)
         {
             this.trainId = trainId;
             this.requestSeatCount = requestSeatCount;
-            this.reservedSeats = new Seats();
+            reservedSeats = new Seats();
         }
 
         public void AddSeatReservation(Seat seat)
         {
-            if (!this.Fullfiled)
+            if (!IsFullfiled)
             {
-                this.reservedSeats.Add(seat);
-                if (this.reservedSeats.Count == this.requestSeatCount)
-                {
-                    this.Fullfiled = true;
-                }
+                reservedSeats.Add(seat);
+                MarkAsFullfiledWhenAllRequestedSeatsAreReserved();
+            }
+        }
+
+        private void MarkAsFullfiledWhenAllRequestedSeatsAreReserved()
+        {
+            if (reservedSeats.Count == requestSeatCount)
+            {
+                IsFullfiled = true;
             }
         }
     }

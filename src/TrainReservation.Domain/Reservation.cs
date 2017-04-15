@@ -12,9 +12,9 @@ namespace TrainReservation
 
         public Reservation(string trainId, BookingReference bookingReference, Seats seats)
         {
-            this.TrainId = trainId;
-            this.BookingReference = bookingReference;
-            this.Seats = seats;
+            TrainId = trainId;
+            BookingReference = bookingReference;
+            Seats = seats;
         }
 
         public Reservation(string trainId) : this(trainId, BookingReference.Null, new Seats())
@@ -23,7 +23,7 @@ namespace TrainReservation
 
         protected override IEnumerable<object> GetAllAttributesToBeUsedForEquality()
         {
-            return new List<object>(){ this.TrainId, this.BookingReference, this.Seats };
+            return new List<object>() {TrainId, BookingReference, Seats};
         }
     }
 }

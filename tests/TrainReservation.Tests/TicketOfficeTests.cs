@@ -55,7 +55,7 @@ namespace TrainReservation.Tests
         }
 
         [Test]
-        public void Should_not_reserve_more_than_70_percent_of_seats_for_overall_train()
+        public void Should_be_able_to_reserve_70_percent_of_overall_train_seats_capacity()
         {
             // setup mocks
             var expectedBookingId = "75bcd15";
@@ -68,7 +68,7 @@ namespace TrainReservation.Tests
 
             // act
             var ticketOffice = new TicketOffice(bookingReferenceProvider, trainDataProvider);
-            var reservation = ticketOffice.MakeReservation(new ReservationRequest(trainId, 10));
+            var reservation = ticketOffice.MakeReservation(new ReservationRequest(trainId, 7));
 
             Check.That(reservation.TrainId).IsEqualTo(trainId);
             Check.That(reservation.BookingReference.Value).IsEqualTo(expectedBookingId);

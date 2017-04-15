@@ -18,7 +18,7 @@ namespace TrainReservation.Domain
             var train = trainDataProvider.GetTrain(request.TrainId);
             var option = train.Reserve(request.SeatCount);
 
-            if (option.Fullfiled)
+            if (option.IsFullfiled)
             {
                 var bookingReference = bookingReferenceProvider.GetBookingReference();
 
