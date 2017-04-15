@@ -15,7 +15,7 @@ namespace TrainReservation.Domain
 
         public Reservation MakeReservation(ReservationRequest request)
         {
-            var train = trainDataProvider.GetTrain(request.TrainId);
+            var train = trainDataProvider.GetTrainSnapshot(request.TrainId);
             var option = train.Reserve(request.SeatCount);
 
             if (option.IsFullfiled)

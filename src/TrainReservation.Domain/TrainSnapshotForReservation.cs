@@ -1,15 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TrainReservation.Domain
 {
-    public class Train
+    /// <summary>
+    /// Aggregate allowing seat allocation during reservations following the business rules defined with the domain experts. 
+    /// </summary>
+    public class TrainSnapshotForReservation
     {
         private const double SeventyPercent = 0.70d;
-        private readonly List<SeatWithBookingReference> seatsWithBookingReferences;
+        private readonly IEnumerable<SeatWithBookingReference> seatsWithBookingReferences;
         public string TrainId { get; }
 
-        public Train(string trainId, List<SeatWithBookingReference> seatsWithBookingReferences)
+        public TrainSnapshotForReservation(string trainId, IEnumerable<SeatWithBookingReference> seatsWithBookingReferences)
         {
             this.seatsWithBookingReferences = seatsWithBookingReferences;
             TrainId = trainId;
@@ -19,12 +23,12 @@ namespace TrainReservation.Domain
         {
             var option = new ReservationOption(TrainId, requestedSeatCount);
 
-            if (AvailableSeatsCount < requestedSeatCount)
+            if (requestedSeatCount > AvailableSeatsCount)
             {
                 return option;
             }
 
-            if (AvailableSeatsCount - requestedSeatCount > MaxReservableSeatsFollowingThePolicy)
+            if (requestedSeatCount > MaxReservableSeatsFollowingThePolicy )
             {
                 return option;
             }
@@ -44,7 +48,7 @@ namespace TrainReservation.Domain
             return option;
         }
 
-        public int OverallTrainCapacity { get { return seatsWithBookingReferences.Count; } }
+        public int OverallTrainCapacity => seatsWithBookingReferences.Count();
 
         public int MaxReservableSeatsFollowingThePolicy => (int)Math.Round(OverallTrainCapacity * SeventyPercent);
 

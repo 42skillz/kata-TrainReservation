@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace TrainReservation.Tests
 {
     [TestFixture]
-    public class TrainTests
+    public class TrainSnapshotForReservationTests
     {
         [Test]
         public void Should_be_able_to_reserve_70_percent_of_overall_train_capacity()
