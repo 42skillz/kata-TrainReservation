@@ -3,10 +3,10 @@ using NUnit.Framework;
 using TrainReservation.Domain.Core;
 using TrainReservation.Mocks;
 
-namespace TrainReservation.Tests
+namespace TrainReservation.Tests.Unit.Core
 {
     [TestFixture]
-    public class CoachTests
+    public class CoachSnapshotForReservationTests
     {
         [Test]
         public void Should_say_it_has_enough_available_seats_when_below_70_percent_of_its_capacity()

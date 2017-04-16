@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using TrainReservation.Mocks;
 
-namespace TrainReservation.Tests
+namespace TrainReservation.Tests.Unit.Core
 {
     [TestFixture]
     public class TrainSnapshotForReservationTests
