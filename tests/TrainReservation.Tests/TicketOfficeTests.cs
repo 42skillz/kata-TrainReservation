@@ -41,7 +41,7 @@ namespace TrainReservation.Tests
 
             var trainId = "express_2000";
             var trainDataProvider = Substitute.For<IProvideTrainData>();
-            trainDataProvider.GetTrainSnapshot(trainId).Returns(TrainProviderHelper.GetTrainWith1Coach3SeatsIncluding1Available(trainId));
+            trainDataProvider.GetTrainSnapshot(trainId).Returns(TrainProviderHelper.GetTrainWith1CoachAnd10SeatsAvailable(trainId));
 
             // act
             var ticketOffice = new TicketOffice(bookingReferenceProvider, trainDataProvider);
@@ -49,7 +49,7 @@ namespace TrainReservation.Tests
 
             Check.That(reservation.TrainId).IsEqualTo(trainId);
             Check.That(reservation.BookingReference.Value).IsEqualTo(expectedBookingId);
-            Check.That(reservation.Seats).ContainsExactly(new Seat("A", 2));
+            Check.That(reservation.Seats).ContainsExactly(new Seat("A", 1));
 
             // Check that the train data mock has been called to persist this reservation
             trainDataProvider.Received().MarkSeatsAsReserved(trainId, reservation.BookingReference, reservation.Seats);
