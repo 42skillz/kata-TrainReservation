@@ -34,7 +34,20 @@ namespace TrainReservation.Infra.Cli.Adapters
         private static string SerializeSeats(Seats seats)
         {
             var result = new StringBuilder();
-            
+
+            var firstElement = true;
+            foreach (var seat in seats)
+            {
+                if (!firstElement)
+                {
+                    result.Append(", ");
+                }
+                
+                result.Append($"\"{seat.SeatNumber}{seat.Coach}\"");
+
+                firstElement = false;
+            }
+
             return result.ToString();
         }
     }
