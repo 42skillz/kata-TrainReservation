@@ -73,7 +73,7 @@ namespace TrainReservation.Tests.Helpers
                 new SeatWithBookingReference(new Seat("A", 7), BookingReference.Null),
                 new SeatWithBookingReference(new Seat("A", 8), BookingReference.Null),
                 new SeatWithBookingReference(new Seat("A", 9), BookingReference.Null),
-                new SeatWithBookingReference(new Seat("A", 10), BookingReference.Null)                
+                new SeatWithBookingReference(new Seat("A", 10), BookingReference.Null)
             };
         }
     }

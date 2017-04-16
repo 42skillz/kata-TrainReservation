@@ -34,7 +34,7 @@ namespace TrainReservation.Domain.Core
 
         protected override IEnumerable<object> GetAllAttributesToBeUsedForEquality()
         {
-            return new object[] {this.trainId, new ListByValue<SeatWithBookingReference>(this.Seats) };
+            return new object[] {trainId, new ListByValue<SeatWithBookingReference>(Seats)};
         }
 
         public bool HasEnoughAvailableSeatsIfWeFollowTheIdealPolicy(int requestedSeatCount)

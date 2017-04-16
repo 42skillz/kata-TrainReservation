@@ -18,7 +18,7 @@ namespace TrainReservation.Domain
 
         protected override IEnumerable<object> GetAllAttributesToBeUsedForEquality()
         {
-            return new object[] { this.Seat, this.BookingReference };
+            return new object[] {Seat, BookingReference};
         }
 
         public override string ToString()

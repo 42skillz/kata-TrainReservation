@@ -156,7 +156,7 @@ namespace TrainReservation.Tests
             var firstBookingId = "75bcd15";
             var secondBookingId = "9904fgG6";
 
-            var bookingReferenceProvider = InstantiateBookingReferenceProviderMock(new[] { firstBookingId, secondBookingId });
+            var bookingReferenceProvider = InstantiateBookingReferenceProviderMock(new[] {firstBookingId, secondBookingId});
 
             var trainId = "express_2000";
             var trainDataProvider = new TrainDataProviderMock(TrainProviderHelper.GetTrainWith2CoachesAnd2IndividualSeatsAvailable(trainId));
@@ -170,6 +170,5 @@ namespace TrainReservation.Tests
             Check.That(firstReservation.BookingReference.Value).IsEqualTo(firstBookingId);
             Check.That(firstReservation.Seats).ContainsExactly(new Seat("A", 7), new Seat("A", 8));
         }
-
     }
 }

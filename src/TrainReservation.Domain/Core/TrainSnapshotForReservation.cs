@@ -18,45 +18,39 @@ namespace TrainReservation.Domain.Core
 
         public TrainSnapshotForReservation(string trainId, IEnumerable<SeatWithBookingReference> seatsWithBookingReferences)
         {
-            this.TrainId = trainId;
+            TrainId = trainId;
 
             this.seatsWithBookingReferences = new List<SeatWithBookingReference>(seatsWithBookingReferences);
 
-            this.coaches = CoachFactory.InstantiateCoaches(trainId, seatsWithBookingReferences);
+            coaches = CoachFactory.InstantiateCoaches(trainId, seatsWithBookingReferences);
         }
 
-        public int OverallTrainCapacity => this.coaches.Values.Sum(coach => coach.OverallCoachCapacity);
+        public int OverallTrainCapacity => coaches.Values.Sum(coach => coach.OverallCoachCapacity);
 
-        public int MaxReservableSeatsFollowingThePolicy => (int)Math.Round(OverallTrainCapacity * SeventyPercent);
+        public int MaxReservableSeatsFollowingThePolicy => (int) Math.Round(OverallTrainCapacity * SeventyPercent);
 
-        public int AlreadyReservedSeatsCount
-        {
-            get
-            {
-                return this.coaches.Values.Sum(coach => coach.AlreadyReservedSeatsCount);
-            }
-        }
+        public int AlreadyReservedSeatsCount { get { return coaches.Values.Sum(coach => coach.AlreadyReservedSeatsCount); } }
 
-        public IEnumerable<SeatWithBookingReference> SeatsWithBookingReferences => this.seatsWithBookingReferences;
+        public IEnumerable<SeatWithBookingReference> SeatsWithBookingReferences => seatsWithBookingReferences;
 
-        public int CoachCount => this.coaches.Count;
+        public int CoachCount => coaches.Count;
 
         protected override IEnumerable<object> GetAllAttributesToBeUsedForEquality()
         {
-            return new object[] { this.TrainId, new ListByValue<SeatWithBookingReference>(this.seatsWithBookingReferences) };
+            return new object[] {TrainId, new ListByValue<SeatWithBookingReference>(seatsWithBookingReferences)};
         }
 
         public ReservationOption Reserve(int requestedSeatCount)
         {
             var option = new ReservationOption(TrainId, requestedSeatCount);
 
-            if ((AlreadyReservedSeatsCount + requestedSeatCount) > MaxReservableSeatsFollowingThePolicy)
+            if (AlreadyReservedSeatsCount + requestedSeatCount > MaxReservableSeatsFollowingThePolicy)
             {
                 return option;
             }
 
             // Try the nice way (i.e. by respecting the "no more 70% of every coach" rule)
-            foreach (var coach in this.coaches.Values)
+            foreach (var coach in coaches.Values)
             {
                 if (coach.HasEnoughAvailableSeatsIfWeFollowTheIdealPolicy(requestedSeatCount))
                 {
@@ -71,7 +65,7 @@ namespace TrainReservation.Domain.Core
             if (!option.IsFullfiled)
             {
                 // Try the hard way (i.e. don't respect the "no more 70% of every coach" rule)
-                foreach (var coach in this.coaches.Values)
+                foreach (var coach in coaches.Values)
                 {
                     option = coach.Reserve(requestedSeatCount);
                     if (option.IsFullfiled)
@@ -80,7 +74,7 @@ namespace TrainReservation.Domain.Core
                     }
                 }
             }
-            
+
             return option;
         }
     }

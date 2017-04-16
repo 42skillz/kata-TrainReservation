@@ -1,5 +1,5 @@
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using TrainReservation.Domain.Core;
 
 namespace TrainReservation.Domain
@@ -8,10 +8,10 @@ namespace TrainReservation.Domain
     {
         public static Dictionary<string, Coach> InstantiateCoaches(string trainId, IEnumerable<SeatWithBookingReference> seatsWithBookingReferences)
         {
-            var result =  new Dictionary<string, Coach>();
+            var result = new Dictionary<string, Coach>();
 
             var coachNames = (from sbr in seatsWithBookingReferences
-                             select sbr.Seat.Coach).Distinct();
+                select sbr.Seat.Coach).Distinct();
 
             foreach (var coachName in coachNames)
             {

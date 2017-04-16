@@ -22,14 +22,9 @@ namespace TrainReservation.Domain
             return new[] {bookingReference};
         }
 
-        public bool IsNull()
-        {
-            return Equals(Null);
-        }
-
         public override string ToString()
         {
-            return this.Value;
+            return Value;
         }
     }
 }

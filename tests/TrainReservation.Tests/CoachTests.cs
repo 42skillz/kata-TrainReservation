@@ -27,7 +27,6 @@ namespace TrainReservation.Tests
             var secondInstance = new Coach("A-train", TrainProviderHelper.GetSeatsWithBookingReferencesFor1CoachesOf10SeatsAnd6ReservedSeats());
 
             Check.That(firstInstance).IsEqualTo(secondInstance);
-
         }
     }
 }
