@@ -50,7 +50,14 @@ namespace TrainReservation.Tests.Helpers
 
         public static TrainSnapshotForReservation GetTrainWith2CoachesAnd2IndividualSeatsAvailable(string trainId)
         {
-            var train = new TrainSnapshotForReservation(trainId, new List<SeatWithBookingReference>()
+            var train = new TrainSnapshotForReservation(trainId, GetSeatsWithBookingReferencesFor2CoachesOf10Seats());
+
+            return train;
+        }
+
+        public static List<SeatWithBookingReference> GetSeatsWithBookingReferencesFor2CoachesOf10Seats()
+        {
+            return new List<SeatWithBookingReference>()
             {
                 new SeatWithBookingReference(new Seat("A", 1), new BookingReference("34Dsq")),
                 new SeatWithBookingReference(new Seat("A", 2), new BookingReference("34Dsq")),
@@ -73,9 +80,7 @@ namespace TrainReservation.Tests.Helpers
                 new SeatWithBookingReference(new Seat("B", 8), BookingReference.Null),
                 new SeatWithBookingReference(new Seat("B", 9), BookingReference.Null),
                 new SeatWithBookingReference(new Seat("B", 10), BookingReference.Null),
-            });
-
-            return train;
+            };
         }
     }
 }

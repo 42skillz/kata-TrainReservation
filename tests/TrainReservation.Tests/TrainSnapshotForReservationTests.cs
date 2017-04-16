@@ -24,5 +24,13 @@ namespace TrainReservation.Tests
             Check.That(train.OverallTrainCapacity).IsEqualTo(10);
             Check.That(train.MaxReservableSeatsFollowingThePolicy).IsEqualTo(7);
         }
+
+        [Test]
+        public void Should_return_the_number_of_coach()
+        {
+            var train = TrainProviderHelper.GetTrainWith2CoachesAnd2IndividualSeatsAvailable("train43");
+
+            Check.That(train.CoachCount).IsEqualTo(2);
+        }
     }
 }

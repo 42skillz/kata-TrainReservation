@@ -41,6 +41,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BookingReference.cs" />
+    <Compile Include="Coach.cs" />
+    <Compile Include="CoachFactory.cs" />
     <Compile Include="IProvideBookingReferences.cs" />
     <Compile Include="IProvideTrainData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

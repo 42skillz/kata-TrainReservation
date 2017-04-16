@@ -10,13 +10,16 @@ namespace TrainReservation.Domain
     public class TrainSnapshotForReservation
     {
         private const double SeventyPercent = 0.70d;
-        private readonly IEnumerable<SeatWithBookingReference> seatsWithBookingReferences;
+        private readonly Dictionary<string, Coach> coaches;
+
         public string TrainId { get; }
 
         public TrainSnapshotForReservation(string trainId, IEnumerable<SeatWithBookingReference> seatsWithBookingReferences)
         {
-            this.seatsWithBookingReferences = seatsWithBookingReferences;
-            TrainId = trainId;
+            this.TrainId = trainId;
+
+            this.SeatsWithBookingReferences = seatsWithBookingReferences;
+            this.coaches = CoachFactory.InstantiateCoaches(seatsWithBookingReferences);
         }
 
         public ReservationOption Reserve(int requestedSeatCount)
@@ -69,9 +72,8 @@ namespace TrainReservation.Domain
             }
         }
 
-        public IEnumerable<SeatWithBookingReference> SeatsWithBookingReferences
-        {
-            get { return seatsWithBookingReferences; }
-        }
+        public IEnumerable<SeatWithBookingReference> SeatsWithBookingReferences { get; }
+
+        public int CoachCount => this.coaches.Count;
     }
 }
