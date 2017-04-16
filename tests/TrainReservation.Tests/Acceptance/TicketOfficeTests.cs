@@ -56,28 +56,6 @@ namespace TrainReservation.Tests.Acceptance
             trainDataProvider.Received().MarkSeatsAsReserved(trainId, reservation.BookingReference, reservation.Seats);
         }
 
-        private static IProvideBookingReferences InstantiateBookingReferenceProviderMock(string[] expectedBookingIds)
-        {
-            var expectedBookingReferences = new List<BookingReference>();
-            foreach (var bookingId in expectedBookingIds)
-            {
-                expectedBookingReferences.Add(new BookingReference(bookingId));
-            }
-
-            var bookingReferenceProvider = Substitute.For<IProvideBookingReferences>();
-
-            bookingReferenceProvider.GetBookingReference()
-                .Returns(expectedBookingReferences.First(), expectedBookingReferences.GetRange(1, expectedBookingReferences.Count - 1).ToArray());
-            return bookingReferenceProvider;
-        }
-
-        private static IProvideBookingReferences InstantiateBookingReferenceProviderMock(string expectedBookingId)
-        {
-            var bookingReferenceProvider = Substitute.For<IProvideBookingReferences>();
-            bookingReferenceProvider.GetBookingReference().Returns(new BookingReference(expectedBookingId));
-            return bookingReferenceProvider;
-        }
-
         [Test]
         public void Should_be_able_to_reserve_70_percent_of_overall_train_seats_capacity()
         {
@@ -192,6 +170,28 @@ namespace TrainReservation.Tests.Acceptance
             Check.That(firstReservation.TrainId).IsEqualTo(trainId);
             Check.That(firstReservation.BookingReference.Value).IsEqualTo(firstBookingId);
             Check.That(firstReservation.Seats).ContainsExactly(new Seat("B", 6), new Seat("B", 7));
+        }
+
+        private static IProvideBookingReferences InstantiateBookingReferenceProviderMock(string[] expectedBookingIds)
+        {
+            var expectedBookingReferences = new List<BookingReference>();
+            foreach (var bookingId in expectedBookingIds)
+            {
+                expectedBookingReferences.Add(new BookingReference(bookingId));
+            }
+
+            var bookingReferenceProvider = Substitute.For<IProvideBookingReferences>();
+
+            bookingReferenceProvider.GetBookingReference()
+                .Returns(expectedBookingReferences.First(), expectedBookingReferences.GetRange(1, expectedBookingReferences.Count - 1).ToArray());
+            return bookingReferenceProvider;
+        }
+
+        private static IProvideBookingReferences InstantiateBookingReferenceProviderMock(string expectedBookingId)
+        {
+            var bookingReferenceProvider = Substitute.For<IProvideBookingReferences>();
+            bookingReferenceProvider.GetBookingReference().Returns(new BookingReference(expectedBookingId));
+            return bookingReferenceProvider;
         }
     }
 }
