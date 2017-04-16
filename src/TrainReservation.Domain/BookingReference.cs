@@ -26,5 +26,10 @@ namespace TrainReservation.Domain
         {
             return Equals(Null);
         }
+
+        public override string ToString()
+        {
+            return this.Value;
+        }
     }
 }

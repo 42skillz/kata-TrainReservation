@@ -12,5 +12,10 @@
         }
 
         public bool IsAvailable { get { return BookingReference.Equals(BookingReference.Null); } }
+
+        public override string ToString()
+        {
+            return $"[{Seat}-{BookingReference}]";
+        }
     }
 }
