@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TrainReservation.Domain;
+using TrainReservation.Domain.Core;
 
 namespace TrainReservation.Tests.Helpers
 {

@@ -1,4 +1,6 @@
-﻿namespace TrainReservation.Domain
+﻿using TrainReservation.Domain.Core;
+
+namespace TrainReservation.Domain
 {
     public interface IProvideTrainData
     {

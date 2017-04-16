@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 
 namespace TrainReservation.Domain.Core
@@ -26,13 +27,7 @@ namespace TrainReservation.Domain.Core
         {
             var option = new ReservationOption(TrainId, requestedSeatCount);
 
-            //TODO: write a test for that guard clause
-            if (requestedSeatCount > AvailableSeatsCount)
-            {
-                return option;
-            }
-
-            if (requestedSeatCount > MaxReservableSeatsFollowingThePolicy)
+            if ((AlreadyReservedSeatsCount + requestedSeatCount) > MaxReservableSeatsFollowingThePolicy)
             {
                 return option;
             }
@@ -43,6 +38,10 @@ namespace TrainReservation.Domain.Core
                 if (coach.HasEnoughAvailableSeatsIfWeFollowTheIdealPolicy(requestedSeatCount))
                 {
                     option = coach.Reserve(requestedSeatCount);
+                    if (option.IsFullfiled)
+                    {
+                        return option;
+                    }
                 }
             }
 
@@ -64,30 +63,26 @@ namespace TrainReservation.Domain.Core
 
         #region Traits in common with Coach?
 
-        public int OverallTrainCapacity => SeatsWithBookingReferences.Count();
-
-        public int MaxReservableSeatsFollowingThePolicy => (int) Math.Round(OverallTrainCapacity * SeventyPercent);
-
-        public int AvailableSeatsCount
+        public int OverallTrainCapacity
         {
             get
             {
-                var availableSeatsCount = 0;
-                // TODO: Linq this
-                foreach (var seatWithBookingReference in SeatsWithBookingReferences)
-                {
-                    if (seatWithBookingReference.IsAvailable)
-                    {
-                        availableSeatsCount++;
-                    }
-                }
+                return this.coaches.Values.Sum(coach => coach.OverallCoachCapacity);
+            }   
+        }
 
-                return availableSeatsCount;
+        public int MaxReservableSeatsFollowingThePolicy => (int) Math.Round(OverallTrainCapacity * SeventyPercent);
+
+        public int AlreadyReservedSeatsCount
+        {
+            get
+            {
+                return this.coaches.Values.Sum(coach => coach.AlreadyReservedSeatsCount);
             }
         }
         
-
         #endregion
+
         public IEnumerable<SeatWithBookingReference> SeatsWithBookingReferences { get; }
 
         public int CoachCount => this.coaches.Count;

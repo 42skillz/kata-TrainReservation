@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BookingReference.cs" />
-    <Compile Include="Coach.cs" />
+    <Compile Include="Core\Coach.cs" />
     <Compile Include="CoachFactory.cs" />
     <Compile Include="IProvideBookingReferences.cs" />
     <Compile Include="IProvideTrainData.cs" />
@@ -53,7 +53,7 @@
     <Compile Include="Seats.cs" />
     <Compile Include="SeatWithBookingReference.cs" />
     <Compile Include="TicketOffice.cs" />
-    <Compile Include="TrainSnapshotForReservation.cs" />
+    <Compile Include="Core\TrainSnapshotForReservation.cs" />
     <Compile Include="Value\EquatableByValue.cs" />
     <Compile Include="Value\ListByValue.cs" />
     <Compile Include="Value\SetByValue.cs" />

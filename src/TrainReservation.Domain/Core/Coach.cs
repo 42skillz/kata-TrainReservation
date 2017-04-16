@@ -31,7 +31,7 @@ namespace TrainReservation.Domain.Core
             {
                 var alreadyReservedSeatsCount = 0;
                 // TODO: Linq this
-                foreach (var seatWithBookingReference in Seats)
+                foreach (var seatWithBookingReference in this.Seats)
                 {
                     if (!seatWithBookingReference.IsAvailable)
                     {
@@ -52,18 +52,22 @@ namespace TrainReservation.Domain.Core
 
         public ReservationOption Reserve(int requestedSeatCount)
         {
-            //foreach (var seat in SeatsWithBookingReferences)
-            //{
-            //    if (seat.IsAvailable)
-            //    {
-            //        option.AddSeatReservation(seat.Seat);
-            //        if (option.IsFullfiled)
-            //        {
-            //            break;
-            //        }
-            //    }
-            //}
-            throw new System.NotImplementedException();
+            var option = new ReservationOption(this.trainId, requestedSeatCount);
+
+            foreach (var seatWithBookingReference in this.Seats)
+            {
+                if (seatWithBookingReference.IsAvailable)
+                {
+                    option.AddSeatReservation(seatWithBookingReference.Seat);
+                    if (option.IsFullfiled)
+                    {
+                        break;
+                    }
+                }
+
+            }
+
+            return option;
         }
     }
 }
