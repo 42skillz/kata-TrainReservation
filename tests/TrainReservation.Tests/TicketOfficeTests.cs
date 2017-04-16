@@ -148,5 +148,28 @@ namespace TrainReservation.Tests
             Check.That(secondReservation.BookingReference.Value).IsEqualTo(secondBookingId);
             Check.That(secondReservation.Seats).ContainsExactly(new Seat("B", 7));
         }
+
+        [Test]
+        public void Should_break_the_70_percent_of_every_coach_rule_when_no_alternative()
+        {
+            // setup mocks
+            var firstBookingId = "75bcd15";
+            var secondBookingId = "9904fgG6";
+
+            var bookingReferenceProvider = InstantiateBookingReferenceProviderMock(new[] { firstBookingId, secondBookingId });
+
+            var trainId = "express_2000";
+            var trainDataProvider = new TrainDataProviderMock(TrainProviderHelper.GetTrainWith2CoachesAnd2IndividualSeatsAvailable(trainId));
+
+            // act
+            var ticketOffice = new TicketOffice(bookingReferenceProvider, trainDataProvider);
+            var firstReservation = ticketOffice.MakeReservation(new ReservationRequest(trainId, 2));
+
+            // Must be located in the remaining seat of 1st coach
+            Check.That(firstReservation.TrainId).IsEqualTo(trainId);
+            Check.That(firstReservation.BookingReference.Value).IsEqualTo(firstBookingId);
+            Check.That(firstReservation.Seats).ContainsExactly(new Seat("A", 7), new Seat("A", 8));
+        }
+
     }
 }
