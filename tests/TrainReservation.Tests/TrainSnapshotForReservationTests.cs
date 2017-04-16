@@ -32,5 +32,13 @@ namespace TrainReservation.Tests
 
             Check.That(train.CoachCount).IsEqualTo(2);
         }
+
+        [Test]
+        public void Should_be_a_value_type()
+        {
+            var firstInstance = TrainProviderHelper.GetTrainWith1CoachAnd10SeatsAvailable("trainId42");
+            var secondInstance = TrainProviderHelper.GetTrainWith1CoachAnd10SeatsAvailable("trainId42");
+            Check.That(firstInstance).IsEqualTo(secondInstance);
+        }
     }
 }

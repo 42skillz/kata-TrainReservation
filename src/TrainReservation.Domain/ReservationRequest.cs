@@ -1,6 +1,9 @@
-﻿namespace TrainReservation.Domain
+﻿using System.Collections.Generic;
+using Value;
+
+namespace TrainReservation.Domain
 {
-    public class ReservationRequest
+    public class ReservationRequest : ValueType<ReservationRequest>
     {
         public string TrainId { get; }
         public int SeatCount { get; }
@@ -9,6 +12,11 @@
         {
             TrainId = trainId;
             SeatCount = seatCount;
+        }
+
+        protected override IEnumerable<object> GetAllAttributesToBeUsedForEquality()
+        {
+            return new object[] { this.TrainId, this.SeatCount };
         }
     }
 }

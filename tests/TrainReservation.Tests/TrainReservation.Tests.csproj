@@ -52,6 +52,8 @@
   <ItemGroup>
     <Compile Include="CoachFactoryTests.cs" />
     <Compile Include="CoachTests.cs" />
+    <Compile Include="ReservationRequestTests.cs" />
+    <Compile Include="ReservationTests.cs" />
     <Compile Include="TicketOfficeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\TrainDataProviderMock.cs" />

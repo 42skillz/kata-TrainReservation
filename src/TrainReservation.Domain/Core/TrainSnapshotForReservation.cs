@@ -1,17 +1,18 @@
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
+using Value;
 
 namespace TrainReservation.Domain.Core
 {
     /// <summary>
     /// Aggregate allowing seat allocation during reservations following the business rules defined with the domain experts. 
     /// </summary>
-    public class TrainSnapshotForReservation
+    public class TrainSnapshotForReservation : ValueType<TrainSnapshotForReservation>
     {
         private const double SeventyPercent = 0.70d;
         private readonly Dictionary<string, Coach> coaches;
+        private readonly List<SeatWithBookingReference> seatsWithBookingReferences;
 
         public string TrainId { get; }
 
@@ -19,8 +20,30 @@ namespace TrainReservation.Domain.Core
         {
             this.TrainId = trainId;
 
-            this.SeatsWithBookingReferences = seatsWithBookingReferences;
+            this.seatsWithBookingReferences = new List<SeatWithBookingReference>(seatsWithBookingReferences);
+
             this.coaches = CoachFactory.InstantiateCoaches(trainId, seatsWithBookingReferences);
+        }
+
+        public int OverallTrainCapacity => this.coaches.Values.Sum(coach => coach.OverallCoachCapacity);
+
+        public int MaxReservableSeatsFollowingThePolicy => (int)Math.Round(OverallTrainCapacity * SeventyPercent);
+
+        public int AlreadyReservedSeatsCount
+        {
+            get
+            {
+                return this.coaches.Values.Sum(coach => coach.AlreadyReservedSeatsCount);
+            }
+        }
+
+        public IEnumerable<SeatWithBookingReference> SeatsWithBookingReferences => this.seatsWithBookingReferences;
+
+        public int CoachCount => this.coaches.Count;
+
+        protected override IEnumerable<object> GetAllAttributesToBeUsedForEquality()
+        {
+            return new object[] { this.TrainId, new ListByValue<SeatWithBookingReference>(this.seatsWithBookingReferences) };
         }
 
         public ReservationOption Reserve(int requestedSeatCount)
@@ -60,31 +83,5 @@ namespace TrainReservation.Domain.Core
             
             return option;
         }
-
-        #region Traits in common with Coach?
-
-        public int OverallTrainCapacity
-        {
-            get
-            {
-                return this.coaches.Values.Sum(coach => coach.OverallCoachCapacity);
-            }   
-        }
-
-        public int MaxReservableSeatsFollowingThePolicy => (int) Math.Round(OverallTrainCapacity * SeventyPercent);
-
-        public int AlreadyReservedSeatsCount
-        {
-            get
-            {
-                return this.coaches.Values.Sum(coach => coach.AlreadyReservedSeatsCount);
-            }
-        }
-        
-        #endregion
-
-        public IEnumerable<SeatWithBookingReference> SeatsWithBookingReferences { get; }
-
-        public int CoachCount => this.coaches.Count;
     }
 }

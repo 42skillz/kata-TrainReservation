@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using TrainReservation.Domain;
 using Value;
 
-namespace TrainReservation
+namespace TrainReservation.Domain
 {
     public class Reservation : ValueType<Reservation>
     {
@@ -23,7 +22,7 @@ namespace TrainReservation
 
         protected override IEnumerable<object> GetAllAttributesToBeUsedForEquality()
         {
-            return new List<object>() {TrainId, BookingReference, Seats};
+            return new List<object>() { TrainId, BookingReference, Seats };
         }
     }
 }

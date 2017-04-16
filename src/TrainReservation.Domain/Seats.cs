@@ -29,7 +29,7 @@ namespace TrainReservation.Domain
 
         protected override IEnumerable<object> GetAllAttributesToBeUsedForEquality()
         {
-            return new List<object>() {new ListByValue<Seat>(seats)};
+            return new List<object>() { new ListByValue<Seat>(seats) };
         }
 
         public void Add(Seat seat)

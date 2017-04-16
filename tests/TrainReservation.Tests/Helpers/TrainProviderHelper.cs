@@ -6,30 +6,6 @@ namespace TrainReservation.Tests.Helpers
 {
     internal static class TrainProviderHelper
     {
-        public static TrainSnapshotForReservation GetTrainWith1CoachAnd3SeatsAvailable(string trainId)
-        {
-            var train = new TrainSnapshotForReservation(trainId, new List<SeatWithBookingReference>()
-            {
-                new SeatWithBookingReference(new Seat("A", 1), BookingReference.Null),
-                new SeatWithBookingReference(new Seat("A", 2), BookingReference.Null),
-                new SeatWithBookingReference(new Seat("A", 3), BookingReference.Null)
-            });
-
-            return train;
-        }
-
-        public static TrainSnapshotForReservation GetTrainWith1Coach3SeatsIncluding1Available(string trainId)
-        {
-            var train = new TrainSnapshotForReservation(trainId, new List<SeatWithBookingReference>()
-            {
-                new SeatWithBookingReference(new Seat("A", 1), new BookingReference("34Dsq")),
-                new SeatWithBookingReference(new Seat("A", 2), BookingReference.Null),
-                new SeatWithBookingReference(new Seat("A", 3), new BookingReference("34Dsq"))
-            });
-
-            return train;
-        }
-
         public static TrainSnapshotForReservation GetTrainWith1CoachAnd10SeatsAvailable(string trainId)
         {
             var train = new TrainSnapshotForReservation(trainId, new List<SeatWithBookingReference>()

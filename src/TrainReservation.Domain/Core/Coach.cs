@@ -1,60 +1,52 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Value;
 
 namespace TrainReservation.Domain.Core
 {
-    public class Coach
+    public class Coach : ValueType<Coach>
     {
         private const double SeventyPercent = 0.70d;
-
         private readonly string trainId;
-        public string CoachId { get; }
-        public List<SeatWithBookingReference> Seats { get; }
 
-        public Coach(string trainId, string coachId, List<SeatWithBookingReference> seats)
+        public Coach(string trainId, List<SeatWithBookingReference> seats)
         {
             this.trainId = trainId;
-            this.CoachId = coachId;
-            this.Seats = seats;
+            Seats = seats;
         }
 
+        public List<SeatWithBookingReference> Seats { get; }
 
-        #region Traits in common with TrainSnapshotForReservation?
+        public int OverallCoachCapacity => Seats.Count;
 
-        public int OverallCoachCapacity => this.Seats.Count;
-
-        public int MaxReservableSeatsFollowingThePolicy => (int)Math.Round(OverallCoachCapacity * SeventyPercent);
+        public int MaxReservableSeatsFollowingThePolicy => (int) Math.Round(OverallCoachCapacity * SeventyPercent);
 
         public int AlreadyReservedSeatsCount
         {
             get
             {
-                var alreadyReservedSeatsCount = 0;
-                // TODO: Linq this
-                foreach (var seatWithBookingReference in this.Seats)
-                {
-                    if (!seatWithBookingReference.IsAvailable)
-                    {
-                        alreadyReservedSeatsCount++;
-                    }
-                }
-
-                return alreadyReservedSeatsCount;
+                return (from seat in Seats
+                    where seat.IsAvailable == false
+                    select seat).Count();
             }
         }
 
-        #endregion
+        protected override IEnumerable<object> GetAllAttributesToBeUsedForEquality()
+        {
+            return new object[] {this.trainId, new ListByValue<SeatWithBookingReference>(this.Seats) };
+        }
 
         public bool HasEnoughAvailableSeatsIfWeFollowTheIdealPolicy(int requestedSeatCount)
         {
-            return (AlreadyReservedSeatsCount + requestedSeatCount) <= MaxReservableSeatsFollowingThePolicy;
+            return AlreadyReservedSeatsCount + requestedSeatCount <= MaxReservableSeatsFollowingThePolicy;
         }
 
         public ReservationOption Reserve(int requestedSeatCount)
         {
-            var option = new ReservationOption(this.trainId, requestedSeatCount);
+            var option = new ReservationOption(trainId, requestedSeatCount);
 
-            foreach (var seatWithBookingReference in this.Seats)
+            foreach (var seatWithBookingReference in Seats)
             {
                 if (seatWithBookingReference.IsAvailable)
                 {
@@ -64,7 +56,6 @@ namespace TrainReservation.Domain.Core
                         break;
                     }
                 }
-
             }
 
             return option;

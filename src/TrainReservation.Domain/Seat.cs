@@ -1,6 +1,9 @@
-﻿namespace TrainReservation.Domain
+﻿using System.Collections.Generic;
+using Value;
+
+namespace TrainReservation.Domain
 {
-    public class Seat
+    public class Seat : ValueType<Seat>
     {
         public string Coach { get; }
         public int SeatNumber { get; }
@@ -16,19 +19,9 @@
             return $"{Coach}{SeatNumber}";
         }
 
-        public override int GetHashCode()
+        protected override IEnumerable<object> GetAllAttributesToBeUsedForEquality()
         {
-            return base.GetHashCode();
-        }
-
-        /// <summary>
-        /// N.B. this is not how you would override equals in a production environment. :)
-        /// </summary>
-        public override bool Equals(object obj)
-        {
-            var other = obj as Seat;
-
-            return Coach == other.Coach && SeatNumber == other.SeatNumber;
+            return new object[] { this.Coach, this.SeatNumber };
         }
     }
 }

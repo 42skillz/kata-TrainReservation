@@ -1,11 +1,10 @@
-using System;
 using System.Linq;
 using System.Collections.Generic;
 using TrainReservation.Domain.Core;
 
 namespace TrainReservation.Domain
 {
-    public class CoachFactory
+    public static class CoachFactory
     {
         public static Dictionary<string, Coach> InstantiateCoaches(string trainId, IEnumerable<SeatWithBookingReference> seatsWithBookingReferences)
         {
@@ -20,7 +19,7 @@ namespace TrainReservation.Domain
                     where sbr.Seat.Coach == coachName
                     select sbr;
 
-                var coach = new Coach(trainId, coachName, new List<SeatWithBookingReference>(seatsForThisCoach));
+                var coach = new Coach(trainId, new List<SeatWithBookingReference>(seatsForThisCoach));
                 result[coachName] = coach;
             }
 

@@ -18,6 +18,7 @@
 
             if (option.IsFullfiled)
             {
+                // Call the various services to validate the transaction
                 var bookingReference = bookingReferenceProvider.GetBookingReference();
 
                 trainDataProvider.MarkSeatsAsReserved(request.TrainId, bookingReference, option.ReservedSeats);
