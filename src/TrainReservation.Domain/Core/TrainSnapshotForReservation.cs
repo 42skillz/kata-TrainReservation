@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TrainReservation.Domain
+namespace TrainReservation.Domain.Core
 {
     /// <summary>
     /// Aggregate allowing seat allocation during reservations following the business rules defined with the domain experts. 
@@ -62,6 +62,8 @@ namespace TrainReservation.Domain
             return option;
         }
 
+        #region Traits in common with Coach?
+
         public int OverallTrainCapacity => SeatsWithBookingReferences.Count();
 
         public int MaxReservableSeatsFollowingThePolicy => (int) Math.Round(OverallTrainCapacity * SeventyPercent);
@@ -71,6 +73,7 @@ namespace TrainReservation.Domain
             get
             {
                 var availableSeatsCount = 0;
+                // TODO: Linq this
                 foreach (var seatWithBookingReference in SeatsWithBookingReferences)
                 {
                     if (seatWithBookingReference.IsAvailable)
@@ -82,7 +85,9 @@ namespace TrainReservation.Domain
                 return availableSeatsCount;
             }
         }
+        
 
+        #endregion
         public IEnumerable<SeatWithBookingReference> SeatsWithBookingReferences { get; }
 
         public int CoachCount => this.coaches.Count;
