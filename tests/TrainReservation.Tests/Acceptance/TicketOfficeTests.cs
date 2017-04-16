@@ -5,9 +5,9 @@ using NSubstitute;
 using NUnit.Framework;
 using TrainReservation.Domain;
 using TrainReservation.Domain.Services;
-using TrainReservation.Tests.Helpers;
+using TrainReservation.Mocks;
 
-namespace TrainReservation.Tests
+namespace TrainReservation.Tests.Acceptance
 {
     [TestFixture]
     public class TicketOfficeTests
@@ -129,7 +129,7 @@ namespace TrainReservation.Tests
             var bookingReferenceProvider = InstantiateBookingReferenceProviderMock(new[] {firstBookingId, secondBookingId});
 
             var trainId = "express_2000";
-            var trainDataProvider = new TrainDataProviderMock(TrainProviderHelper.GetTrainWith2CoachesAnd2IndividualSeatsAvailable(trainId));
+            var trainDataProvider = new TrainDataServiceMock(TrainProviderHelper.GetTrainWith2CoachesAnd2IndividualSeatsAvailable(trainId));
 
             // act
             // First reservation
@@ -160,7 +160,7 @@ namespace TrainReservation.Tests
             var bookingReferenceProvider = InstantiateBookingReferenceProviderMock(new[] {firstBookingId, secondBookingId});
 
             var trainId = "express_2000";
-            var trainDataProvider = new TrainDataProviderMock(TrainProviderHelper.GetTrainWith2CoachesAnd2IndividualSeatsAvailable(trainId));
+            var trainDataProvider = new TrainDataServiceMock(TrainProviderHelper.GetTrainWith2CoachesAnd2IndividualSeatsAvailable(trainId));
 
             // act
             var ticketOffice = new TicketOffice(bookingReferenceProvider, trainDataProvider);

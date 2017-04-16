@@ -6,12 +6,12 @@ using Value;
 namespace TrainReservation.Domain.Core
 {
     /// <summary>
-    /// Aggregate allowing seat allocation during reservations following the business rules defined with the domain experts. 
+    /// Snapshot of a train topology allowing to find available seats following the business rules defined with the domain experts. 
     /// </summary>
     public class TrainSnapshotForReservation : ValueType<TrainSnapshotForReservation>
     {
         private const double SeventyPercent = 0.70d;
-        private readonly Dictionary<string, Coach> coaches;
+        private readonly Dictionary<string, CoachSnapshotForReservation> coaches;
         private readonly List<SeatWithBookingReference> seatsWithBookingReferences;
 
         public string TrainId { get; }
@@ -40,7 +40,7 @@ namespace TrainReservation.Domain.Core
             return new object[] {TrainId, new ListByValue<SeatWithBookingReference>(seatsWithBookingReferences)};
         }
 
-        public ReservationOption Reserve(int requestedSeatCount)
+        public ReservationOption FindReservationOption(int requestedSeatCount)
         {
             var option = new ReservationOption(TrainId, requestedSeatCount);
 
@@ -54,7 +54,7 @@ namespace TrainReservation.Domain.Core
             {
                 if (coach.HasEnoughAvailableSeatsIfWeFollowTheIdealPolicy(requestedSeatCount))
                 {
-                    option = coach.Reserve(requestedSeatCount);
+                    option = coach.FindReservationOption(requestedSeatCount);
                     if (option.IsFullfiled)
                     {
                         return option;
@@ -67,7 +67,7 @@ namespace TrainReservation.Domain.Core
                 // Try the hard way (i.e. don't respect the "no more 70% of every coach" rule)
                 foreach (var coach in coaches.Values)
                 {
-                    option = coach.Reserve(requestedSeatCount);
+                    option = coach.FindReservationOption(requestedSeatCount);
                     if (option.IsFullfiled)
                     {
                         return option;

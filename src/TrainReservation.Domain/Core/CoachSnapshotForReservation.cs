@@ -5,12 +5,15 @@ using Value;
 
 namespace TrainReservation.Domain.Core
 {
-    public class Coach : ValueType<Coach>
+    /// <summary>
+    /// Snapshot of a coach topology allowing to find available seats following the business rules defined with the domain experts. 
+    /// </summary>
+    public class CoachSnapshotForReservation : ValueType<CoachSnapshotForReservation>
     {
         private const double SeventyPercent = 0.70d;
         private readonly string trainId;
 
-        public Coach(string trainId, List<SeatWithBookingReference> seats)
+        public CoachSnapshotForReservation(string trainId, List<SeatWithBookingReference> seats)
         {
             this.trainId = trainId;
             Seats = seats;
@@ -42,7 +45,7 @@ namespace TrainReservation.Domain.Core
             return AlreadyReservedSeatsCount + requestedSeatCount <= MaxReservableSeatsFollowingThePolicy;
         }
 
-        public ReservationOption Reserve(int requestedSeatCount)
+        public ReservationOption FindReservationOption(int requestedSeatCount)
         {
             var option = new ReservationOption(trainId, requestedSeatCount);
 

@@ -1,6 +1,6 @@
 ﻿using NFluent;
 using NUnit.Framework;
-using TrainReservation.Tests.Helpers;
+using TrainReservation.Mocks;
 
 namespace TrainReservation.Tests
 {
@@ -13,7 +13,7 @@ namespace TrainReservation.Tests
             var train = TrainProviderHelper.GetTrainWith1CoachAnd10SeatsAvailable("trainId42");
 
             Check.That(train.OverallTrainCapacity).IsEqualTo(10);
-            var option = train.Reserve(7);
+            var option = train.FindReservationOption(7);
             Check.That(option.IsFullfiled).IsTrue();
         }
 

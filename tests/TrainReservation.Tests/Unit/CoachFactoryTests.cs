@@ -1,7 +1,7 @@
 ﻿using NFluent;
 using NUnit.Framework;
 using TrainReservation.Domain;
-using TrainReservation.Tests.Helpers;
+using TrainReservation.Mocks;
 
 namespace TrainReservation.Tests
 {

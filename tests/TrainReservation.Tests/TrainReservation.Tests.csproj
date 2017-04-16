@@ -50,27 +50,34 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Infra\CliReservationAdapterTests.cs" />
     <Compile Include="Unit\CoachFactoryTests.cs" />
     <Compile Include="Unit\CoachTests.cs" />
     <Compile Include="Unit\ReservationRequestTests.cs" />
     <Compile Include="Unit\ReservationTests.cs" />
     <Compile Include="Acceptance\TicketOfficeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Helpers\TrainDataProviderMock.cs" />
-    <Compile Include="Helpers\TrainProviderHelper.cs" />
     <Compile Include="Unit\TrainSnapshotForReservationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\externalLibs\Value\Value.csproj">
+      <Project>{2bca44f4-d631-401f-83e3-2bc74e719112}</Project>
+      <Name>Value</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\TrainReservation.Domain\TrainReservation.Domain.csproj">
       <Project>{1f6cfc8e-ca97-4694-ae77-fa9d922e4099}</Project>
       <Name>TrainReservation.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Value\Value.csproj">
-      <Project>{2bca44f4-d631-401f-83e3-2bc74e719112}</Project>
-      <Name>Value</Name>
+    <ProjectReference Include="..\..\src\TrainReservation.Infra.Cli\TrainReservation.Infra.Cli.csproj">
+      <Project>{5a3d4845-c253-4f44-b78e-0c5b2d8f0f78}</Project>
+      <Name>TrainReservation.Infra.Cli</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\TrainReservation.Mocks\TrainReservation.Mocks.csproj">
+      <Project>{e3e3569d-c500-4dbb-8b97-cad0f968a8e2}</Project>
+      <Name>TrainReservation.Mocks</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

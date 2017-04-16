@@ -3,13 +3,13 @@ using System.Linq;
 using TrainReservation.Domain;
 using TrainReservation.Domain.Core;
 
-namespace TrainReservation.Tests.Helpers
+namespace TrainReservation.Mocks
 {
-    internal class TrainDataProviderMock : IProvideTrainData
+    public class TrainDataServiceMock : IProvideTrainData
     {
         private readonly Dictionary<string, TrainSnapshotForReservation> trainSnapshots = new Dictionary<string, TrainSnapshotForReservation>();
 
-        public TrainDataProviderMock(TrainSnapshotForReservation initialSnapshot)
+        public TrainDataServiceMock(TrainSnapshotForReservation initialSnapshot)
         {
             trainSnapshots[initialSnapshot.TrainId] = initialSnapshot;
         }

@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using TrainReservation.Domain;
 using TrainReservation.Domain.Core;
 
-namespace TrainReservation.Tests.Helpers
+namespace TrainReservation.Mocks
 {
-    internal static class TrainProviderHelper
+    public static class TrainProviderHelper
     {
         public static TrainSnapshotForReservation GetTrainWith1CoachAnd10SeatsAvailable(string trainId)
         {

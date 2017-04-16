@@ -1,5 +1,8 @@
 ﻿namespace TrainReservation.Domain.Services
 {
+    /// <summary>
+    /// Service to reserve train tickets.
+    /// </summary>
     public class TicketOffice
     {
         private readonly IProvideBookingReferences bookingReferenceProvider;
@@ -13,8 +16,8 @@
 
         public Reservation MakeReservation(ReservationRequest request)
         {
-            var train = trainDataProvider.GetTrainSnapshot(request.TrainId);
-            var option = train.Reserve(request.SeatCount);
+            var trainSnapshot = trainDataProvider.GetTrainSnapshot(request.TrainId);
+            var option = trainSnapshot.FindReservationOption(request.SeatCount);
 
             if (option.IsFullfiled)
             {
