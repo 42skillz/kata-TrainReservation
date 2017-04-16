@@ -16,12 +16,12 @@ namespace TrainReservation.Domain.Core
         public CoachSnapshotForReservation(string trainId, List<SeatWithBookingReference> seats)
         {
             this.trainId = trainId;
-            Seats = seats;
+            this.Seats = seats;
         }
 
         public List<SeatWithBookingReference> Seats { get; }
 
-        public int OverallCoachCapacity => Seats.Count;
+        public int OverallCoachCapacity => this.Seats.Count;
 
         public int MaxReservableSeatsFollowingThePolicy => (int) Math.Round(OverallCoachCapacity * SeventyPercent);
 
@@ -29,7 +29,7 @@ namespace TrainReservation.Domain.Core
         {
             get
             {
-                return (from seat in Seats
+                return (from seat in this.Seats
                     where seat.IsAvailable == false
                     select seat).Count();
             }
@@ -37,7 +37,7 @@ namespace TrainReservation.Domain.Core
 
         protected override IEnumerable<object> GetAllAttributesToBeUsedForEquality()
         {
-            return new object[] {trainId, new ListByValue<SeatWithBookingReference>(Seats)};
+            return new object[] { this.trainId, new ListByValue<SeatWithBookingReference>(this.Seats)};
         }
 
         public bool HasEnoughAvailableSeatsIfWeFollowTheIdealPolicy(int requestedSeatCount)
@@ -49,7 +49,7 @@ namespace TrainReservation.Domain.Core
         {
             var option = new ReservationOption(trainId, requestedSeatCount);
 
-            foreach (var seatWithBookingReference in Seats)
+            foreach (var seatWithBookingReference in this.Seats)
             {
                 if (seatWithBookingReference.IsAvailable)
                 {

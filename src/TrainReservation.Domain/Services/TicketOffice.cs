@@ -16,15 +16,15 @@
 
         public Reservation MakeReservation(ReservationRequest request)
         {
-            var trainSnapshot = trainDataProvider.GetTrainSnapshot(request.TrainId);
+            var trainSnapshot = this.trainDataProvider.GetTrainSnapshot(request.TrainId);
             var option = trainSnapshot.FindReservationOption(request.SeatCount);
 
             if (option.IsFullfiled)
             {
                 // Call the various services to validate the transaction
-                var bookingReference = bookingReferenceProvider.GetBookingReference();
+                var bookingReference = this.bookingReferenceProvider.GetBookingReference();
 
-                trainDataProvider.MarkSeatsAsReserved(request.TrainId, bookingReference, option.ReservedSeats);
+                this.trainDataProvider.MarkSeatsAsReserved(request.TrainId, bookingReference, option.ReservedSeats);
                 return new Reservation(request.TrainId, bookingReference, option.ReservedSeats);
             }
             else

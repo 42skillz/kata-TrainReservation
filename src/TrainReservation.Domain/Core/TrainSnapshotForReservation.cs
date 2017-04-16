@@ -18,11 +18,11 @@ namespace TrainReservation.Domain.Core
 
         public TrainSnapshotForReservation(string trainId, IEnumerable<SeatWithBookingReference> seatsWithBookingReferences)
         {
-            TrainId = trainId;
+            this.TrainId = trainId;
 
             this.seatsWithBookingReferences = new List<SeatWithBookingReference>(seatsWithBookingReferences);
 
-            coaches = CoachFactory.InstantiateCoaches(trainId, seatsWithBookingReferences);
+            this.coaches = CoachFactory.InstantiateCoaches(trainId, seatsWithBookingReferences);
         }
 
         public int OverallTrainCapacity => coaches.Values.Sum(coach => coach.OverallCoachCapacity);
@@ -33,11 +33,11 @@ namespace TrainReservation.Domain.Core
 
         public IEnumerable<SeatWithBookingReference> SeatsWithBookingReferences => seatsWithBookingReferences;
 
-        public int CoachCount => coaches.Count;
+        public int CoachCount => this.coaches.Count;
 
         protected override IEnumerable<object> GetAllAttributesToBeUsedForEquality()
         {
-            return new object[] {TrainId, new ListByValue<SeatWithBookingReference>(seatsWithBookingReferences)};
+            return new object[] { this.TrainId, new ListByValue<SeatWithBookingReference>(this.seatsWithBookingReferences)};
         }
 
         public ReservationOption FindReservationOption(int requestedSeatCount)
