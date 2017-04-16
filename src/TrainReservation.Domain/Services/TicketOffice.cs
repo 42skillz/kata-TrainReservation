@@ -1,4 +1,4 @@
-﻿namespace TrainReservation.Domain
+﻿namespace TrainReservation.Domain.Services
 {
     public class TicketOffice
     {

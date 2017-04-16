@@ -52,7 +52,7 @@
     <Compile Include="Seat.cs" />
     <Compile Include="Seats.cs" />
     <Compile Include="SeatWithBookingReference.cs" />
-    <Compile Include="TicketOffice.cs" />
+    <Compile Include="Services\TicketOffice.cs" />
     <Compile Include="Core\TrainSnapshotForReservation.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -4,6 +4,7 @@ using NFluent;
 using NSubstitute;
 using NUnit.Framework;
 using TrainReservation.Domain;
+using TrainReservation.Domain.Services;
 using TrainReservation.Tests.Helpers;
 
 namespace TrainReservation.Tests
