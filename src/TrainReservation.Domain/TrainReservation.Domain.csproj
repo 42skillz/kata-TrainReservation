@@ -54,13 +54,12 @@
     <Compile Include="SeatWithBookingReference.cs" />
     <Compile Include="TicketOffice.cs" />
     <Compile Include="Core\TrainSnapshotForReservation.cs" />
-    <Compile Include="Value\EquatableByValue.cs" />
-    <Compile Include="Value\ListByValue.cs" />
-    <Compile Include="Value\SetByValue.cs" />
-    <Compile Include="Value\ValueType.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Value\Value.csproj" />
+    <ProjectReference Include="..\..\Value\Value.csproj">
+      <Project>{2bca44f4-d631-401f-83e3-2bc74e719112}</Project>
+      <Name>Value</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

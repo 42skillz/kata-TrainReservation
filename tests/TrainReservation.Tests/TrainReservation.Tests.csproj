@@ -68,6 +68,10 @@
       <Project>{1f6cfc8e-ca97-4694-ae77-fa9d922e4099}</Project>
       <Name>TrainReservation.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Value\Value.csproj">
+      <Project>{2bca44f4-d631-401f-83e3-2bc74e719112}</Project>
+      <Name>Value</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
