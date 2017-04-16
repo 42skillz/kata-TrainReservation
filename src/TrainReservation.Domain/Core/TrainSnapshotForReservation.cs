@@ -44,7 +44,7 @@ namespace TrainReservation.Domain.Core
         {
             var option = new ReservationOption(TrainId, requestedSeatCount);
 
-            if (AlreadyReservedSeatsCount + requestedSeatCount > MaxReservableSeatsFollowingThePolicy)
+            if (!StillAllowedToReserveInThatTrain(requestedSeatCount))
             {
                 return option;
             }
@@ -76,6 +76,11 @@ namespace TrainReservation.Domain.Core
             }
 
             return option;
+        }
+
+        private bool StillAllowedToReserveInThatTrain(int requestedSeatCount)
+        {
+            return AlreadyReservedSeatsCount + requestedSeatCount <= MaxReservableSeatsFollowingThePolicy;
         }
     }
 }

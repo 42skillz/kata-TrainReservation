@@ -25,6 +25,13 @@ namespace TrainReservation.Mocks
             return train;
         }
 
+        public static TrainSnapshotForReservation GetTrainWith2CoachesOf10And1Then2SeatsAvailable(string trainId)
+        {
+            var train = new TrainSnapshotForReservation(trainId, GetSeatsWithBookingReferencesFor2CoachesOf10SeatsAndMoreSeatsOnCoachB());
+
+            return train;
+        }
+
         public static TrainSnapshotForReservation GetTrainWith2CoachesAnd2IndividualSeatsAvailable(string trainId)
         {
             var train = new TrainSnapshotForReservation(trainId, GetSeatsWithBookingReferencesFor2CoachesOf10Seats());
@@ -53,6 +60,33 @@ namespace TrainReservation.Mocks
                 new SeatWithBookingReference(new Seat("B", 4), new BookingReference("34Dsq")),
                 new SeatWithBookingReference(new Seat("B", 5), new BookingReference("34Dsq")),
                 new SeatWithBookingReference(new Seat("B", 6), new BookingReference("34Dsq")),
+                new SeatWithBookingReference(new Seat("B", 7), BookingReference.Null),
+                new SeatWithBookingReference(new Seat("B", 8), BookingReference.Null),
+                new SeatWithBookingReference(new Seat("B", 9), BookingReference.Null),
+                new SeatWithBookingReference(new Seat("B", 10), BookingReference.Null),
+            };
+        }
+        public static List<SeatWithBookingReference> GetSeatsWithBookingReferencesFor2CoachesOf10SeatsAndMoreSeatsOnCoachB()
+        {
+            return new List<SeatWithBookingReference>()
+            {
+                new SeatWithBookingReference(new Seat("A", 1), new BookingReference("34Dsq")),
+                new SeatWithBookingReference(new Seat("A", 2), new BookingReference("34Dsq")),
+                new SeatWithBookingReference(new Seat("A", 3), new BookingReference("34Dsq")),
+                new SeatWithBookingReference(new Seat("A", 4), new BookingReference("34Dsq")),
+                new SeatWithBookingReference(new Seat("A", 5), new BookingReference("34Dsq")),
+                new SeatWithBookingReference(new Seat("A", 6), new BookingReference("34Dsq")),
+                new SeatWithBookingReference(new Seat("A", 7), BookingReference.Null),
+                new SeatWithBookingReference(new Seat("A", 8), BookingReference.Null),
+                new SeatWithBookingReference(new Seat("A", 9), BookingReference.Null),
+                new SeatWithBookingReference(new Seat("A", 10), BookingReference.Null),
+
+                new SeatWithBookingReference(new Seat("B", 1), new BookingReference("34Dsq")),
+                new SeatWithBookingReference(new Seat("B", 2), new BookingReference("34Dsq")),
+                new SeatWithBookingReference(new Seat("B", 3), new BookingReference("34Dsq")),
+                new SeatWithBookingReference(new Seat("B", 4), new BookingReference("34Dsq")),
+                new SeatWithBookingReference(new Seat("B", 5), new BookingReference("34Dsq")),
+                new SeatWithBookingReference(new Seat("B", 6), BookingReference.Null),
                 new SeatWithBookingReference(new Seat("B", 7), BookingReference.Null),
                 new SeatWithBookingReference(new Seat("B", 8), BookingReference.Null),
                 new SeatWithBookingReference(new Seat("B", 9), BookingReference.Null),
