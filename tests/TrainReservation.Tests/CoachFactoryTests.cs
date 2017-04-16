@@ -11,7 +11,7 @@ namespace TrainReservation.Tests
         [Test]
         public void Should_instantiate_coaches_from_seats_with_booking_references()
         {
-            var coaches = CoachFactory.InstantiateCoaches(TrainProviderHelper.GetSeatsWithBookingReferencesFor2CoachesOf10Seats());
+            var coaches = CoachFactory.InstantiateCoaches("the A-train", TrainProviderHelper.GetSeatsWithBookingReferencesFor2CoachesOf10Seats());
             Check.That(coaches).HasSize(2);
             Check.That(coaches["A"]).IsNotNull();
             Check.That(coaches["A"].Seats).HasSize(10);

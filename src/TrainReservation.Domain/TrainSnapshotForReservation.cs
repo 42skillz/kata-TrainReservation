@@ -19,13 +19,14 @@ namespace TrainReservation.Domain
             this.TrainId = trainId;
 
             this.SeatsWithBookingReferences = seatsWithBookingReferences;
-            this.coaches = CoachFactory.InstantiateCoaches(seatsWithBookingReferences);
+            this.coaches = CoachFactory.InstantiateCoaches(trainId, seatsWithBookingReferences);
         }
 
         public ReservationOption Reserve(int requestedSeatCount)
         {
             var option = new ReservationOption(TrainId, requestedSeatCount);
 
+            //TODO: write a test for that guard clause
             if (requestedSeatCount > AvailableSeatsCount)
             {
                 return option;
@@ -36,18 +37,28 @@ namespace TrainReservation.Domain
                 return option;
             }
 
-            foreach (var seat in SeatsWithBookingReferences)
+            // Try the nice way (i.e. by respecting the "no more 70% of every coach" rule)
+            foreach (var coach in this.coaches.Values)
             {
-                if (seat.IsAvailable)
+                if (coach.HasEnoughAvailableSeatsIfWeFollowTheIdealPolicy(requestedSeatCount))
                 {
-                    option.AddSeatReservation(seat.Seat);
-                    if (option.IsFullfiled)
-                    {
-                        break;
-                    }
+                    option = coach.Reserve(requestedSeatCount);
                 }
             }
 
+            if (!option.IsFullfiled)
+            {
+                // Try the hard way (i.e. don't respect the "no more 70% of every coach" rule)
+                foreach (var coach in this.coaches.Values)
+                {
+                    option = coach.Reserve(requestedSeatCount);
+                    if (option.IsFullfiled)
+                    {
+                        return option;
+                    }
+                }
+            }
+            
             return option;
         }
 

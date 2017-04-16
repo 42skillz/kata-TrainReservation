@@ -6,7 +6,7 @@ namespace TrainReservation.Domain
 {
     public class CoachFactory
     {
-        public static Dictionary<string, Coach> InstantiateCoaches(IEnumerable<SeatWithBookingReference> seatsWithBookingReferences)
+        public static Dictionary<string, Coach> InstantiateCoaches(string trainId, IEnumerable<SeatWithBookingReference> seatsWithBookingReferences)
         {
             var result =  new Dictionary<string, Coach>();
 
@@ -19,7 +19,7 @@ namespace TrainReservation.Domain
                     where sbr.Seat.Coach == coachName
                     select sbr;
 
-                var coach = new Coach(coachName, new List<SeatWithBookingReference>(seatsForThisCoach));
+                var coach = new Coach(trainId, coachName, new List<SeatWithBookingReference>(seatsForThisCoach));
                 result[coachName] = coach;
             }
 

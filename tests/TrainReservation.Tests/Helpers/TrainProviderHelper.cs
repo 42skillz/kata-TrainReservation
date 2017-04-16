@@ -82,5 +82,22 @@ namespace TrainReservation.Tests.Helpers
                 new SeatWithBookingReference(new Seat("B", 10), BookingReference.Null),
             };
         }
+
+        public static List<SeatWithBookingReference> GetSeatsWithBookingReferencesFor1CoachesOf10SeatsAnd6ReservedSeats()
+        {
+            return new List<SeatWithBookingReference>()
+            {
+                new SeatWithBookingReference(new Seat("A", 1), new BookingReference("34Dsq")),
+                new SeatWithBookingReference(new Seat("A", 2), new BookingReference("34Dsq")),
+                new SeatWithBookingReference(new Seat("A", 3), new BookingReference("34Dsq")),
+                new SeatWithBookingReference(new Seat("A", 4), new BookingReference("34Dsq")),
+                new SeatWithBookingReference(new Seat("A", 5), new BookingReference("34Dsq")),
+                new SeatWithBookingReference(new Seat("A", 6), new BookingReference("34Dsq")),
+                new SeatWithBookingReference(new Seat("A", 7), BookingReference.Null),
+                new SeatWithBookingReference(new Seat("A", 8), BookingReference.Null),
+                new SeatWithBookingReference(new Seat("A", 9), BookingReference.Null),
+                new SeatWithBookingReference(new Seat("A", 10), BookingReference.Null)                
+            };
+        }
     }
 }
