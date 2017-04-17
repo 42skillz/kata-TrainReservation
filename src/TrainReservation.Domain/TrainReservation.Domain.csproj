@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BookingReference.cs" />
-    <Compile Include="Core\CoachSnapshotForReservation.cs" />
+    <Compile Include="Core\CoachSnapshot.cs" />
     <Compile Include="CoachFactory.cs" />
     <Compile Include="IProvideBookingReferences.cs" />
     <Compile Include="IProvideTrainData.cs" />
@@ -54,7 +54,7 @@
     <Compile Include="Seats.cs" />
     <Compile Include="SeatWithBookingReference.cs" />
     <Compile Include="Services\TicketOffice.cs" />
-    <Compile Include="Core\TrainSnapshotForReservation.cs" />
+    <Compile Include="Core\TrainSnapshot.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\externalLibs\Value\Value.csproj">

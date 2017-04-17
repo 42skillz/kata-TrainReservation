@@ -14,6 +14,10 @@ namespace TrainReservation.Infra.Cli.Adapters
 
         public BookingReference GetBookingReference()
         {
+            // the place where we should adapt the domain format into the 
+            // json whatever needed by the external service to call (here, we'll call an
+            // in-memory stub
+
             return bookingReferenceService.GetBookingReference();
         }
     }

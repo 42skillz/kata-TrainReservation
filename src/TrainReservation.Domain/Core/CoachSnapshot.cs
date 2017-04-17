@@ -8,12 +8,12 @@ namespace TrainReservation.Domain.Core
     /// <summary>
     /// Snapshot of a coach topology allowing to find available seats following the business rules defined with the domain experts. 
     /// </summary>
-    public class CoachSnapshotForReservation : ValueType<CoachSnapshotForReservation>
+    public class CoachSnapshot : ValueType<CoachSnapshot>
     {
         private const double SeventyPercent = 0.70d;
         private readonly string trainId;
 
-        public CoachSnapshotForReservation(string trainId, List<SeatWithBookingReference> seats)
+        public CoachSnapshot(string trainId, List<SeatWithBookingReference> seats)
         {
             this.trainId = trainId;
             this.Seats = seats;

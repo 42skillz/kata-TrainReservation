@@ -6,9 +6,9 @@ namespace TrainReservation.Domain
 {
     public static class CoachFactory
     {
-        public static Dictionary<string, CoachSnapshotForReservation> InstantiateCoaches(string trainId, IEnumerable<SeatWithBookingReference> seatsWithBookingReferences)
+        public static Dictionary<string, CoachSnapshot> InstantiateCoaches(string trainId, IEnumerable<SeatWithBookingReference> seatsWithBookingReferences)
         {
-            var result = new Dictionary<string, CoachSnapshotForReservation>();
+            var result = new Dictionary<string, CoachSnapshot>();
 
             var coachNames = (from sbr in seatsWithBookingReferences
                 select sbr.Seat.Coach).Distinct();
@@ -19,7 +19,7 @@ namespace TrainReservation.Domain
                     where sbr.Seat.Coach == coachName
                     select sbr;
 
-                var coach = new CoachSnapshotForReservation(trainId, new List<SeatWithBookingReference>(seatsForThisCoach));
+                var coach = new CoachSnapshot(trainId, new List<SeatWithBookingReference>(seatsForThisCoach));
                 result[coachName] = coach;
             }
 

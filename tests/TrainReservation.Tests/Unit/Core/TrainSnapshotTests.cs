@@ -5,7 +5,7 @@ using TrainReservation.Mocks;
 namespace TrainReservation.Tests.Unit.Core
 {
     [TestFixture]
-    public class TrainSnapshotForReservationTests
+    public class TrainSnapshotTests
     {
         [Test]
         public void Should_be_able_to_reserve_70_percent_of_overall_train_capacity()

@@ -7,14 +7,14 @@ namespace TrainReservation.Mocks
 {
     public class TrainDataServiceMock : IProvideTrainData
     {
-        private readonly Dictionary<string, TrainSnapshotForReservation> trainSnapshots = new Dictionary<string, TrainSnapshotForReservation>();
+        private readonly Dictionary<string, TrainSnapshot> trainSnapshots = new Dictionary<string, TrainSnapshot>();
 
-        public TrainDataServiceMock(TrainSnapshotForReservation initialSnapshot)
+        public TrainDataServiceMock(TrainSnapshot initialSnapshot)
         {
             trainSnapshots[initialSnapshot.TrainId] = initialSnapshot;
         }
 
-        public TrainSnapshotForReservation GetTrainSnapshot(string trainId)
+        public TrainSnapshot GetTrainSnapshot(string trainId)
         {
             return trainSnapshots[trainId];
         }
@@ -38,7 +38,7 @@ namespace TrainReservation.Mocks
                 }
             }
 
-            var updatedSnapshot = new TrainSnapshotForReservation(trainId, newSeatsConfiguration);
+            var updatedSnapshot = new TrainSnapshot(trainId, newSeatsConfiguration);
             trainSnapshots[trainId] = updatedSnapshot;
         }
     }

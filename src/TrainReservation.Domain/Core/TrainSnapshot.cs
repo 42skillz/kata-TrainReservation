@@ -8,15 +8,15 @@ namespace TrainReservation.Domain.Core
     /// <summary>
     /// Snapshot of a train topology allowing to find available seats following the business rules defined with the domain experts. 
     /// </summary>
-    public class TrainSnapshotForReservation : ValueType<TrainSnapshotForReservation>
+    public class TrainSnapshot : ValueType<TrainSnapshot>
     {
         private const double SeventyPercent = 0.70d;
-        private readonly Dictionary<string, CoachSnapshotForReservation> coaches;
+        private readonly Dictionary<string, CoachSnapshot> coaches;
         private readonly List<SeatWithBookingReference> seatsWithBookingReferences;
 
         public string TrainId { get; }
 
-        public TrainSnapshotForReservation(string trainId, IEnumerable<SeatWithBookingReference> seatsWithBookingReferences)
+        public TrainSnapshot(string trainId, IEnumerable<SeatWithBookingReference> seatsWithBookingReferences)
         {
             this.TrainId = trainId;
 

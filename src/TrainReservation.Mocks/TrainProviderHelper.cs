@@ -6,9 +6,9 @@ namespace TrainReservation.Mocks
 {
     public static class TrainProviderHelper
     {
-        public static TrainSnapshotForReservation GetTrainWith1CoachAnd10SeatsAvailable(string trainId)
+        public static TrainSnapshot GetTrainWith1CoachAnd10SeatsAvailable(string trainId)
         {
-            var train = new TrainSnapshotForReservation(trainId, new List<SeatWithBookingReference>()
+            var train = new TrainSnapshot(trainId, new List<SeatWithBookingReference>()
             {
                 new SeatWithBookingReference(new Seat("A", 1), BookingReference.Null),
                 new SeatWithBookingReference(new Seat("A", 2), BookingReference.Null),
@@ -25,16 +25,16 @@ namespace TrainReservation.Mocks
             return train;
         }
 
-        public static TrainSnapshotForReservation GetTrainWith2CoachesOf10And1Then2SeatsAvailable(string trainId)
+        public static TrainSnapshot GetTrainWith2CoachesOf10And1Then2SeatsAvailable(string trainId)
         {
-            var train = new TrainSnapshotForReservation(trainId, GetSeatsWithBookingReferencesFor2CoachesOf10SeatsAndMoreSeatsOnCoachB());
+            var train = new TrainSnapshot(trainId, GetSeatsWithBookingReferencesFor2CoachesOf10SeatsAndMoreSeatsOnCoachB());
 
             return train;
         }
 
-        public static TrainSnapshotForReservation GetTrainWith2CoachesAnd2IndividualSeatsAvailable(string trainId)
+        public static TrainSnapshot GetTrainWith2CoachesAnd2IndividualSeatsAvailable(string trainId)
         {
-            var train = new TrainSnapshotForReservation(trainId, GetSeatsWithBookingReferencesFor2CoachesOf10Seats());
+            var train = new TrainSnapshot(trainId, GetSeatsWithBookingReferencesFor2CoachesOf10Seats());
 
             return train;
         }
