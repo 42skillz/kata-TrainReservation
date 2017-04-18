@@ -4,6 +4,7 @@ using NFluent;
 using NSubstitute;
 using NUnit.Framework;
 using TrainReservation.Domain;
+using TrainReservation.Domain.Core;
 using TrainReservation.Domain.Services;
 using TrainReservation.Mocks;
 
@@ -17,12 +18,10 @@ namespace TrainReservation.Tests.Acceptance
         {
             // setup mocks
             var expectedBookingId = "75bcd15";
-            var bookingReferenceProvider = Substitute.For<IProvideBookingReferences>();
-            bookingReferenceProvider.GetBookingReference().Returns(new BookingReference(expectedBookingId));
+            var bookingReferenceProvider = ConfigureABookingReferenceProviderMock(expectedBookingId);
 
             var trainId = "express_2000";
-            var trainDataProvider = Substitute.For<IProvideTrainData>();
-            trainDataProvider.GetTrainSnapshot(trainId).Returns(TrainProviderHelper.GetTrainWith1CoachAnd10SeatsAvailable(trainId));
+            var trainDataProvider = ConfigureATrainDataProviderMock(trainId, TrainProviderHelper.GetTrainWith1CoachAnd10SeatsAvailable(trainId));
 
             // act
             var ticketOffice = new TicketOffice(bookingReferenceProvider, trainDataProvider);
@@ -38,12 +37,11 @@ namespace TrainReservation.Tests.Acceptance
         {
             // setup mocks
             var expectedBookingId = "75bcd15";
-            var bookingReferenceProvider = InstantiateBookingReferenceProviderMock(expectedBookingId);
+            var bookingReferenceProvider = ConfigureABookingReferenceProviderMock(expectedBookingId);
 
             var trainId = "express_2000";
-            var trainDataProvider = Substitute.For<IProvideTrainData>();
-            trainDataProvider.GetTrainSnapshot(trainId).Returns(TrainProviderHelper.GetTrainWith1CoachAnd10SeatsAvailable(trainId));
-
+            var trainDataProvider = ConfigureATrainDataProviderMock(trainId, TrainProviderHelper.GetTrainWith1CoachAnd10SeatsAvailable(trainId));
+            
             // act
             var ticketOffice = new TicketOffice(bookingReferenceProvider, trainDataProvider);
             var reservation = ticketOffice.MakeReservation(new ReservationRequest(trainId, 1));
@@ -61,12 +59,11 @@ namespace TrainReservation.Tests.Acceptance
         {
             // setup mocks
             var expectedBookingId = "75bcd15";
-            var bookingReferenceProvider = InstantiateBookingReferenceProviderMock(expectedBookingId);
+            var bookingReferenceProvider = ConfigureABookingReferenceProviderMock(expectedBookingId);
 
             var trainId = "express_2000";
-            var trainDataProvider = Substitute.For<IProvideTrainData>();
-            trainDataProvider.GetTrainSnapshot(trainId).Returns(TrainProviderHelper.GetTrainWith1CoachAnd10SeatsAvailable(trainId));
-
+            var trainDataProvider = ConfigureATrainDataProviderMock(trainId, TrainProviderHelper.GetTrainWith1CoachAnd10SeatsAvailable(trainId));
+            
             // act
             var ticketOffice = new TicketOffice(bookingReferenceProvider, trainDataProvider);
             var reservation = ticketOffice.MakeReservation(new ReservationRequest(trainId, 7));
@@ -82,12 +79,11 @@ namespace TrainReservation.Tests.Acceptance
         {
             // setup mocks
             var expectedBookingId = "75bcd15";
-            var bookingReferenceProvider = InstantiateBookingReferenceProviderMock(expectedBookingId);
+            var bookingReferenceProvider = ConfigureABookingReferenceProviderMock(expectedBookingId);
 
             var trainId = "express_2000";
-            var trainDataProvider = Substitute.For<IProvideTrainData>();
-            trainDataProvider.GetTrainSnapshot(trainId).Returns(TrainProviderHelper.GetTrainWith1CoachAnd10SeatsAvailable(trainId));
-
+            var trainDataProvider = ConfigureATrainDataProviderMock(trainId, TrainProviderHelper.GetTrainWith1CoachAnd10SeatsAvailable(trainId));
+            
             // act
             var ticketOffice = new TicketOffice(bookingReferenceProvider, trainDataProvider);
             var reservation = ticketOffice.MakeReservation(new ReservationRequest(trainId, 9));
@@ -104,7 +100,7 @@ namespace TrainReservation.Tests.Acceptance
             var firstBookingId = "75bcd15";
             var secondBookingId = "9904fgG6";
 
-            var bookingReferenceProvider = InstantiateBookingReferenceProviderMock(new[] {firstBookingId, secondBookingId});
+            var bookingReferenceProvider = ConfigureABookingReferenceProviderMock(new[] {firstBookingId, secondBookingId});
 
             var trainId = "express_2000";
             var trainDataProvider = new TrainDataServiceMock(TrainProviderHelper.GetTrainWith2CoachesAnd2IndividualSeatsAvailable(trainId));
@@ -135,7 +131,7 @@ namespace TrainReservation.Tests.Acceptance
             var firstBookingId = "75bcd15";
             var secondBookingId = "9904fgG6";
 
-            var bookingReferenceProvider = InstantiateBookingReferenceProviderMock(new[] {firstBookingId, secondBookingId});
+            var bookingReferenceProvider = ConfigureABookingReferenceProviderMock(new[] {firstBookingId, secondBookingId});
 
             var trainId = "express_2000";
             var trainDataProvider = new TrainDataServiceMock(TrainProviderHelper.GetTrainWith2CoachesAnd2IndividualSeatsAvailable(trainId));
@@ -157,7 +153,7 @@ namespace TrainReservation.Tests.Acceptance
             var firstBookingId = "75bcd15";
             var secondBookingId = "9904fgG6";
 
-            var bookingReferenceProvider = InstantiateBookingReferenceProviderMock(new[] { firstBookingId, secondBookingId });
+            var bookingReferenceProvider = ConfigureABookingReferenceProviderMock(new[] { firstBookingId, secondBookingId });
 
             var trainId = "express_2000";
             var trainDataProvider = new TrainDataServiceMock(TrainProviderHelper.GetTrainWith2CoachesOf10And1Then2SeatsAvailable(trainId));
@@ -172,7 +168,7 @@ namespace TrainReservation.Tests.Acceptance
             Check.That(firstReservation.Seats).ContainsExactly(new Seat("B", 6), new Seat("B", 7));
         }
 
-        private static IProvideBookingReferences InstantiateBookingReferenceProviderMock(string[] expectedBookingIds)
+        private static IProvideBookingReferences ConfigureABookingReferenceProviderMock(string[] expectedBookingIds)
         {
             var expectedBookingReferences = new List<BookingReference>();
             foreach (var bookingId in expectedBookingIds)
@@ -187,7 +183,14 @@ namespace TrainReservation.Tests.Acceptance
             return bookingReferenceProvider;
         }
 
-        private static IProvideBookingReferences InstantiateBookingReferenceProviderMock(string expectedBookingId)
+        private static IProvideTrainData ConfigureATrainDataProviderMock(string trainId, TrainSnapshot trainConfiguration)
+        {
+            var trainDataProvider = Substitute.For<IProvideTrainData>();
+            trainDataProvider.GetTrainSnapshot(trainId).Returns(trainConfiguration);
+            return trainDataProvider;
+        }
+
+        private static IProvideBookingReferences ConfigureABookingReferenceProviderMock(string expectedBookingId)
         {
             var bookingReferenceProvider = Substitute.For<IProvideBookingReferences>();
             bookingReferenceProvider.GetBookingReference().Returns(new BookingReference(expectedBookingId));
