@@ -25,7 +25,7 @@ Contrairement à __l'*approche classique du TDD*__ par laquelle j'ai commencé, 
 
 __RED (acceptance test) - puis pleins de { RED - GREEN - REFACTOR au niveau (unit tests) } - GREEN (acceptance test) - REFACTOR (acceptance test)__ et on recommence ensuite avec le prochain test d'acceptance sur la boite noire.
 
-L'intérêt principal de cette technique est d'éviter de se perdre en route dans notre implémentation. Cela est rendu possible par nos tests d'acceptance qui vont crystallisant dès le départ les contours et les conditions du succès de l'implémentation de notre système. En ce qui me concèrne, ça me pousse à rester concentré sur l'objectif final et à ne pas dévier en route face à ce juge de paix (le [YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it) d'XP).
+L'intérêt principal de cette technique est d'éviter de se perdre en route dans notre implémentation. Cela est rendu possible par __nos tests d'acceptance__ qui __vont crystalliser dès le départ les contours et les conditions du succès de l'implémentation de notre système__. En ce qui me concèrne, ça me pousse à rester concentré sur l'objectif final et à ne pas dévier en route face à ce juge de paix (le __[YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it)__ d'XP).
 
 ## Acceptance ? Cornichon toi même !
 Par test d'acceptance j'entends un __test gros-grain, qui va porter sur l'ensemble de mon système à l'exception des technnologies pour communiquer avec l'extérieur__ (persistance, middlewares, stack HTTP, etc.). __Ce n'est donc pas un test d'intégration__. Attention également, en lisant "Acceptance", certains d'entre-vous penseront tout de suite à du Gerkhin. Ce n'est pas mon cas, car je ne paie le prix de la surchouche correspondante (specflow /  Cucumber) que si et seulement si le métier est à portée de main et qu'il est à l'aise avec ce format (assez rare en définitive). Mes test d'acceptance sont donc __comme des tests unitaires mais qui portent sur le système dans son ensemble au lieu de porter sur des petites parties du système__. 
@@ -34,21 +34,28 @@ __Dans tous les cas, mes tests ne sont que des tests de comportements !__ et ne 
 
 
 ## Un Outside-in particulier ?
-__Avec le temps et l'expérience, je me suis rendu-compte que certaines petites boucles au niveau "unitaire" que je systématisais avant ne me paraissaient plus du tout indispensables.__ Il n'y a pas de règle pour savoir (ou en tout cas je ne l'ai pas encore identifiée), c'est plutôt lié au contexte, à la difficulté de la tâche en cours pour faire réussir le test d'acceptance, et à la clairvoyance de mon esprit au moment où je code (dans tout cet article, il faut entendre "coder" au sens large, en incluant le Design donc).
+__Avec le temps et l'expérience, je me suis rendu-compte que certaines petites boucles au niveau "unitaire" que je systématisais avant ne me paraissent plus du tout indispensables.__ Il n'y a pas de règle pour savoir si j'écris un test unitaire ou pas (ou en tout cas je ne l'ai pas encore identifiée), c'est plutôt intuitivement lié au contexte, à la difficulté de la tâche en cours pour faire réussir le test d'acceptance, et à la clairvoyance de mon esprit au moment où je code (dans tout cet article, il faut entendre "coder" au sens large, en incluant le Design donc). Par contre si je galère sur le moindre aspect de l'implémentation, c'est un signal pour écrire fissa un test unitaire correspondant.
 
 Bon. Le mieux pour clarifier tout ça, serait de commencer à regarder un peu de code, non ?
 
 ## Le kata utilisé
-Le kata mentionné plus haut est le __[Train Reservation d'Emily BACHE](https://github.com/emilybache/KataTrainReservation/blob/master/README.md)__. L'objectif ? coder une application qui va permettre à des voyageurs de réserver des places dans un train dont ils connaissent déjà l'identifiant. Etant donné un train et sa topologie (récupérée auprès d'une Web API externe), le système à construire a pour but d'identifier les places les plus adaptées à la demande du voyageur en respectant quelques règles métiers du genre :
+Le kata mentionné plus haut est le __[Train Reservation d'Emily BACHE](https://github.com/emilybache/KataTrainReservation/blob/master/README.md)__. 
+
+L'objectif ? coder une application qui va permettre à des voyageurs de réserver des places dans un train dont ils connaissent déjà l'identifiant. Etant donné un train et sa topologie (récupérée auprès d'une Web API externe), le système à construire a pour but d'identifier les places les plus adaptées à la demande de reservation du voyageur en respectant quelques règles métiers du genre :
  - Remplir les trains jusqu'à 70% maximum de leur capacité
  - Attribuer toutes les places demandées pour une réservation dans la même voiture
 
-Pour ce faire, notre système doit composer avec quelques back-ends de l'opérateur historiques des trains (genre SNCF):
- - Une Web API qui fournit la topologie d'un train à partir de son identifiant
- - 
+Pour ce faire, notre système doit composer avec quelques back-ends de l'opérateur historiques des trains (genre SNCF), à savoir : 
+ - Une Web API qui fournit la topologie d'un train à partir de son identifiant (__Train Data Service__)
+ - Une Web API qui fournit un identifiant valable de Booking Reference (contrainte réglementaire) (__Booking Reference Service__)
+ - Une Web API qui permet de réserver officiellement les places que notre système aura identifiées dans un train donné (__Train Data Service__)
+
+
+Quant à nous, __c'est le Train Reservation Service que nous devons implémenter__. 
+
+Prêts ? Je vous propose qu'on commence par un premier test d'acceptance :
+
+## 1er test d'acceptance
 
 
 ---
-English version:
-
-# Rid me of that testing pyramid!
