@@ -63,9 +63,9 @@ Pour mes premiers pas, je m'attaque en général au cas qui me parait le plus si
     Should_reserve_seats_when_unreserved_seats_are_available()
 ```
 
-Ici, j'ai fait comme à mon habitude, une forme un peu particulière de [TDD as if you meant it](https://gojko.net/2009/02/27/thought-provoking-tdd-exercise-at-the-software-craftsmanship-conference/) dans laquelle je laisse l'implémentation émergente dans le même fichier à côté du test le temps d'y voir un plus clair, et de le déplacer ensuite celle-ci dans les bons modules/emplacements. C'est pour cette raison que mon 1er fichier de test contient l'intégralité du test + implémentations. 
+Ensuite, j'ai fait comme à mon habitude une forme un peu particulière de __[TDD as if you meant it](https://gojko.net/2009/02/27/thought-provoking-tdd-exercise-at-the-software-craftsmanship-conference/)__. Celà signifie que je laisse l'implémentation émergente dans le même fichier que celui du test le temps d'y voir un plus clair, et de le déplacer ensuite mon code d'implémentation dans les bons projets/répertoires. C'est pour cette raison que mon 1er fichier de test ci-dessous contient l'intégralité du test + implémentations. 
 
-Bien entendu ici, c'est un test qui échoue que l'on écrit (__RED__-GREEN-REFACTOR) :
+Bien entendu, c'est un test qui échoue que j'ai commencé à écrire (__RED__-GREEN-REFACTOR). Cet article ne rendra pas bien compte en revanche de la dynamique de génération du code d'implémentation au fil des lignes de mon test que j'écris. Je me sers pour cela très intensivement des raccourcis __Alt-Enter__ de R# et de __Ctrl-Shift-Backspace__ de Visual Studio pour revenir au contexte précédent (c.ad. de la ligne du test) quand mon curseur se laisse embarquer dans la nouvelle classe/méthode générée par R#. Au final, j'obtiens le code suivant : 
 
 ```c#
 
