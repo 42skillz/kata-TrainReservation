@@ -18,18 +18,23 @@ Pour décrire ma façon de travailler et mon interprétation personnelle de la d
 ## Quelques notes sur l'Outside-in TDD
 Quand je dois décrire rapidement comment je travaille à quelqu'un avec qui je vais pairer, j'ai l'habitude de dire que je pratique l'outside-in TDD (appellé aussi London-School of TDD, mais aussi la "*double-boucle*").
 
-Contrairement à __l'*approche classique du TDD*__ avec laquelle j'ai commencée, la pratique de __l'*Outside-in TDD*__ me force à considérer mon système (ex: une WEB API, un service, etc.) depuis l'extérieur, __comme une grosse boite noire__. Celle-ci est vide pour commencer, et je vais faire emerger à la fois ses contours (APIs) et son comportement en y écrivant petit à petit des tests d'acceptance. On parle de double-boucle ici car le workflow sera le suivant: 
+Contrairement à __l'*approche classique du TDD*__ avec laquelle j'ai commencée, la pratique de __l'*Outside-in TDD*__ me force à considérer mon système (ex: une WEB API, un service, etc.) __depuis l'extérieur et comme une grosse boite noire__. Celle-ci est vide pour commencer, et __on va faire emerger à la fois ses contours (APIs) et son comportement en y écrivant petit à petit des tests d'acceptance__. On parle de double-boucle ici car le workflow sera le suivant: 
 
 ![outsideInDiagram](outside-in.png)
 
 __RED (acceptance test) - puis pleins de { RED - GREEN - REFACTOR au niveau (unit tests) } - GREEN (acceptance test) - REFACTOR (acceptance test)__ et on recommence ensuite avec le prochain test d'acceptance sur la boite noire.
 
 ## Acceptance ?
-Par test d'acceptance j'entends un test gros-grain, qui va tester l'ensemble de mon système à l'exception des technnologies de persistance ou autre middlewares. Ce n'est donc pas un test d'intégration. Attention également, en lisant "Acceptance", certains d'entre-vous penseront tout de suite à du Gerkhin. Ce n'est pas mon cas, car je ne paie le prix de la surchouche correspondante que si et seulement si le métier est à portée de main et qu'il est à l'aise avec ce format (assez rare en définitive). Mes test d'acceptance sont donc comme des tests unitaires mais qui portent sur le système dans son ensemble au lieu de porter sur des petites parties du système. Dans tous les cas, mes tests sont des tests de comportements et ne sont pas liés à des détails d'implémentations (une des nombreuses erreurs que j'ai pu faire au début, rendant mes tests pénibles car très fragiles à chaque fois que je voulais changer quelque chose dans mon implémentation). 
+Par test d'acceptance j'entends un __test gros-grain, qui va porter sur l'ensemble de mon système à l'exception des technnologies pour communiquer avec l'extérieur__ (persistance, middlewares, stack HTTP, etc.). __Ce n'est donc pas un test d'intégration__. Attention également, en lisant "Acceptance", certains d'entre-vous penseront tout de suite à du Gerkhin. Ce n'est pas mon cas, car je ne paie le prix de la surchouche correspondante que si et seulement si le métier est à portée de main et qu'il est à l'aise avec ce format (assez rare en définitive). Mes test d'acceptance sont donc __comme des tests unitaires mais qui portent sur le système dans son ensemble au lieu de porter sur des petites parties du système__. 
 
-__Avec le temps et l'expérience, je me suis rendu-compte que certaines petites boucles au niveau unitaire que je systématisais avant ne me paraissaient plus indispensables.__ Il n'y a pas de règle pour cela (ou en tout cas je ne l'ai pas identifiée), c'est plutôt lié au contexte, à la difficulté de la tâche et à la clairvoyance de mon esprit au moment où je code (au sens large, en incluant le Design donc).
+__Dans tous les cas, mes tests sont des tests de comportements__ et ne sont pas liés à des détails d'implémentations (une des nombreuses erreurs que j'ai pu faire au début de mon expérience du TDD, rendant mes tests pénibles car très fragiles à chaque fois que je voulais changer quelque chose dans mon implémentation ;-( 
 
+__Avec le temps et l'expérience, je me suis rendu-compte que certaines petites boucles au niveau "unitaire" que je systématisais avant ne me paraissaient plus du tout indispensables.__ Il n'y a pas de règle pour savoir (ou en tout cas je ne l'ai pas encore identifiée), c'est plutôt lié au contexte, à la difficulté de la tâche en cours pour faire réussir le test d'acceptance, et à la clairvoyance de mon esprit au moment où je code (dans tout cet article, il faut entendre "coder" au sens large, en incluant le Design donc).
 
+Bon. Le mieux, c'est peut-être de commencer à regarder le code, ça devrait clarifier encore plus les choses.
+
+## Le kata
+Le kata mentionné plus haut est le TrainReservation
 
 
 ---
