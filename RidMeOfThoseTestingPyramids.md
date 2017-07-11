@@ -63,6 +63,11 @@ Bien entendu ici, c'est un test qui échoue que l'on écrit (__RED__-GREEN-REFAC
 
 ```c#
 
+using KataTrainReservation;
+using NFluent;
+using NSubstitute;
+using NUnit.Framework;
+
 namespace TrainReservation.Tests
 {
     [TestFixture]
