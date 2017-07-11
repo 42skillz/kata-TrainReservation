@@ -57,7 +57,9 @@ Prêts ? Je vous propose qu'on commence par un premier test d'acceptance :
 
 ## 1er test d'acceptance
 
-Pour nos premiers pas, nous allons nous attaquer ici au cas qui nous parait le plus simple. En l'occurence ici, le cas où on veut réserver des sièges dans un train vide (c.ad. avec toutes les places de disponibles). Petit détail pratique au passage : je n'ai pas conservé dans git tous les baby steps, donc le code va apparaitre ici en bloc un peu plus gros que ceux codés à l'époque. Ici, j'ai fait comme à mon habitude du [TDD as if you meant it]() qui est un workflow dans lequel on laisse l'implémentation dans le même fichier à côté du test le temps d'y voir plus clair et de le déplacer ensuite dans les bons modules/emplacements. C'est pour cette raison que mon 1er fichier de test que voici est auto-porteur :
+Pour mes premiers pas, je m'attaque en général au cas qui me parait le plus simple. En l'occurence ici, le cas où on veut réserver des sièges dans un train vide (c.ad. avec toutes les places de disponibles). Petit détail pratique au passage : je n'ai pas conservé dans git tous les baby steps, donc le code va apparaitre ici en bloc un peu plus gros que ceux codés à l'époque. Ici, j'ai fait comme à mon habitude, une forme un peu particulière de [TDD as if you meant it](https://gojko.net/2009/02/27/thought-provoking-tdd-exercise-at-the-software-craftsmanship-conference/) dans laquelle je laisse l'implémentation émergente dans le même fichier à côté du test le temps d'y voir un plus clair, et de le déplacer ensuite celle-ci dans les bons modules/emplacements. C'est pour cette raison que mon 1er fichier de test contient l'intégralité du test + implémentations. 
+
+Bien entendu ici, c'est un test qui échoue que l'on écrit (__RED__-GREEN-REFACTOR) :
 
 ```c#
 
