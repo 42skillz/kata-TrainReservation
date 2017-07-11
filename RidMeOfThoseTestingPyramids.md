@@ -69,9 +69,9 @@ Bien entendu, c'est un test qui échoue que j'ai commencé à écrire (__RED__-G
 
 Cet article ne rendra malheureusement pas bien compte de la dynamique de génération du code d'implémentation au fil des lignes de mon test que j'écris. Je me sers pour cela très intensivement des raccourcis __Alt-Enter__ de R# et de __Ctrl-Shift-Backspace__ de Visual Studio pour revenir au contexte précédent (c.ad. de la ligne du test d'où je suis parti lorsque mon curseur s'est laissé embarquer dans la nouvelle classe/méthode générée par R#). 
 
-J'y fait émerger le concept de __TicketOffice__ (le coeur de mon système à venir), de __ReservationRequest__ mais aussi des 2 services externes (__BookingReferenceProvider__ et __TrainDataProvider__) dont mon système va avoir besoin pour travailler et que je commence ici à stubber à l'aide de la libraire NSubstitute.
+Ce premier test d'acceptance est déjà un exercice de Design pour mon système à venir. J'y fait émerger le concept de __TicketOffice__ (le coeur de mon système à venir), de __ReservationRequest__ mais aussi des 2 services externes (__BookingReferenceProvider__ et __TrainDataProvider__) dont mon système va avoir besoin pour travailler et que je commence ici à stubber à l'aide de la libraire NSubstitute.
 
-Au final, j'obtiens le code suivant : 
+Au final, j'obtiens le code suivant qui constitue les prémices de ma boite noire TrainReservation/TicketOffice : 
 
 ```c#
 
@@ -146,5 +146,7 @@ namespace TrainReservation.Tests
 }
 
 ```
+
+
 
 ---
