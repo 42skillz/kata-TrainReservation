@@ -16,16 +16,18 @@ Je ne sais pas si j'en suis actuellement à la phase d'adaptation ou déjà à l
 Pour décrire ma façon de travailler et mon interprétation personnelle de la double boucle de l'outside-in TDD, je me suis dit qu'il n'y aurait pas mieux que du code pour accompagner mes propos. J'ai donc repris un kata que j'ai eu à faire il y a quelques mois en C# pour m'en servir de base pour mes explications. Celui-ci ayant été réalisé dans des conditions un peu particulières (plutôt tard le soir, et interrompu par de nombreux calins/biberons) et sans savoir que j'allais le  publier, je vous demanderai un peu d'indulgence quant aux design et aux termes métiers un peu approximatif (je découvrais ce sujet et ce kata pour la 1ere fois). Le véritable intérêt de montrer ce code ici est pour l'illustration des types de tests et de cheminement que je prends pour faire "émerger" mon logiciel.
 
 ## Quelques notes sur l'Outside-in TDD
-Quand je dois décrire rapidement comment je travaille à quelqu'un avec qui je vais pairer, 
-> j'ai l'habitude de dire que je pratique l'outside-in TDD (appellé aussi London-School of TDD, mais aussi la "*double-boucle*").
+Quand je dois décrire rapidement comment je travaille à quelqu'un avec qui je vais pairer, j'ai l'habitude de dire que
+> je pratique l'outside-in TDD (appellé aussi London-School of TDD / "*double-boucle*").
 
-Contrairement à __l'*approche classique du TDD*__ avec laquelle j'ai commencée, la pratique de __l'*Outside-in TDD*__ me force à considérer mon système (ex: une WEB API, un service, etc.) __depuis l'extérieur et comme une grosse boite noire__. Celle-ci est vide pour commencer, et __on va faire emerger à la fois ses contours (APIs) et son comportement en y écrivant petit à petit des tests d'acceptance__. On parle de double-boucle ici car le workflow sera le suivant: 
+Contrairement à __l'*approche classique du TDD*__ par laquelle j'ai commencé, la pratique de __l'*Outside-in TDD*__ me force à considérer mon système (ex: une WEB API, un service, etc.) __depuis l'extérieur et comme une grosse boite noire__. Celle-ci est vide pour commencer, et __on va faire emerger à la fois ses contours (APIs) et son comportement en y écrivant petit à petit des tests d'acceptance__. On parle de double-boucle ici car le workflow sera le suivant: 
 
 ![outsideInDiagram](outside-in.png)
 
 __RED (acceptance test) - puis pleins de { RED - GREEN - REFACTOR au niveau (unit tests) } - GREEN (acceptance test) - REFACTOR (acceptance test)__ et on recommence ensuite avec le prochain test d'acceptance sur la boite noire.
 
-## Acceptance ?
+L'intérêt principal de cette technique est d'éviter de se perdre en route dans notre implémentation. Cela est rendu possible par nos tests d'acceptance qui vont crystallisant dès le départ les contours et les conditions du succès de l'implémentation de notre système. En ce qui me concèrne, ça me pousse à rester concentré sur l'objectif final et à ne pas dévier en route face à ce juge de paix (le [YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it) d'XP).
+
+## Acceptance ? Cornichon toi même !
 Par test d'acceptance j'entends un __test gros-grain, qui va porter sur l'ensemble de mon système à l'exception des technnologies pour communiquer avec l'extérieur__ (persistance, middlewares, stack HTTP, etc.). __Ce n'est donc pas un test d'intégration__. Attention également, en lisant "Acceptance", certains d'entre-vous penseront tout de suite à du Gerkhin. Ce n'est pas mon cas, car je ne paie le prix de la surchouche correspondante (specflow /  Cucumber) que si et seulement si le métier est à portée de main et qu'il est à l'aise avec ce format (assez rare en définitive). Mes test d'acceptance sont donc __comme des tests unitaires mais qui portent sur le système dans son ensemble au lieu de porter sur des petites parties du système__. 
 
 __Dans tous les cas, mes tests ne sont que des tests de comportements !__ et ne sont pas liés à des détails d'implémentations (une des nombreuses erreurs que j'ai pu faire au début de mon expérience du TDD, rendant mes tests pénibles car très fragiles à chaque fois que je voulais changer quelque chose dans mon implémentation ;-( 
