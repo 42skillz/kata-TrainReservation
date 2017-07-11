@@ -14,7 +14,7 @@ namespace TrainReservation.Domain
             BookingReference = bookingReference;
         }
 
-        public bool IsAvailable { get { return BookingReference.Equals(BookingReference.Null); } }
+        public bool IsAvailable => BookingReference.Equals(BookingReference.Null);
 
         protected override IEnumerable<object> GetAllAttributesToBeUsedForEquality()
         {
