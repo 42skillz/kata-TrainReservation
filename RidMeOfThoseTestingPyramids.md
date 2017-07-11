@@ -57,5 +57,75 @@ Prêts ? Je vous propose qu'on commence par un premier test d'acceptance :
 
 ## 1er test d'acceptance
 
+Pour nos premiers pas, nous allons nous attaquer ici au cas qui nous parait le plus simple. En l'occurence ici, le cas où on veut réserver des sièges dans un train vide (c.ad. avec toutes les places de disponibles). Petit détail pratique au passage : je n'ai pas conservé dans git tous les baby steps, donc le code va apparaitre ici en bloc un peu plus gros que ceux codés à l'époque. Ici, j'ai fait comme à mon habitude du [TDD as if you meant it]() qui est un workflow dans lequel on laisse l'implémentation dans le même fichier à côté du test le temps d'y voir plus clair et de le déplacer ensuite dans les bons modules/emplacements. C'est pour cette raison que mon 1er fichier de test que voici est auto-porteur :
+
+```c#
+
+namespace TrainReservation.Tests
+{
+    [TestFixture]
+    public class TicketOfficeTests
+    {
+        [Test]
+        public void Should_reserve_seats_when_unreserved_seats_are_available()
+        {
+            var bookingReferenceProvider = Substitute.For<IProvideBookingReferences>();
+            string expectedBookingId = "75bcd15";
+            bookingReferenceProvider.GetBookingReference().Returns(expectedBookingId);
+
+            var trainDataProvider = new TrainDataProvider();
+
+            var ticketOffice = new TicketOffice(bookingReferenceProvider, trainDataProvider);
+            var trainId = "express_2000";
+
+            var reservationRequest = new ReservationRequest(trainId, 3);
+            var reservation = ticketOffice.Reserve(reservationRequest);
+
+            Check.That(reservation.TrainId).IsEqualTo(trainId);
+            Check.That(reservation.BookingId).IsEqualTo(expectedBookingId);
+            Check.That(reservation.Seats).ContainsExactly(new Seat("A", 1), new Seat("A", 2), new Seat("A", 3));
+        }
+    }
+
+    public interface IProvideTrainData
+    {
+    }
+
+    public class TrainDataProvider : IProvideTrainData
+    {
+    }
+
+    public interface IProvideBookingReferences
+    {
+        string GetBookingReference();
+    }
+
+    public class BookingReferenceProvider : IProvideBookingReferences
+    {
+        public string GetBookingReference()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
+    public class TicketOffice
+    {
+        private IProvideBookingReferences bookingReferenceProvider;
+        private IProvideTrainData trainDataProvider;
+
+        public TicketOffice(IProvideBookingReferences bookingReferenceProvider, IProvideTrainData trainDataProvider)
+        {
+            this.bookingReferenceProvider = bookingReferenceProvider;
+            this.trainDataProvider = trainDataProvider;
+        }
+
+        public Reservation Reserve(ReservationRequest reservationRequest)
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+}
+
+```
 
 ---
