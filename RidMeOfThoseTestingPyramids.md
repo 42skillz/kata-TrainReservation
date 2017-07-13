@@ -144,24 +144,79 @@ namespace TrainReservation.Tests
             throw new System.NotImplementedException();
         }
     }
+
+    public class ReservationRequest
+    {
+        public string TrainId { get; private set; }
+        public int SeatCount { get; private set; }
+
+        public ReservationRequest(string trainId, int seatCount)
+        {
+            this.TrainId = trainId;
+            this.SeatCount = seatCount;
+        }
+    }
+
+    public class Reservation
+    {
+        public string TrainId { get; private set; }
+        public string BookingId { get; private set; }
+        public List<Seat> Seats { get; private set; }
+
+        public Reservation(string trainId, string bookingId, List<Seat> seats)
+        {
+            this.TrainId = trainId;
+            this.BookingId = bookingId;
+            this.Seats = seats;
+        }
+    }
+
+    public class Seat
+    {
+        public string Coach { get; private set; }
+        public int SeatNumber { get; private set; }
+
+        public Seat(string coach, int seatNumber)
+        {
+            this.Coach = coach;
+            this.SeatNumber = seatNumber;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        /// <summary>
+        /// N.B. this is not how you would override equals in a production environment. :)
+        /// </summary>
+        public override bool Equals(object obj)
+        {
+            Seat other = obj as Seat;
+
+            return this.Coach == other.Coach && this.SeatNumber == other.SeatNumber;
+        }
+    }
 }
 
 ```
 
-Ok pour le __RED__, passons maintenant au __GREEN__ de ce test d'acceptance. Pour ceci, c'est l'implémentation de __la méthode MakeReservation(...)__ (et non plus Reserve(...)) du type __TicketOffice__ qui va être la plus impactée. Voici la nouvelle version:
+Intéressant de souligner ici que j'ai laissé le plugin R# m'aider à redéfinir temporairement les méthodes GetHashCode() et le Equals(object obj) __du type Seat__ pour pouvoir le rendre comparable "par valeur" (j'en avais besoin pour ma dernière assertion/check). 
+
+J'aurai du le transformer de suite en __*Value type*__ (au moins en rajoutant read-only sur les propriétés Coach et SeatNumber ou sinon en utilisant la __[librairie Value](https://github.com/tpierrain/Value/blob/master/Readme.md)__), mais je pense que c'est par inadvertance ou parce que cette librairie Value n'était pas encore packagée/disponible sur nuget à l'époque.
+
+
+Bon. C'est ok pour le __RED__, passons maintenant au __GREEN__ de ce test d'acceptance. Pour faire passer ce test, j'ai remplacé le 
+```C#
+    throw new System.NotImplementedException();
+```
+de la méthode __TicketOffice.MakeReservation(...)__ (qui ne s'appelle plus "Reserve" en passant), par l'implémentation suivante :
 
 ```C#
 
     public class TicketOffice
     {
-        private readonly IProvideBookingReferences bookingReferenceProvider;
-        private readonly IProvideTrainData trainDataProvider;
-
-        public TicketOffice(IProvideBookingReferences bookingReferenceProvider, IProvideTrainData trainDataProvider)
-        {
-            this.bookingReferenceProvider = bookingReferenceProvider;
-            this.trainDataProvider = trainDataProvider;
-        }
+        // ...
 
         public Reservation MakeReservation(ReservationRequest request)
         {
@@ -187,6 +242,10 @@ Ok pour le __RED__, passons maintenant au __GREEN__ de ce test d'acceptance. Pou
     }
 
 ```
+Ici, l'écriture du code de cette méthode m'a paru suffisamment simple et rapide pour que je ne ressente pas le besoin de faire une petite boucle avec un ou plusieurs tests unitaires intermédiaires.
+
+Il y a quelques années, j'aurai surement rajouté sur ma route un  test unitaire portant sur le comportement du type __Seat__ (et sans doute pour vérifier comment fonctionne la méthode *IsAvailable()* ). Mais désormais, parce que j'ai déjà un test d'acceptance qui couvre mon action et que le code ne me pose pas de problème (de design ni d'implémentation), j'ai plutôt tendance à avancer rapidement et à ne faire de petites boucles de tests unitaires que si je ressens la moindre difficulté sur ma route (ce qui n'a pas été le cas ici).
+
 
 
 
