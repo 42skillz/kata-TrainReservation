@@ -332,7 +332,7 @@ Quand on y regarde de plus près, cette première implémentation de la méthode
 #### Rome ne s'est pas fait en 1 jour
 On le verra, c'est en rajoutant de nouveaux cas de tests que je m'apercevrai plus tard de cette erreur d'implémentation et la rectifierai. Bon, on n'en est pas encore là. On passe au second test d'acceptance ?
 
-### 2nd test d'acceptance
+## Au suivant ! (2nd test d'acceptance)
 
 Pour ce second test d'acceptance, j'ai choisi de continuer à explorer le "*Happy Path*" en écrivant un test qui vérifie - une fois qu'on a trouvé des places de libre- qu'on appelle bien l'API de l'opérateur historique pour leur demander de les reserver. Je réfléchis donc encore 30 secondes, et clarifie mes intentions en écrivant comme nom pour ce test :
 
