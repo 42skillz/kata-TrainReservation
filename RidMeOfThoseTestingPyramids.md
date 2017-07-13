@@ -67,6 +67,8 @@ Ensuite, j'ai fait comme à mon habitude une forme un peu particulière de __[TD
 
 Bien entendu, c'est un test qui échoue que j'ai commencé à écrire (__RED__-GREEN-REFACTOR). 
 
+
+#### Des raccourcis, encore des raccourcis
 Cet article ne rendra malheureusement pas bien compte de la dynamique de génération du code d'implémentation au fil des lignes de mon test que j'écris. Je me sers pour cela très intensivement des raccourcis __Alt-Enter__ de R# (pour pouvoir créer des types et des méthodes à la volée) et de __Ctrl-Shift-Backspace__ de Visual Studio (pour pouvoir revenir au contexte précédent, c.ad. de la ligne du test d'où je suis parti lorsque mon curseur s'est laissé embarquer dans la nouvelle classe/méthode générée par R#). 
 
 #### Un exercice de Design
@@ -244,13 +246,48 @@ de la méthode __TicketOffice.MakeReservation(...)__ (qui ne s'appelle plus "Res
 ```
 Ici, l'écriture du code de cette méthode m'a paru suffisamment simple et rapide pour que je ne ressente pas le besoin de faire une petite boucle avec un ou plusieurs tests unitaires intermédiaires.
 
-### Il y a quelques années...
+#### Il y a quelques années...
 Il y a quelques années, j'aurai surement rajouté sur ma route un  test unitaire ou deux portant sur le comportement du type __Seat__ par exemple (notamment pour vérifier qu'il est bien comparable par "valeurs"). 
 
-### Maintenant...
+#### Maintenant...
 Mais désormais, parce que j'ai déjà un test d'acceptance qui couvre mon action et que le code ne me pose pas de problème (de design ni d'implémentation), j'ai plutôt tendance à avancer rapidement et à ne faire de petites boucles de tests unitaires que si je ressens la moindre difficulté sur ma route (ce qui n'a pas été le cas ici).
 
-Dernier détail au sujet de cette implémentation : vu que la seconde assertion de mon test d'acceptance en avait besoin, j'ai rajouté les 4-5 classes de ma librairie *Value* __pour__ m'aider à faire en sorte __que le type BookingReference devienne un *ValueType*__. Ca consiste à le faire dériver de la classe concrète *ValueType*, ce qui nous force ensuite à implémenter la méthode abstraite *GetAllAttributesToBeUsedForEquality()* qui sert à la libraire pour comparer deux instances du même type. Voici ce que cela donne : 
+#### Un test incomplet...
+Dès mes premiers pas sur l'implémentation de la méthode MakeReservation(), je me suis rendu compte que mon test d'acceptance était incomplet et que j'avais oublié d'y définir une topologie pour le train. J'ai donc du modifié celui-ci en cours de route pour instruire mon stub de IProvideTrainData (l'interface qui abstrait les appels au service web TrainDataService de l'opérateur historique). 
+
+Voici donc la nouvelle version de la construction du Stub :
+
+```C#
+// setup IProvideTrainData mock
+var trainId = "express_2000";
+var trainDataProvider = Substitute.For<IProvideTrainData>();
+// What has been 
+trainDataProvider.GetSeats(trainId).Returns(new List<SeatWithBookingReference>() { new SeatWithBookingReference(new Seat("A", 1), BookingReference.Null), new SeatWithBookingReference(new Seat("A", 2), BookingReference.Null) , new SeatWithBookingReference(new Seat("A", 3), BookingReference.Null) });
+```
+
+et l'ajout d'une nouvelle sructure de données que voici : 
+
+````C#  
+public class SeatWithBookingReference
+{
+    public Seat Seat { get; }
+    public BookingReference BookingReference { get; }
+
+    public SeatWithBookingReference(Seat seat, BookingReference bookingReference)
+    {
+        Seat = seat;
+        BookingReference = bookingReference;
+    }
+
+    public bool IsAvailable()
+    {
+        return BookingReference.Equals(BookingReference.Null);
+    }
+}
+````
+
+#### Value Type
+Dernier détail au sujet de cette implémentation : vu que la seconde assertion de mon test d'acceptance en avait besoin, j'ai également rajouté les 4-5 classes de ma librairie *Value* __pour__ m'aider à faire en sorte __que le type BookingReference devienne un *ValueType*__. Ca consiste à le faire dériver de la classe concrète *ValueType*, ce qui nous force ensuite à implémenter la méthode abstraite *GetAllAttributesToBeUsedForEquality()* qui sert à la libraire pour comparer deux instances du même type. Voici ce que cela donne : 
 
 ```C#
     public class BookingReference : ValueType<BookingReference>
@@ -277,8 +314,16 @@ Dernier détail au sujet de cette implémentation : vu que la seconde assertion 
     }
 ```
 
-public class BookingReference : ValueType<BookingReference>
+#### L'avez-vous remarqué ?
+Quand on y regarde de plus près, cette première implémentation de la méthode MakeReservation() est vraiment naïve. En effet, elle agit presque comme un aspirateur à __Seats__ ;-) qui va réserver tous les sièges de libre même si on n'en veut que 2. Je ne l'ai pas vu de suite -surement à cause de mon état de fatigue de l'époque- mais surtout parce que mon 1er test d'acceptance était mal écrit car propice à ce type de bétise. En effet, celui-ci proposait déjà un train avec 3 places de libres alors même que je demandais à reserver 3 places... 
 
+#### Rome ne s'est pas fait en 1 jour
+On le verra, c'est en rajoutant de nouveaux cas de tests que l'on s'appercevra ensuite de cette erreur d'implémentation et que l'on pourra rectifier le tir. Bon, on passe au second test d'acceptance ?
 
+### Second test d'acceptance
+
+Pour ce second test d'acceptance, j'ai choisi de continuer à explorer le "Happy Path" en décidant d'écrire un test qui vérifie - une fois qu'on a trouvé des places de libre- qu'on demande bien au back-office de l'opérateur historique de les reserver pour nous. Je réfléchis encore 30 secondes et choisi comme nom pour ce test :
+
+> Should_mark_seats_as_reserved_once_reserved()
 
 ---
