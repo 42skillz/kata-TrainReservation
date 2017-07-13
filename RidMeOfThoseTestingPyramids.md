@@ -295,7 +295,7 @@ public class SeatWithBookingReference
 ````
 
 #### Value Type
-Dernier détail au sujet de cette première implémentation : vu que la seconde assertion de mon test d'acceptance en avait besoin, j'ai également rajouté les 4-5 classes de ma librairie *Value* dans mon projet __pour__ m'aider à faire en sorte __que le type BookingReference devienne un *ValueType*__.
+Dernier détail au sujet de cette première implémentation : vu que la seconde assertion de mon test d'acceptance en avait besoin, j'ai également rajouté les 4-5 classes de ma __[librairie *Value*](https://github.com/tpierrain/Value/blob/master/Readme.md)__ dans mon projet __pour__ m'aider à faire en sorte __que le type BookingReference devienne un *ValueType*__.
 
 ![](Value-tiny.jpg)
 
