@@ -364,6 +364,7 @@ public void Should_mark_seats_as_reserved_once_reserved()
     Check.That(reservation.BookingId).IsEqualTo(expectedBookingId);
     Check.That(reservation.Seats).ContainsExactly(new Seat("A", 2));
 
+    // We ask our mock if it has been called on the MarkSeatsAsReserved(...) methods and with the expected arguments
     trainDataProvider.Received().MarkSeatsAsReserved(trainId, new BookingReference(reservation.BookingId), new List<Seat>(){new Seat("A", 2)});
 }
 ```
