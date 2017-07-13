@@ -244,8 +244,40 @@ de la méthode __TicketOffice.MakeReservation(...)__ (qui ne s'appelle plus "Res
 ```
 Ici, l'écriture du code de cette méthode m'a paru suffisamment simple et rapide pour que je ne ressente pas le besoin de faire une petite boucle avec un ou plusieurs tests unitaires intermédiaires.
 
-Il y a quelques années, j'aurai surement rajouté sur ma route un  test unitaire portant sur le comportement du type __Seat__ (et sans doute pour vérifier comment fonctionne la méthode *IsAvailable()* ). Mais désormais, parce que j'ai déjà un test d'acceptance qui couvre mon action et que le code ne me pose pas de problème (de design ni d'implémentation), j'ai plutôt tendance à avancer rapidement et à ne faire de petites boucles de tests unitaires que si je ressens la moindre difficulté sur ma route (ce qui n'a pas été le cas ici).
+### Il y a quelques années...
+Il y a quelques années, j'aurai surement rajouté sur ma route un  test unitaire ou deux portant sur le comportement du type __Seat__ par exemple (notamment pour vérifier qu'il est bien comparable par "valeurs"). 
 
+### Maintenant...
+Mais désormais, parce que j'ai déjà un test d'acceptance qui couvre mon action et que le code ne me pose pas de problème (de design ni d'implémentation), j'ai plutôt tendance à avancer rapidement et à ne faire de petites boucles de tests unitaires que si je ressens la moindre difficulté sur ma route (ce qui n'a pas été le cas ici).
+
+Dernier détail au sujet de cette implémentation : vu que la seconde assertion de mon test d'acceptance en avait besoin, j'ai rajouté les 4-5 classes de ma librairie *Value* __pour__ m'aider à faire en sorte __que le type BookingReference devienne un *ValueType*__. Ca consiste à le faire dériver de la classe concrète *ValueType*, ce qui nous force ensuite à implémenter la méthode abstraite *GetAllAttributesToBeUsedForEquality()* qui sert à la libraire pour comparer deux instances du même type. Voici ce que cela donne : 
+
+```C#
+    public class BookingReference : ValueType<BookingReference>
+    {
+        private readonly string bookingReference;
+        private static readonly BookingReference nullReference = new BookingReference(string.Empty);
+
+        public BookingReference(string bookingReference)
+        {
+            this.bookingReference = bookingReference;
+        }
+
+        public static BookingReference Null { get { return nullReference; } }
+
+        protected override IEnumerable<object> GetAllAttributesToBeUsedForEquality()
+        {
+            return new[] {bookingReference};
+        }
+
+        public bool IsNull()
+        {
+            return Equals(Null);
+        }
+    }
+```
+
+public class BookingReference : ValueType<BookingReference>
 
 
 
