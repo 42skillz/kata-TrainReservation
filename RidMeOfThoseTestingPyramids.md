@@ -320,10 +320,50 @@ Quand on y regarde de plus près, cette première implémentation de la méthode
 #### Rome ne s'est pas fait en 1 jour
 On le verra, c'est en rajoutant de nouveaux cas de tests que l'on s'appercevra ensuite de cette erreur d'implémentation et que l'on pourra rectifier le tir. Bon, on passe au second test d'acceptance ?
 
-### Second test d'acceptance
+### Passons maintenant au 2nd test d'acceptance
 
-Pour ce second test d'acceptance, j'ai choisi de continuer à explorer le "Happy Path" en décidant d'écrire un test qui vérifie - une fois qu'on a trouvé des places de libre- qu'on demande bien au back-office de l'opérateur historique de les reserver pour nous. Je réfléchis encore 30 secondes et choisi comme nom pour ce test :
+Pour ce second test d'acceptance, j'ai choisi de continuer à explorer le "*Happy Path*" en écrivant un test qui vérifie - une fois qu'on a trouvé des places de libre- qu'on appelle bien l'API de l'opérateur historique pour leur demander de les reserver. Je réfléchis donc encore 30 secondes, et clarifie mes intentions en écrivant comme nom pour ce test :
 
 > Should_mark_seats_as_reserved_once_reserved()
+
+Le test ressemble à ça :
+
+```C#
+[Test]
+public void Should_mark_seats_as_reserved_once_reserved()
+{
+    // setup mocks
+    var expectedBookingId = "75bcd15";
+    var bookingReferenceProvider = Substitute.For<IProvideBookingReferences>();
+    bookingReferenceProvider.GetBookingReference().Returns(expectedBookingId);
+
+    var trainId = "express_2000";
+    var trainDataProvider = Substitute.For<IProvideTrainData>();
+    trainDataProvider.GetSeats(trainId).Returns(new List<SeatWithBookingReference>() { new SeatWithBookingReference(new Seat("A", 1), new BookingReference("34Dsq")), new SeatWithBookingReference(new Seat("A", 2), BookingReference.Null), new SeatWithBookingReference(new Seat("A", 3), new BookingReference("34Dsq")) });
+
+    // act
+    var ticketOffice = new TicketOffice(bookingReferenceProvider, trainDataProvider);
+    var reservation = ticketOffice.MakeReservation(new ReservationRequest(trainId, 1));
+
+    Check.That(reservation.TrainId).IsEqualTo(trainId);
+    Check.That(reservation.BookingId).IsEqualTo(expectedBookingId);
+    Check.That(reservation.Seats).ContainsExactly(new Seat("A", 2));
+
+    trainDataProvider.Received().MarkSeatsAsReserved(trainId, new BookingReference(reservation.BookingId), new List<Seat>(){new Seat("A", 2)});
+}
+```
+et j'ai besoin de rajouter une nouvelle méthode *MarkSeatsAsReserved()* à l'interface *IProvideTrainData* existante. Cela donne ça:
+
+```C#
+public interface IProvideTrainData
+{
+    List<SeatWithBookingReference> GetSeats(string trainId);
+    void MarkSeatsAsReserved(string trainId, BookingReference bookingReference, List<Seat> seats);
+}
+```
+
+Le test est bien RED, il est temps de le *mettre au vert*.
+
+
 
 ---
