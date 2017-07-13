@@ -368,7 +368,7 @@ public void Should_mark_seats_as_reserved_once_reserved()
     trainDataProvider.Received().MarkSeatsAsReserved(trainId, new BookingReference(reservation.BookingId), new List<Seat>(){new Seat("A", 2)});
 }
 ```
-Ce qui m'a fait rajouter une nouvelle méthode *MarkSeatsAsReserved()* à l'interface *IProvideTrainData* existante. Interface qui ressemblait donc à ça :
+Ce qui m'a fait rajouter en route une nouvelle méthode *MarkSeatsAsReserved()* sur l'interface *IProvideTrainData* existante. Celle-ci ressemble donc désormais à :
 
 ```C#
 public interface IProvideTrainData
@@ -378,7 +378,9 @@ public interface IProvideTrainData
 }
 ```
 
-Le test est bien RED, il est temps de le *mettre au vert*.
+Le test est bien RED, il est donc temps de le *mettre au vert*.
+
+
 
 
 
