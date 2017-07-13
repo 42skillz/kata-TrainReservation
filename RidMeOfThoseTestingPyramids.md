@@ -13,19 +13,19 @@ En fait, celà fait longtemps que je veux écrire cet article sur ma pratique pa
 Je ne sais pas si j'en suis actuellement à la phase d'adaptation ou déjà à la phase de transcendence en ce qui concèrne le TDD, mais je sais juste que cela fonctionne très bien pour moi (pour être à la fois zen et efficace au travail). __Si vous débutez la pratique du TDD en revanche, je vous pousserai plutôt à ne pas me suivre tout de suite, et à systématiser plutôt une approche *by-the-book*__ (*out-of-the-box* pour reprendre les termes de Kent BECK) avant de faire un jour votre propre adaptation.
 
 ## Le code en support
-Pour décrire ma façon de travailler et mon interprétation personnelle de la double boucle de l'outside-in TDD, je me suis dit qu'il n'y aurait pas mieux que du code pour accompagner mes propos. J'ai donc repris un kata que j'ai eu à faire il y a quelques mois en C# pour m'en servir de base pour mes explications. Celui-ci ayant été réalisé dans des conditions un peu particulières (plutôt tard le soir, et interrompu par de nombreux calins/biberons) et sans savoir que j'allais le  publier, je vous demanderai un peu d'indulgence quant aux design et aux termes métiers un peu approximatif (je découvrais ce sujet et ce kata pour la 1ere fois). Le véritable intérêt de montrer ce code ici est pour l'illustration des types de tests et de cheminement que je prends pour faire "émerger" mon logiciel.
+Pour décrire ma façon de travailler et mon interprétation personnelle de la double boucle de l'outside-in TDD, je me suis dit qu'il n'y aurait pas mieux que du code pour accompagner mes propos. J'ai donc repris un kata que j'ai eu à faire il y a quelques mois en C# pour m'en servir de base pour mes explications. Celui-ci ayant été réalisé dans des conditions un peu particulières (plutôt tard le soir, et interrompu par de nombreux calins/biberons) et sans savoir que j'allais le  publier, je vous demanderai un peu d'indulgence quant aux design et aux termes métiers un peu approximatifs (je découvrais le sujet et ce kata pour la 1ere fois). L'intérêt de montrer ce code est pour mieux illustrer les types de tests et le cheminement que j'ai pris pour faire "émerger" mon logiciel.
 
 ## Quelques notes sur l'Outside-in TDD
 Quand je dois décrire rapidement comment je travaille à quelqu'un avec qui je vais pairer, j'ai l'habitude de dire que
 > je pratique l'outside-in TDD (appellé aussi London-School of TDD / "*double-boucle*").
 
-Contrairement à __l'*approche classique du TDD*__ par laquelle j'ai commencé, la pratique de __l'*Outside-in TDD*__ me force à considérer mon système (ex: une WEB API, un service, etc.) __depuis l'extérieur et comme une grosse boite noire__. Celle-ci est vide pour commencer, et __on va faire emerger à la fois ses contours (APIs) et son comportement en y écrivant petit à petit des tests d'acceptance__. On parle de double-boucle ici car le workflow sera le suivant: 
+Contrairement à __l'*approche classique du TDD*__ par laquelle j'ai commencé (et appelée aussi parfois inside-out), la pratique de __l'*Outside-in TDD*__ me force à __considérer mon système__ (ex: une WEB API, un service, etc.) __depuis l'extérieur, comme une grosse boite noire__. Celle-ci est vide pour commencer, et __on va faire emerger à la fois ses contours (APIs) et son comportement en y écrivant petit à petit des tests d'acceptance__. On parle de double-boucle ici car le workflow sera le suivant: 
 
 ![outsideInDiagram](outside-in.png)
 
 __RED (acceptance test) - puis pleins de { RED - GREEN - REFACTOR au niveau (unit tests) } - GREEN (acceptance test) - REFACTOR (acceptance test)__ et on recommence ensuite avec le prochain test d'acceptance sur la boite noire.
 
-L'intérêt principal de cette technique est d'éviter de se perdre en route dans notre implémentation. Cela est rendu possible par __nos tests d'acceptance__ qui __vont crystalliser dès le départ les contours et les conditions du succès de l'implémentation de notre système__. En ce qui me concèrne, ça me pousse à rester concentré sur l'objectif final et à ne pas dévier en route face à ce juge de paix (le __[YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it)__ d'XP).
+L'intérêt principal de cette technique est d'éviter de se perdre en route dans notre implémentation. Cela est rendu possible par __nos tests d'acceptance__ qui __vont crystalliser dès le départ les contours et les conditions du succès de l'implémentation de notre système__. En ce qui me concèrne, ça me pousse à rester concentré sur l'objectif final et à ne pas dévier en route face à ce juge de paix minimaliste (le __[YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it)__ d'XP).
 
 ## Acceptance ? Cornichon toi même !
 Par test d'acceptance j'entends un __test gros-grain, qui va porter sur l'ensemble de mon système à l'exception des technnologies pour communiquer avec l'extérieur__ (persistance, middlewares, stack HTTP, etc.). __Ce n'est donc pas un test d'intégration__. Attention également, en lisant "Acceptance", certains d'entre-vous penseront tout de suite à du Gerkhin. Ce n'est pas mon cas, car je ne paie le prix de la surchouche correspondante (specflow /  Cucumber) que si et seulement si le métier est à portée de main et qu'il est à l'aise avec ce format (assez rare en définitive). Mes test d'acceptance sont donc __comme des tests unitaires mais qui portent sur le système dans son ensemble au lieu de porter sur des petites parties du système__. 
@@ -53,22 +53,23 @@ Pour ce faire, notre système doit composer avec quelques back-ends de l'opérat
 
 Quant à nous, __c'est le Train Reservation Service que nous devons implémenter__. 
 
-Prêts ? Je vous propose qu'on commence par un premier test d'acceptance. Ah si ! avant que je n'oublie : je n'ai pas conservé tous mes baby steps dans GIT, donc le code que je présenterai ici (ou que vous pouvez aller voir dans les commits de ce repo) apparaitra en bloc un peu plus gros que ceux rajoutés à l'époque.
+Prêts ? Je vous propose qu'on commence par un premier test d'acceptance. Ah si ! avant que je n'oublie : je n'ai pas conservé tous mes baby steps dans git, donc le code que je présenterai ici (ou que vous pouvez aller voir dans les commits de ce repo) apparaitra en bloc un peu plus gros que ceux rajoutés à l'époque.
 
 ## 1er test d'acceptance
 
-Pour mes premiers pas, je m'attaque en général au cas qui me parait le plus simple. En l'occurence ici, le cas où on veut réserver des sièges dans un train vide (c.ad. avec toutes les places de disponibles). Je réfléchi 30 secondes et pars donc sur un nom de test qui va m'aider à clarifier mon intention pour celui-ci : 
+Pour mes premiers pas, je m'attaque en général au cas qui me parait le plus simple. En l'occurence ici, le cas où on veut réserver des sièges dans un train vide (avec toutes les places de disponibles donc). Je réfléchi 30 secondes et pars donc sur un nom de test qui va m'aider à clarifier mon intention pour celui-ci : 
 
 ```c#
     Should_reserve_seats_when_unreserved_seats_are_available()
 ```
 
-Ensuite, j'ai fait comme à mon habitude une forme un peu particulière de __[TDD as if you meant it](https://gojko.net/2009/02/27/thought-provoking-tdd-exercise-at-the-software-craftsmanship-conference/)__. Celà signifie que je laisse l'implémentation émergente dans le même fichier que celui du test le temps d'y voir un plus clair, et de le déplacer ensuite mon code d'implémentation dans un second temps dans les bons projets/répertoires. C'est pour cette raison que mon 1er fichier de test ci-dessous contient l'intégralité du test + implémentations nécessaires. 
+Ensuite, j'ai fait comme à mon habitude une forme un peu particulière de __[TDD as if you meant it](https://gojko.net/2009/02/27/thought-provoking-tdd-exercise-at-the-software-craftsmanship-conference/)__. Celà signifie que je laisse l'implémentation émergente dans le même fichier que celui du test le temps d'y voir un plus clair, et de le déplacer ensuite dans un second temps ce code d'implémentation dans les bons projets/répertoires. C'est pour cette raison que mon 1er fichier de tests ci-dessous contient l'intégralité du test + implémentations nécessaires. 
 
 Bien entendu, c'est un test qui échoue que j'ai commencé à écrire (__RED__-GREEN-REFACTOR). 
 
-Cet article ne rendra malheureusement pas bien compte de la dynamique de génération du code d'implémentation au fil des lignes de mon test que j'écris. Je me sers pour cela très intensivement des raccourcis __Alt-Enter__ de R# et de __Ctrl-Shift-Backspace__ de Visual Studio pour revenir au contexte précédent (c.ad. de la ligne du test d'où je suis parti lorsque mon curseur s'est laissé embarquer dans la nouvelle classe/méthode générée par R#). 
+Cet article ne rendra malheureusement pas bien compte de la dynamique de génération du code d'implémentation au fil des lignes de mon test que j'écris. Je me sers pour cela très intensivement des raccourcis __Alt-Enter__ de R# (pour pouvoir créer des types et des méthodes à la volée) et de __Ctrl-Shift-Backspace__ de Visual Studio (pour pouvoir revenir au contexte précédent, c.ad. de la ligne du test d'où je suis parti lorsque mon curseur s'est laissé embarquer dans la nouvelle classe/méthode générée par R#). 
 
+#### Un exercice de Design
 Ce premier test d'acceptance est déjà un exercice de Design pour mon système à venir. J'y fait émerger le concept de __TicketOffice__ (le coeur de mon système à venir), de __ReservationRequest__ mais aussi des 2 services externes (__BookingReferenceProvider__ et __TrainDataProvider__) dont mon système va avoir besoin pour travailler et que je commence ici à stubber à l'aide de la libraire NSubstitute.
 
 Au final, j'obtiens le code suivant qui constitue les prémices de ma boite noire TrainReservation/TicketOffice : 
@@ -144,6 +145,46 @@ namespace TrainReservation.Tests
         }
     }
 }
+
+```
+
+Ok pour le __RED__, passons maintenant au __GREEN__ de ce test d'acceptance. Pour ceci, c'est l'implémentation de __la méthode MakeReservation(...)__ (et non plus Reserve(...)) du type __TicketOffice__ qui va être la plus impactée. Voici la nouvelle version:
+
+```C#
+
+    public class TicketOffice
+    {
+        private readonly IProvideBookingReferences bookingReferenceProvider;
+        private readonly IProvideTrainData trainDataProvider;
+
+        public TicketOffice(IProvideBookingReferences bookingReferenceProvider, IProvideTrainData trainDataProvider)
+        {
+            this.bookingReferenceProvider = bookingReferenceProvider;
+            this.trainDataProvider = trainDataProvider;
+        }
+
+        public Reservation MakeReservation(ReservationRequest request)
+        {
+            var reservedSeats = new List<Seat>();
+
+            var seats = trainDataProvider.GetSeats(request.TrainId);
+            foreach (var seatWithBookingReference in seats)
+            {
+                if (seatWithBookingReference.IsAvailable())
+                {
+                    reservedSeats.Add(seatWithBookingReference.Seat);
+                }
+            }
+
+            if (reservedSeats.Count > 0)
+            {
+                var bookingReference = bookingReferenceProvider.GetBookingReference();
+                return new Reservation(request.TrainId, bookingReference, reservedSeats);
+            }
+
+            return new Reservation(request.TrainId, string.Empty, reservedSeats);
+        }
+    }
 
 ```
 
