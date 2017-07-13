@@ -250,12 +250,14 @@ Ici, l'écriture du code de cette méthode m'a paru suffisamment simple et rapid
 Il y a quelques années, j'aurai surement rajouté sur ma route un  test unitaire ou deux portant sur le comportement du type __Seat__ par exemple (notamment pour vérifier qu'il est bien comparable par "valeurs"). 
 
 #### Maintenant...
-Mais désormais, parce que j'ai déjà un test d'acceptance qui couvre mon action et que le code ne me pose pas de problème (de design ni d'implémentation), j'ai plutôt tendance à avancer rapidement et à ne faire de petites boucles de tests unitaires que si je ressens la moindre difficulté sur ma route (ce qui n'a pas été le cas ici).
+Désormais, parce que j'ai déjà un test d'acceptance qui couvre mon action et que le code ne me pose pas de problème (de design ni d'implémentation), j'ai plutôt tendance à avancer rapidement et à ne faire UNIQUEMENT des boucles intermédiaires de READ-GREEN-REFACTOR au niveau "unitaire" si je ressens la moindre difficulté sur ma route (ce qui n'a pas été le cas ici). 
 
 #### Un test incomplet...
 Dès mes premiers pas sur l'implémentation de la méthode MakeReservation(), je me suis rendu compte que mon test d'acceptance était incomplet et que j'avais oublié d'y définir une topologie pour le train. J'ai donc du modifié celui-ci en cours de route pour instruire mon stub de IProvideTrainData (l'interface qui abstrait les appels au service web TrainDataService de l'opérateur historique). 
 
-Voici donc la nouvelle version de la construction du Stub :
+C'est ça pour moi le __*Design émergeant*__ : une amélioration constante obtenue à l'aide de tatonnements et d'améliorations progressives au fur et à mesure que l'on rentre dans le métier/fonctionnel.
+
+Voici donc à quoi ressemble ma nouvelle version de la construction du Stub :
 
 ```C#
 // setup IProvideTrainData mock
@@ -265,7 +267,7 @@ var trainDataProvider = Substitute.For<IProvideTrainData>();
 trainDataProvider.GetSeats(trainId).Returns(new List<SeatWithBookingReference>() { new SeatWithBookingReference(new Seat("A", 1), BookingReference.Null), new SeatWithBookingReference(new Seat("A", 2), BookingReference.Null) , new SeatWithBookingReference(new Seat("A", 3), BookingReference.Null) });
 ```
 
-et l'ajout d'une nouvelle sructure de données que voici : 
+mais aussi de l'ajout d'une nouvelle structure de données : 
 
 ````C#  
 public class SeatWithBookingReference
@@ -287,7 +289,11 @@ public class SeatWithBookingReference
 ````
 
 #### Value Type
-Dernier détail au sujet de cette implémentation : vu que la seconde assertion de mon test d'acceptance en avait besoin, j'ai également rajouté les 4-5 classes de ma librairie *Value* __pour__ m'aider à faire en sorte __que le type BookingReference devienne un *ValueType*__. Ca consiste à le faire dériver de la classe concrète *ValueType*, ce qui nous force ensuite à implémenter la méthode abstraite *GetAllAttributesToBeUsedForEquality()* qui sert à la libraire pour comparer deux instances du même type. Voici ce que cela donne : 
+Dernier détail au sujet de cette implémentation : vu que la seconde assertion de mon test d'acceptance en avait besoin, j'ai également rajouté les 4-5 classes de ma librairie *Value* __pour__ m'aider à faire en sorte __que le type BookingReference devienne un *ValueType*__. 
+
+![](Value-tiny.jpg)
+
+Cela me permet alors de ne pas avoir à coder une implémentation correcte de la comparaison par valeur sur tous mes objets du domaine (c'est ma librairie qui va s'en charger pour moi). Pour en bénéficier, j'ai juste à faire dériver mon objet du Domaine (ici BookingReference) de la classe concrète *ValueType*, ce qui me force ensuite à implémenter la méthode abstraite *GetAllAttributesToBeUsedForEquality()* dont se servira la libraire pour comparer deux instances du même type. Voici ce que cela donne : 
 
 ```C#
     public class BookingReference : ValueType<BookingReference>
