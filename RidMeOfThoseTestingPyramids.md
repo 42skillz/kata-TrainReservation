@@ -1,4 +1,4 @@
-# Virez-moi cette pyramide de tests une bonne fois pour toute !
+# Virez-moi cette pyramide de tests !
 __Thomas PIERRAIN__ (__[use case driven](https://twitter.com/tpierrain)__ on twitter)
 
 > __TL;DR:__ après plus de 12 ans de pratique du TDD, j'ai fini pas adopter presque exclusivement une forme d'*Outside-in* "économe" qui me fait écrire plus de tests d'acceptance que de tests unitaires. Je ne suis donc pas du tout à l'aise avec la pyramide de tests classique que nombreuses personnes revendiquent encore aujourd'hui et qui préconise d'avoir plus de tests unitaires que de tests d'acceptance. Cette série d'articles est une petite visite guidée dans ma tête -et avec du code en soutient - pour vous montrer comment je pratique cette forme d'Outside-In TDD au quotidien.
@@ -124,7 +124,7 @@ namespace TrainReservation.Tests
             var reservationRequest = new ReservationRequest(trainId, 3);
             var reservation = ticketOffice.Reserve(reservationRequest);
 
-            // Assert
+            // Assert   
             Check.That(reservation.TrainId).IsEqualTo(trainId);
             Check.That(reservation.BookingId).IsEqualTo(expectedBookingId);
             Check.That(reservation.Seats).ContainsExactly(new Seat("A", 1), new Seat("A", 2), new Seat("A", 3));
