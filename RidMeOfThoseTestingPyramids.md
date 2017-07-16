@@ -213,7 +213,11 @@ namespace TrainReservation.Tests
 
 ```
 
-Intéressant de souligner ici que j'ai laissé le plugin R# m'aider à redéfinir temporairement les méthodes GetHashCode() et le Equals(object obj) __du type Seat__ pour pouvoir le rendre comparable "par valeur" (j'en avais besoin pour ma dernière assertion/check). 
+Intéressant de souligner ici que j'ai laissé le plugin R# m'aider à redéfinir temporairement les méthodes GetHashCode() et le Equals(object obj) __du type Seat__ pour pouvoir le rendre comparable "par valeur" (j'en avais besoin pour ma dernière assertion/check). Pour rappel : 
+
+```C#
+    Check.That(reservation.Seats).ContainsExactly(new Seat("A", 1), new Seat("A", 2), new Seat("A", 3));
+```
 
 J'aurai du le transformer de suite en __*Value type*__ (au moins en rajoutant read-only sur les propriétés Coach et SeatNumber ou sinon en utilisant la __[librairie Value](https://github.com/tpierrain/Value/blob/master/Readme.md)__), mais je pense que c'est par inadvertance ou parce que cette librairie Value n'était pas encore packagée/disponible sur nuget à l'époque.
 
@@ -387,7 +391,14 @@ public interface IProvideTrainData
 }
 ```
 
-Le test est bien RED, il est donc temps de le *mettre au vert*.
+Le test est bien RED, il est donc temps de le *mettre au vert*. Mais ça, on le verra dans le 2eme épisode de cette série.
+
+
+
+*PS : Je tatonne un peu avec le format et le fond de cet article (est-ce utile ? lisible ?). N'hésitez pas à me laisser vos commentaires ou remarques sous forme d'issues sur ce projet github*
+
+
+Thomas PIERRAIN
 
 
 
