@@ -1,4 +1,4 @@
-# Dégagez-moi cette pyramide de tests !
+# Virez-moi cette pyramide de tests une bonne fois pour toute !
 __Thomas PIERRAIN__ (__[use case driven](https://twitter.com/tpierrain)__ on twitter)
 
 > __TL;DR:__ après plus de 12 ans de pratique du TDD, j'ai fini pas adopter presque exclusivement une forme d'*Outside-in* "économe" qui me fait écrire plus de tests d'acceptance que de tests unitaires. Je ne suis donc pas du tout à l'aise avec la pyramide de tests classique que nombreuses personnes revendiquent encore aujourd'hui et qui préconise d'avoir plus de tests unitaires que de tests d'acceptance. Cette série d'articles est une petite visite guidée dans ma tête -et avec du code en soutient - pour vous montrer comment je pratique cette forme d'Outside-In TDD au quotidien.
@@ -35,7 +35,9 @@ De mon point de vue, il y a un vrai risque de "décrochage" par rapport au besoi
 C'est pour cette raison donc, que j'ai arrêté de faire du "classique" sur mes projets depuis quelques années, car j'y ai trouvé le risque de faire des trucs qui ne soient pas exactement alignés avec le besoin réel (voire de tomber dans le piège du "modélisme" quand on reste trop longtemps *au centre* de notre système). Un vrai risque *d'effet tunnel* par rapport à l'objectif final dans tous les cas.
 
 ### De l'extérieur, vers l'intérieur (tiens donc, c'est comme avec l'archi hexagonale ;-)
-Contrairement à l'*approche classique*, la pratique de __l'*Outside-in TDD*__ me force elle à __considérer mon système__ (ex: une WEB API, un service, etc.) __depuis l'extérieur, comme une grosse boite noire__. Celle-ci est vide pour commencer, et __on va faire emerger à la fois ses contours (APIs) et son comportement en y écrivant petit à petit des tests d'acceptance__. On parle de double-boucle ici car le workflow sera le suivant: 
+Contrairement à l'*approche classique*, la pratique de __l'*Outside-in TDD*__ me force elle à __considérer mon système__ (ex: une WEB API, un service, etc.) __depuis l'extérieur, comme une grosse boite noire__. Celle-ci est vide pour commencer, et __on va faire emerger à la fois ses contours (APIs) et son comportement en y écrivant petit à petit des tests d'acceptance__. 
+
+On parle de double-boucle ici car le workflow sera le suivant: 
 
 ![outsideInDiagram](outside-in.png)
 
@@ -51,7 +53,7 @@ __Dans tous les cas, mes tests ne sont que des tests de comportements !__ et ne 
 
 
 ### Un Outside-in particulier ?
-__Avec le temps et l'expérience, je me suis rendu-compte que certaines petites boucles au niveau "unitaire" que je systématisais avant ne me paraissaient plus du tout indispensables.__ Il n'y a pas de règle pour savoir si j'écris un test unitaire ou pas (ou en tout cas je ne l'ai pas encore identifiée), c'est plutôt intuitivement lié au contexte, à la difficulté de la tâche en cours pour faire réussir le test d'acceptance, et à la clairvoyance de mon esprit au moment où je code (dans tout le reste de cet article il faudra entendre "coder" au sens large, c.ad. en y incluant le Design). __Par contre si je galère sur le moindre aspect de l'implémentation, c'est un signal pour écrire fissa un test unitaire correspondant.__
+__Avec le temps et l'expérience, je me suis rendu-compte que certaines petites boucles au niveau "unitaire" que je systématisais avant ne me paraissaient plus du tout indispensables.__ Il n'y a pas réellement de règle pour savoir si j'écris un test unitaire ou pas (ou en tout cas je ne l'ai pas encore identifiée), c'est plutôt intuitivement lié au contexte, à la difficulté de la tâche en cours pour faire réussir le test d'acceptance, et à la clairvoyance de mon esprit au moment où je code (dans tout le reste de cet article il faudra entendre "coder" au sens large, c.ad. en y incluant le Design). __Par contre si je galère sur le moindre aspect de l'implémentation, c'est un signal pour écrire fissa un test unitaire correspondant.__
 
 Bon. Le mieux pour clarifier tout ça, serait de commencer à regarder un peu de code, non ?
 
@@ -85,13 +87,13 @@ Ensuite, j'ai fait comme à mon habitude une forme un peu particulière de __[TD
 Bien entendu, c'est un test qui échoue que j'ai commencé à écrire (__RED__-GREEN-REFACTOR). __Ecrire des tests qui échouent avant de commencer l'implémentation est un conseil qui reste valable quelque soit votre niveau de pratique du TDD.__
 
 
-#### Des raccourcis, encore des raccourcis
+#### Des raccourcis, encore des raccourcis...
 Cet article ne rendra malheureusement pas bien compte de la dynamique super fluide de génération du code d'implémentation au fil des lignes du test que j'écris. Je me sers pour cela très intensivement des raccourcis clavier __Alt-Enter__ de R# (pour pouvoir créer des types et des méthodes à la volée) et de __Ctrl-Shift-Backspace__ de Visual Studio (pour pouvoir revenir au contexte précédent, c.ad. de la ligne du test d'où je suis parti lorsque mon curseur s'est laissé embarquer dans la nouvelle classe/méthode générée par R#). 
 
 #### Un exercice de Design
-Ce premier test d'acceptance est déjà un exercice de Design pour mon système à venir. J'y fait émerger le concept de __TicketOffice__ (le coeur de mon système à venir), de __ReservationRequest__ mais aussi des 2 services externes (__BookingReferenceProvider__ et __TrainDataProvider__) dont mon système va avoir besoin pour travailler et que je commence ici à [stubber](./Appendix.md#stub) à l'aide de la libraire [NSubstitute](http://nsubstitute.github.io/).
+Ce premier test d'acceptance est déjà un exercice de Design pour mon système à venir. J'y fait émerger le concept de __TicketOffice__ (le coeur de mon système à venir), de __ReservationRequest__ mais aussi des 2 services externes (__BookingReferenceProvider__ et __TrainDataProvider__) dont mon système va avoir besoin pour travailler et que je commence ici à __[stubber](./Appendix.md#stub)__ à l'aide de la libraire [NSubstitute](http://nsubstitute.github.io/).
 
-Au final, j'obtiens le code suivant qui constitue les prémices de ma boite noire TrainReservation/TicketOffice. Il est important de noter ici que 90% du walking skeleton (c.ad. de mon implémentation vide qui retourne) est générée automatiquement par le plugin R# et mon usage intensif __de son raccourci clavier Alt-Enter__ : 
+Au final, j'obtiens le code suivant qui constitue les prémices de ma boite noire TrainReservation/TicketOffice. Il est important de noter ici que 90% du walking skeleton (c.ad. de mon implémentation vide qui retourne) est générée automatiquement par le plugin R# et mon usage intensif __de son raccourci clavier Alt-Enter__. Ca fait beaucoup de code ici, mais c'est très rapide à générer : 
 
 ```c#
 
@@ -108,6 +110,7 @@ namespace TrainReservation.Tests
         [Test]
         public void Should_reserve_seats_when_unreserved_seats_are_available()
         {
+            // Setup stubs
             var bookingReferenceProvider = Substitute.For<IProvideBookingReferences>();
             string expectedBookingId = "75bcd15";
             bookingReferenceProvider.GetBookingReference().Returns(expectedBookingId);
@@ -115,8 +118,8 @@ namespace TrainReservation.Tests
             var trainDataProvider = new TrainDataProvider();
 
             var ticketOffice = new TicketOffice(bookingReferenceProvider, trainDataProvider);
-            var trainId = "express_2000";
 
+            var trainId = "express_2000";
             var reservationRequest = new ReservationRequest(trainId, 3);
             var reservation = ticketOffice.Reserve(reservationRequest);
 
@@ -280,7 +283,7 @@ Ici, l'écriture du code de cette méthode m'a paru suffisamment simple et rapid
 Il y a quelques années, j'aurai surement rajouté sur ma route un  test unitaire ou deux portant sur le comportement du type __*Seat*__ par exemple (notamment pour vérifier qu'il est bien comparable par "valeurs"). 
 
 #### Maintenant...
-Désormais, parce que j'ai déjà un test d'acceptance qui couvre mon action et que le code ne me pose pas de problème (de design ni d'implémentation), j'ai plutôt tendance à avancer rapidement et à ne faire UNIQUEMENT des boucles intermédiaires de READ-GREEN-REFACTOR au niveau "unitaire" si je ressens la moindre difficulté sur ma route (ce qui n'a pas été le cas ici). 
+Désormais, parce que j'ai déjà un test d'acceptance qui couvre mon action ET QUE le code ne me pose pas de problème (de design ni d'implémentation), j'ai plutôt tendance à avancer rapidement et à ne faire UNIQUEMENT des boucles intermédiaires de READ-GREEN-REFACTOR au niveau "unitaire" si je ressens la moindre difficulté sur ma route (ce qui n'a pas été le cas ici). 
 
 #### Un test incomplet...
 Dès mes premiers pas sur l'implémentation de la méthode *MakeReservation()*, je me suis rendu compte que mon test d'acceptance était incomplet et que j'avais oublié d'y définir une topologie pour le train. J'ai donc du modifié celui-ci en cours de route pour mieux instruire mon stub de IProvideTrainData (l'interface qui abstrait les appels au service web TrainDataService de l'opérateur historique). 
@@ -320,11 +323,11 @@ public class SeatWithBookingReference
 ````
 
 #### Value Type
-Dernier détail au sujet de cette première implémentation : vu que la seconde assertion de mon test d'acceptance en avait besoin, j'ai également rajouté les 4-5 classes de ma __[librairie *Value*](https://github.com/tpierrain/Value/blob/master/Readme.md)__ dans mon projet __pour__ m'aider à faire en sorte __que le type BookingReference devienne un *ValueType*__ ([voir les explications sur le readme de Value](https://github.com/tpierrain/Value/blob/master/Readme.md)).
+Dernier détail au sujet de cette première implémentation : vu que la seconde assertion de mon test d'acceptance en avait besoin, j'ai également rajouté les 4-5 classes de ma __[librairie *Value*](https://github.com/tpierrain/Value/blob/master/Readme.md)__ dans mon projet __pour__ m'aider à faire en sorte __que le type BookingReference devienne un *ValueType*__ (__[pour comprendre ce qu'est un Value Object -ou Value Type- voir les explications sur le readme de Value](https://github.com/tpierrain/Value/blob/master/Readme.md)__).
 
 ![](Value-tiny.jpg)
 
-__Cela me permet alors de ne pas avoir à coder une implémentation correcte de la comparaison par valeur sur tous mes objets du domaine__ (c'est ma librairie qui va s'en charger et de manière fiable pour moi). Pour en bénéficier, j'ai juste à faire dériver mon objet du Domaine (ici BookingReference) de la classe concrète *ValueType*, ce qui me force ensuite à implémenter la méthode abstraite *GetAllAttributesToBeUsedForEquality()* dont se servira la libraire pour comparer deux instances du même type. Voici ce que cela donne : 
+__Utiliser cette pico-librairie me permet alors de ne pas avoir à coder une implémentation correcte de la comparaison par valeur pour chaque Type Valeur de mon domaine__ (c'est elle qui va s'en charger et de manière fiable). Pour en bénéficier, j'ai juste à faire dériver mon objet du Domaine (ici BookingReference) de la classe concrète *ValueType*, ce qui me force ensuite à implémenter la méthode abstraite *GetAllAttributesToBeUsedForEquality()* dont se servira la libraire pour comparer deux instances du même type. Voici ce que cela donne : 
 
 ```C#
     public class BookingReference : ValueType<BookingReference>
@@ -339,16 +342,16 @@ __Cela me permet alors de ne pas avoir à coder une implémentation correcte de 
 
         public static BookingReference Null { get { return nullReference; } }
 
+        // Note: the only accidental complexity of my domain types is that abstract method
         protected override IEnumerable<object> GetAllAttributesToBeUsedForEquality()
         {
             return new[] {bookingReference};
         }
-
     }
 ```
 
 #### L'avez-vous remarqué ?
-Quand on y regarde de plus près, cette première implémentation de la méthode *MakeReservation()* du type *TicketOffice* est vraiment naïve. En effet, elle agit presque comme un aspirateur à __Seats__ ;-) qui va réserver tous les sièges de libre même si on n'en veut que 2. Je ne l'ai pas vu de suite -surement à cause de mon état de fatigue de l'époque- mais surtout parce que mon 1er test d'acceptance était mal écrit car propice à ce type de bétise. En effet, celui-ci proposait déjà un train avec 3 places de libres alors même que je demandais à reserver 3 places... 
+Quand on y regarde de plus près, cette première implémentation de la méthode *MakeReservation()* du type *TicketOffice* est vraiment naïve. En effet, elle agit presque comme un aspirateur à __Seats__ ;-) qui va réserver tous les sièges de libre même si on n'en veut que 2. Je ne l'ai pas vu de suite -surement à cause de mon état de fatigue de l'époque- mais surtout parce que mon 1er test d'acceptance était mal écrit et propice à ce type de bétise. En effet, celui-ci proposait déjà un train avec 3 places de libres alors même que je demandais à reserver 3 places... 
 
 #### Rome ne s'est pas fait en 1 jour
 On le verra, c'est en rajoutant de nouveaux cas de tests que je m'apercevrai plus tard de cette erreur d'implémentation et la rectifierai. Bon, on n'en est pas encore là. On passe au second test d'acceptance ?
