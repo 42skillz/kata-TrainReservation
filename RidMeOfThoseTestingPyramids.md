@@ -117,12 +117,14 @@ namespace TrainReservation.Tests
 
             var trainDataProvider = new TrainDataProvider();
 
+            // Instantiate and use business logic
             var ticketOffice = new TicketOffice(bookingReferenceProvider, trainDataProvider);
 
             var trainId = "express_2000";
             var reservationRequest = new ReservationRequest(trainId, 3);
             var reservation = ticketOffice.Reserve(reservationRequest);
 
+            // Assert
             Check.That(reservation.TrainId).IsEqualTo(trainId);
             Check.That(reservation.BookingId).IsEqualTo(expectedBookingId);
             Check.That(reservation.Seats).ContainsExactly(new Seat("A", 1), new Seat("A", 2), new Seat("A", 3));
