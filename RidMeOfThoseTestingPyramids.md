@@ -18,7 +18,7 @@ Je ne sais pas si j'en suis actuellement à la phase d'adaptation ou déjà à l
 
 Pour décrire ma façon de travailler et mon interprétation personnelle de la double boucle de l'outside-in TDD, je me suis dit qu'il n'y aurait pas mieux que du code pour accompagner et clarifier mes propos. J'ai donc repris un kata que j'ai eu à faire il y a quelques mois en C# pour m'en servir de base pour mes explications. Celui-ci ayant été réalisé dans des conditions un peu particulières (plutôt tard le soir, et interrompu par de nombreux calins/biberons) et sans savoir que j'allais le  publier, je vous demanderai un peu d'indulgence quant aux design et aux termes métiers un peu approximatifs (je découvrais le sujet et ce kata pour la 1ere fois). L'intérêt de montrer ce code est essentiellement pour mieux illustrer les types de tests et le cheminement que j'ai pris pour faire "émerger" mon logiciel.
 
-## Quelques notes sur l'Outside-in TDD
+## Quelques notes sur cet Outside-in frugal ;-)
 Quand je dois décrire rapidement à quelqu'un avec qui je vais pairer comment je travaille, j'ai l'habitude de dire que
 > je pratique l'outside-in TDD 
 
@@ -42,14 +42,14 @@ __RED (acceptance test) - puis pleins de { RED - GREEN - REFACTOR au niveau (uni
 
 L'intérêt principal de cette technique est d'éviter de se perdre en route dans notre implémentation. Cela est rendu possible par __nos tests d'acceptance__ qui __vont cadrer et crystalliser dès le départ les contours et les conditions du succès de notre système__. En ce qui me concèrne, ça me pousse à rester concentré sur l'objectif final en m'évitant de dévier ou de m'éparpiller en route face à ce juge de paix minimaliste (le __[YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it)__ d'XP).
 
-## Acceptance ? Cornichon toi même !
+### Acceptance ? Cornichon toi même !
 Par test d'acceptance j'entends un __test gros-grain, qui va porter sur l'ensemble de mon système à l'exception des technnologies pour communiquer avec l'extérieur__ (j'exclue donc la persistance, les middlewares et autres stacks HTTP). __Ce n'est donc pas un test d'intégration__. Attention également, en lisant "*Acceptance*", certains d'entre-vous penseront tout de suite à du Gerkhin (le formalisme *Given-When-Then...*). Ce n'est pas mon cas, car je ne paie en général le prix de la surchouche correspondante (specflow /  Cucumber) que si et seulement si le métier est à portée de main et qu'il est à l'aise avec ce format (ce qui est assez rare en définitive). Comme vous le verrez dans les exemples ci-dessous, mes test d'acceptance sont donc __écrits comme des tests *unitaires* mais ils portent sur le système dans son ensemble au lieu de porter sur des toutes petites parties de celui-ci__.
 
-## Le bon comportement
+### Le bon comportement
 __Dans tous les cas, mes tests ne sont que des tests de comportements !__ et ne sont pas liés à des détails d'implémentations (une des nombreuses erreurs que j'ai pu faire au début de mon expérience du TDD, rendant mes tests pénibles car très fragiles à chaque fois que je voulais changer quelque chose dans mon implémentation ;-( 
 
 
-## Un Outside-in particulier ?
+### Un Outside-in particulier ?
 __Avec le temps et l'expérience, je me suis rendu-compte que certaines petites boucles au niveau "unitaire" que je systématisais avant ne me paraissaient plus du tout indispensables.__ Il n'y a pas de règle pour savoir si j'écris un test unitaire ou pas (ou en tout cas je ne l'ai pas encore identifiée), c'est plutôt intuitivement lié au contexte, à la difficulté de la tâche en cours pour faire réussir le test d'acceptance, et à la clairvoyance de mon esprit au moment où je code (dans tout le reste de cet article il faudra entendre "coder" au sens large, c.ad. en y incluant le Design). __Par contre si je galère sur le moindre aspect de l'implémentation, c'est un signal pour écrire fissa un test unitaire correspondant.__
 
 Bon. Le mieux pour clarifier tout ça, serait de commencer à regarder un peu de code, non ?
