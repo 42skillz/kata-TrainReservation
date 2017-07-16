@@ -1,7 +1,9 @@
-# Brûlez-moi cette pyramide de tests !
+# Dégagez-moi cette pyramide de tests !
 __Thomas PIERRAIN__ (__[use case driven](https://twitter.com/tpierrain)__ on twitter)
 
-> __TL;DR:__ après plus de 12 ans de pratique du TDD, j'ai fini pas adopter presque exclusivement une forme d'*Outside-in* "économe" qui me fait écrire plus de tests d'acceptance que de tests unitaires. Je ne suis donc pas du tout à l'aise avec la pyramide de tests classique que nombreuses personnes revendiquent encore aujourd'hui et qui préconise d'avoir plus de tests unitaires que de tests d'acceptance. Petite visite guidée dans ma tête -et avec du code- pour vous montrer comment je pratique cette forme d'Outside-In TDD au quotidien.
+> __TL;DR:__ après plus de 12 ans de pratique du TDD, j'ai fini pas adopter presque exclusivement une forme d'*Outside-in* "économe" qui me fait écrire plus de tests d'acceptance que de tests unitaires. Je ne suis donc pas du tout à l'aise avec la pyramide de tests classique que nombreuses personnes revendiquent encore aujourd'hui et qui préconise d'avoir plus de tests unitaires que de tests d'acceptance. Cette série d'articles est une petite visite guidée dans ma tête -et autours de code- pour vous montrer comment je pratique cette forme d'Outside-In TDD au quotidien.
+
+## Episode 1: objectifs, définitions et premiers tests
 
 ## Disclaimers
 Pardonnez-moi ce titre un peu raccoleur, mais j'avais vraiment envie d'aborder ce sujet avec un maximum de monde alors ;-)
@@ -17,8 +19,10 @@ Je ne sais pas si j'en suis actuellement à la phase d'adaptation ou déjà à l
 Pour décrire ma façon de travailler et mon interprétation personnelle de la double boucle de l'outside-in TDD, je me suis dit qu'il n'y aurait pas mieux que du code pour accompagner et clarifier mes propos. J'ai donc repris un kata que j'ai eu à faire il y a quelques mois en C# pour m'en servir de base pour mes explications. Celui-ci ayant été réalisé dans des conditions un peu particulières (plutôt tard le soir, et interrompu par de nombreux calins/biberons) et sans savoir que j'allais le  publier, je vous demanderai un peu d'indulgence quant aux design et aux termes métiers un peu approximatifs (je découvrais le sujet et ce kata pour la 1ere fois). L'intérêt de montrer ce code est essentiellement pour mieux illustrer les types de tests et le cheminement que j'ai pris pour faire "émerger" mon logiciel.
 
 ## Quelques notes sur l'Outside-in TDD
-Il y a plusieurs forme de TDD, et je ne vais bien entendu pas les détailler toutes ici. En fait quand je dois décrire rapidement comment je travaille à quelqu'un avec qui je vais pairer, j'ai l'habitude de dire que
-> je pratique l'outside-in TDD (appellé aussi "*London-School*" ou "*double-boucle*").
+Il y a plusieurs formes de TDD. Quand je dois décrire rapidement à quelqu'un avec qui je vais pairer comment je travaille, j'ai l'habitude de dire que
+> je pratique l'outside-in TDD 
+
+(appellé aussi "*London-School*" ou "*double-boucle*").
 
 Contrairement à __l'*approche classique du TDD*__ par laquelle j'ai commencé (et appelée aussi désormais "*inside-out*"), la pratique de __l'*Outside-in TDD*__ me force à __considérer mon système__ (ex: une WEB API, un service, etc.) __depuis l'extérieur, comme une grosse boite noire__. Celle-ci est vide pour commencer, et __on va faire emerger à la fois ses contours (APIs) et son comportement en y écrivant petit à petit des tests d'acceptance__. On parle de double-boucle ici car le workflow sera le suivant: 
 
@@ -73,9 +77,9 @@ Bien entendu, c'est un test qui échoue que j'ai commencé à écrire (__RED__-G
 Cet article ne rendra malheureusement pas bien compte de la dynamique super fluide de génération du code d'implémentation au fil des lignes du test que j'écris. Je me sers pour cela très intensivement des raccourcis clavier __Alt-Enter__ de R# (pour pouvoir créer des types et des méthodes à la volée) et de __Ctrl-Shift-Backspace__ de Visual Studio (pour pouvoir revenir au contexte précédent, c.ad. de la ligne du test d'où je suis parti lorsque mon curseur s'est laissé embarquer dans la nouvelle classe/méthode générée par R#). 
 
 #### Un exercice de Design
-Ce premier test d'acceptance est déjà un exercice de Design pour mon système à venir. J'y fait émerger le concept de __TicketOffice__ (le coeur de mon système à venir), de __ReservationRequest__ mais aussi des 2 services externes (__BookingReferenceProvider__ et __TrainDataProvider__) dont mon système va avoir besoin pour travailler et que je commence ici à stubber à l'aide de la libraire NSubstitute.
+Ce premier test d'acceptance est déjà un exercice de Design pour mon système à venir. J'y fait émerger le concept de __TicketOffice__ (le coeur de mon système à venir), de __ReservationRequest__ mais aussi des 2 services externes (__BookingReferenceProvider__ et __TrainDataProvider__) dont mon système va avoir besoin pour travailler et que je commence ici à [stubber](./Appendix.md#Stub) à l'aide de la libraire [NSubstitute](http://nsubstitute.github.io/).
 
-Au final, j'obtiens le code suivant qui constitue les prémices de ma boite noire TrainReservation/TicketOffice : 
+Au final, j'obtiens le code suivant qui constitue les prémices de ma boite noire TrainReservation/TicketOffice. Il est important de noter ici que 90% du walking skeleton (c.ad. de mon implémentation vide qui retourne) est générée automatiquement par le plugin R# et mon usage intensif __de son raccourci clavier Alt-Enter__ : 
 
 ```c#
 
@@ -109,7 +113,10 @@ namespace TrainReservation.Tests
             Check.That(reservation.Seats).ContainsExactly(new Seat("A", 1), new Seat("A", 2), new Seat("A", 3));
         }
     }
-
+`
+    // -----------------------------------------------------------------
+    // All the code below has been automatically generated by my intensive usage of Alt-Enter (R# shortcut) : create class, create method, encapsulate fields, etc.
+     
     public interface IProvideTrainData
     {
     }
