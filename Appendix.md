@@ -1,5 +1,5 @@
 # Annexes
-Cette page sera le lieu pour y déposer quelques clarifications ou définitions.
+Cette page sera le lieu pour quelques clarifications ou définitions.
 
 
 ## Mock
