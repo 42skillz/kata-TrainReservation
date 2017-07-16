@@ -1,9 +1,9 @@
 # Dégagez-moi cette pyramide de tests !
 __Thomas PIERRAIN__ (__[use case driven](https://twitter.com/tpierrain)__ on twitter)
 
-> __TL;DR:__ après plus de 12 ans de pratique du TDD, j'ai fini pas adopter presque exclusivement une forme d'*Outside-in* "économe" qui me fait écrire plus de tests d'acceptance que de tests unitaires. Je ne suis donc pas du tout à l'aise avec la pyramide de tests classique que nombreuses personnes revendiquent encore aujourd'hui et qui préconise d'avoir plus de tests unitaires que de tests d'acceptance. Cette série d'articles est une petite visite guidée dans ma tête -et autours de code- pour vous montrer comment je pratique cette forme d'Outside-In TDD au quotidien.
+> __TL;DR:__ après plus de 12 ans de pratique du TDD, j'ai fini pas adopter presque exclusivement une forme d'*Outside-in* "économe" qui me fait écrire plus de tests d'acceptance que de tests unitaires. Je ne suis donc pas du tout à l'aise avec la pyramide de tests classique que nombreuses personnes revendiquent encore aujourd'hui et qui préconise d'avoir plus de tests unitaires que de tests d'acceptance. Cette série d'articles est une petite visite guidée dans ma tête -et avec du code en soutient - pour vous montrer comment je pratique cette forme d'Outside-In TDD au quotidien.
 
-## Episode 1: objectifs, définitions et premiers tests
+# Episode 1: objectifs, définitions et premiers tests
 
 ## Disclaimers
 Pardonnez-moi ce titre un peu raccoleur, mais j'avais vraiment envie d'aborder ce sujet avec un maximum de monde alors ;-)
@@ -12,19 +12,29 @@ En fait, celà fait longtemps que je veux écrire cet article sur ma pratique pa
 
 > “There are three phases to XP, out-of-the-box, adaptation, and transcendence” (Kent BECK)
 
-Je ne sais pas si j'en suis actuellement à la phase d'adaptation ou déjà à la phase de transcendence en ce qui concèrne le TDD, mais je sais juste que cela fonctionne très bien pour moi (pour être à la fois zen et efficace au travail). __Si vous débutez la pratique du TDD en revanche, je vous pousserai plutôt à ne pas me suivre tout de suite, et à systématiser plutôt une approche *by-the-book*__ (*out-of-the-box* pour reprendre les termes de Kent BECK) avant de faire -un jour- votre propre adaptation.
+Je ne sais pas si j'en suis actuellement à la phase d'adaptation ou déjà à la phase de transcendence en ce qui concèrne le TDD, mais je sais juste que cela fonctionne très bien pour moi (pour être à la fois zen et efficace au travail). __Si vous débutez la pratique du TDD en revanche, je vous pousserai plutôt à systématiser une approche *by-the-book*__ (*out-of-the-box* pour reprendre les termes de Kent BECK) avant de faire -sans doute un jour- votre propre adaptation.
 
 ## Le code en support
 
 Pour décrire ma façon de travailler et mon interprétation personnelle de la double boucle de l'outside-in TDD, je me suis dit qu'il n'y aurait pas mieux que du code pour accompagner et clarifier mes propos. J'ai donc repris un kata que j'ai eu à faire il y a quelques mois en C# pour m'en servir de base pour mes explications. Celui-ci ayant été réalisé dans des conditions un peu particulières (plutôt tard le soir, et interrompu par de nombreux calins/biberons) et sans savoir que j'allais le  publier, je vous demanderai un peu d'indulgence quant aux design et aux termes métiers un peu approximatifs (je découvrais le sujet et ce kata pour la 1ere fois). L'intérêt de montrer ce code est essentiellement pour mieux illustrer les types de tests et le cheminement que j'ai pris pour faire "émerger" mon logiciel.
 
 ## Quelques notes sur l'Outside-in TDD
-Il y a plusieurs formes de TDD. Quand je dois décrire rapidement à quelqu'un avec qui je vais pairer comment je travaille, j'ai l'habitude de dire que
+Quand je dois décrire rapidement à quelqu'un avec qui je vais pairer comment je travaille, j'ai l'habitude de dire que
 > je pratique l'outside-in TDD 
 
-(appellé aussi "*London-School*" ou "*double-boucle*").
+Il y a de nombreuses formes et approches du TDD, mais j'aime à retenir ces 2 principales :
+1. La forme classique
+2. L'outside-in TDD (appellé aussi "*London-School*" ou "*double-boucle*")
 
-Contrairement à __l'*approche classique du TDD*__ par laquelle j'ai commencé (et appelée aussi désormais "*inside-out*"), la pratique de __l'*Outside-in TDD*__ me force à __considérer mon système__ (ex: une WEB API, un service, etc.) __depuis l'extérieur, comme une grosse boite noire__. Celle-ci est vide pour commencer, et __on va faire emerger à la fois ses contours (APIs) et son comportement en y écrivant petit à petit des tests d'acceptance__. On parle de double-boucle ici car le workflow sera le suivant: 
+Dans la forme classique, on part du centre du système (pour cela qu'on parle également d'*inside-out*) en se concentrant au début sur de petites implémentations que l'on va consolider et assembler au fur et à mesure pour arriver au bout d'un moment à constituer le système global souhaité (si tout se passe bien en route ais-je envie de rajouter). 
+
+### Pour éviter le décrochage
+
+De mon point de vue, il y a un vrai risque de "décrochage" par rapport au besoin final avec l'approcha classique du TDD. En effet, si on a mal jugé la situation (en imaginant une trajectoire vers le resultat final dans notre tête, qui n'est pas la bonne finalement) ou si on se laisse distraire voire perdre en route (et qui ne s'est pas laissé grisé par l'effet cathédrale/usine à gaz quand il était plus jeune...), on peut galérer et tatonner un peu plus que nécessaire avec cette approche.
+
+C'est pour cette raison donc, que j'ai arrêté de faire du "classique" sur mes projets depuis quelques années, car j'y ai trouvé le risque de faire des trucs qui ne soient pas exactement alignés avec le besoin réel (voire de tomber dans le piège du "modélisme" quand on reste trop longtemps *au centre* de notre système). J'y vois un vrai risque *d'effet tunnel* par rapport à l'objectif final.
+
+Contrairement à l'*approche classique*, la pratique de __l'*Outside-in TDD*__ me force elle à __considérer mon système__ (ex: une WEB API, un service, etc.) __depuis l'extérieur, comme une grosse boite noire__. Celle-ci est vide pour commencer, et __on va faire emerger à la fois ses contours (APIs) et son comportement en y écrivant petit à petit des tests d'acceptance__. On parle de double-boucle ici car le workflow sera le suivant: 
 
 ![outsideInDiagram](outside-in.png)
 
@@ -262,7 +272,7 @@ de la méthode __*TicketOffice.MakeReservation(...)*__ (qui ne s'appelle plus "*
     }
 
 ```
-Ici, l'écriture du code de cette méthode m'a paru suffisamment simple et rapide pour que je ne ressente pas le besoin de faire une petite boucle avec un ou plusieurs tests unitaires intermédiaires.
+Ici, l'écriture du code de cette méthode m'a paru suffisamment simple et rapide (10 minutes environs) pour que je ne ressente pas le besoin de faire une petite boucle avec un ou plusieurs tests unitaires intermédiaires.
 
 #### Il y a quelques années...
 Il y a quelques années, j'aurai surement rajouté sur ma route un  test unitaire ou deux portant sur le comportement du type __*Seat*__ par exemple (notamment pour vérifier qu'il est bien comparable par "valeurs"). 
@@ -332,10 +342,6 @@ __Cela me permet alors de ne pas avoir à coder une implémentation correcte de 
             return new[] {bookingReference};
         }
 
-        public bool IsNull()
-        {
-            return Equals(Null);
-        }
     }
 ```
 
