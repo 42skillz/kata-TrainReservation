@@ -3,12 +3,12 @@ __Thomas PIERRAIN__ (__[use case driven](https://twitter.com/tpierrain)__ on twi
 
 > __TL;DR:__ après plus de 12 ans de pratique du TDD, j'ai fini pas adopter presque exclusivement une forme d'*Outside-in* "économe" qui me fait écrire plus de tests d'acceptance que de tests unitaires. Je ne suis donc pas du tout à l'aise avec la pyramide de tests classique que nombreuses personnes revendiquent encore aujourd'hui et qui préconise d'avoir plus de tests unitaires que de tests d'acceptance. Cette série d'articles est une petite visite guidée dans ma tête -et avec du code en soutient - pour vous montrer comment je pratique cette forme d'Outside-In TDD au quotidien.
 
-# Episode 1: objectifs, définitions et premiers tests
+# Episode 1: définitions, objectifs et premiers tests
 
 ## Disclaimers
-Pardonnez-moi ce titre un peu raccoleur, mais j'avais vraiment envie d'aborder ce sujet avec un maximum de monde alors ;-)
+Pardonnez-moi ce titre un peu raccoleur avec la pyramide, mais j'avais vraiment envie d'aborder ce sujet avec un maximum de monde alors ;-)
 
-En fait, celà fait longtemps que je veux écrire cet article sur ma pratique particulière du TDD et de récentes publications et discussions sur le sujet m'ont finalement décidées à l'écrire. Je ne prétends en aucun cas expliquer aux gens comment ils doivent bosser, c'est plutôt une tentative pour montrer comment moi je pratique le TDD avec autant de plaisir que de succès depuis quelques années maintenant. Des amis m'ont déconseillés de le faire en pretextant que cela pourrait être mal interpreté par des débutants. Je tiens donc ici à préciser que cette façon de coder est la conséquence de plus de 12 ans de pratique du TDD en entreprise (et en open source). Et c'est bien  parce que j'ai pratiqué le TDD by-the-book(s) pendant toutes ces années, mais aussi parce que je suis tombé dans à peu près toutes les erreurs d'interprétations et tous les pièges possibles autours de cette discipline, que j'en suis arrivé à cette forme qui prends -vous le verrez- un peu de liberté avec la technique classique. Mais comme le dit Kent BECK:
+En fait, celà fait longtemps que je veux écrire cet article sur ma pratique particulière du TDD et de récentes publications et discussions sur le sujet m'ont finalement décidées à l'écrire. Je ne prétends en aucun cas expliquer aux gens comment ils doivent bosser, c'est plutôt une tentative pour montrer comment moi je pratique le TDD __avec autant de plaisir que de succès depuis quelques années maintenant__. Des amis m'ont déconseillés de le faire en pretextant que cela pourrait être mal interpreté par des débutants. Je tiens donc ici à préciser que cette façon de coder est la conséquence de plus de 12 ans de pratique du TDD en entreprise (et en open source). Et c'est bien  parce que j'ai pratiqué le TDD by-the-book(s) pendant toutes ces années, mais aussi parce que je suis tombé dans à peu près toutes les erreurs d'interprétations et tous les pièges possibles autours de cette discipline, que j'en suis arrivé à cette forme qui prends -vous le verrez- un peu de liberté avec la technique classique. Mais comme le dit Kent BECK:
 
 > “There are three phases to XP, out-of-the-box, adaptation, and transcendence” (Kent BECK)
 
@@ -16,7 +16,7 @@ Je ne sais pas si j'en suis actuellement à la phase d'adaptation ou déjà à l
 
 ## Le code en support
 
-Pour décrire ma façon de travailler et mon interprétation personnelle de la double boucle de l'outside-in TDD, je me suis dit qu'il n'y aurait pas mieux que du code pour accompagner et clarifier mes propos. J'ai donc repris un kata que j'ai eu à faire il y a quelques mois en C# pour m'en servir de base pour mes explications. Celui-ci ayant été réalisé dans des conditions un peu particulières (plutôt tard le soir, et interrompu par de nombreux calins/biberons) et sans savoir que j'allais le  publier, je vous demanderai un peu d'indulgence quant aux design et aux termes métiers un peu approximatifs (je découvrais le sujet et ce kata pour la 1ere fois). L'intérêt de montrer ce code est essentiellement pour mieux illustrer les types de tests et le cheminement que j'ai pris pour faire "émerger" mon logiciel.
+Pour décrire ma façon de travailler et mon interprétation personnelle de la double boucle de l'outside-in TDD, je me suis dit qu'il n'y aurait pas mieux que du code pour accompagner et clarifier mes propos. J'ai donc repris un kata que j'ai eu à faire il y a quelques mois en C# pour m'en servir de base pour mes explications. Celui-ci ayant été réalisé dans des conditions un peu particulières (plutôt tard le soir, et interrompu par de nombreux calins/biberons) et sans savoir que j'allais le  publier, je vous demanderai un peu d'indulgence quant aux design et aux termes métiers un peu approximatifs (je découvrais le sujet et ce kata pour la 1ere fois). L'intérêt de montrer ce code est surtout pour illustrer les tests que j'écris, ceux que je n'écris plus, et le type de cheminement que je prends pour faire "émerger" mes softs.
 
 ## Quelques notes sur cet Outside-in frugal ;-)
 Quand je dois décrire rapidement à quelqu'un avec qui je vais pairer comment je travaille, j'ai l'habitude de dire que
@@ -30,10 +30,11 @@ Dans la forme classique, on part du centre du système (pour cela qu'on parle é
 
 ### Pour éviter le décrochage
 
-De mon point de vue, il y a un vrai risque de "décrochage" par rapport au besoin final avec l'approcha classique du TDD. En effet, si on a mal jugé la situation (en imaginant une trajectoire vers le resultat final dans notre tête, qui n'est pas la bonne finalement) ou si on se laisse distraire voire perdre en route (et qui ne s'est pas laissé grisé par l'effet cathédrale/usine à gaz quand il était plus jeune...), on peut galérer et tatonner un peu plus que nécessaire avec cette approche.
+De mon point de vue, il y a un vrai risque de "décrochage" par rapport au besoin final avec l'approche classique du TDD. En effet, si on a mal jugé la situation (en imaginant une trajectoire vers le resultat final dans notre tête, qui n'est pas la bonne finalement) ou si on se laisse distraire voire perdre en route (et qui ne s'est pas laissé grisé par l'effet cathédrale/usine à gaz quand il était plus jeune...), on peut galérer et tatonner un peu plus que nécessaire avec cette approche.
 
-C'est pour cette raison donc, que j'ai arrêté de faire du "classique" sur mes projets depuis quelques années, car j'y ai trouvé le risque de faire des trucs qui ne soient pas exactement alignés avec le besoin réel (voire de tomber dans le piège du "modélisme" quand on reste trop longtemps *au centre* de notre système). Un vrai risque *d'effet tunnel* par rapport à l'objectif final.
+C'est pour cette raison donc, que j'ai arrêté de faire du "classique" sur mes projets depuis quelques années, car j'y ai trouvé le risque de faire des trucs qui ne soient pas exactement alignés avec le besoin réel (voire de tomber dans le piège du "modélisme" quand on reste trop longtemps *au centre* de notre système). Un vrai risque *d'effet tunnel* par rapport à l'objectif final dans tous les cas.
 
+### De l'extérieur, vers l'intérieur (tiens donc, c'est comme avec l'archi hexagonale ;-)
 Contrairement à l'*approche classique*, la pratique de __l'*Outside-in TDD*__ me force elle à __considérer mon système__ (ex: une WEB API, un service, etc.) __depuis l'extérieur, comme une grosse boite noire__. Celle-ci est vide pour commencer, et __on va faire emerger à la fois ses contours (APIs) et son comportement en y écrivant petit à petit des tests d'acceptance__. On parle de double-boucle ici car le workflow sera le suivant: 
 
 ![outsideInDiagram](outside-in.png)
