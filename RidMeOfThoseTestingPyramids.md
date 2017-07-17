@@ -6,17 +6,17 @@ __Thomas PIERRAIN__ (__[use case driven](https://twitter.com/tpierrain)__ on twi
 # Episode 1: définitions, objectifs et premiers tests
 
 ## Disclaimers
-Pardonnez-moi ce titre un peu raccoleur avec la pyramide, mais j'avais vraiment envie d'aborder ce sujet avec un maximum de monde alors ;-)
+Pardonnez-moi ce titre un peu racoleur avec la pyramide, mais j'avais vraiment envie d'aborder ce sujet avec un maximum de monde alors ;-)
 
-En fait, celà fait longtemps que je veux écrire cet article sur ma pratique particulière du TDD et de récentes publications et discussions sur le sujet m'ont finalement décidées à l'écrire. Je ne prétends en aucun cas expliquer aux gens comment ils doivent bosser, c'est plutôt une tentative pour montrer comment moi je pratique le TDD __avec autant de plaisir que de succès depuis quelques années maintenant__. Des amis m'ont déconseillés de le faire en pretextant que cela pourrait être mal interpreté par des débutants. Je tiens donc ici à préciser que cette façon de coder est la conséquence de plus de 12 ans de pratique du TDD en entreprise (et en open source). Et c'est bien  parce que j'ai pratiqué le TDD by-the-book(s) pendant toutes ces années, mais aussi parce que je suis tombé dans à peu près toutes les erreurs d'interprétations et tous les pièges possibles autours de cette discipline, que j'en suis arrivé à cette forme qui prends -vous le verrez- un peu de liberté avec la technique classique. Mais comme le dit Kent BECK:
+En fait, cela fait longtemps que je veux écrire cet article sur ma pratique particulière du TDD et de récentes publications et discussions sur le sujet m'ont finalement décidées à l'écrire. Je ne prétends en aucun cas expliquer aux gens comment ils doivent bosser, c'est plutôt une tentative pour montrer comment moi je pratique le TDD __avec autant de plaisir que de succès depuis quelques années maintenant__. Des amis m'ont déconseillé de le faire en prétextant que cela pourrait être mal interprété par des débutants. Je tiens donc ici à préciser que cette façon de coder est la conséquence de plus de 12 ans de pratique du TDD en entreprise (et en open source). Et c'est bien parce que j'ai pratiqué le TDD by-the-book(s) pendant toutes ces années, mais aussi parce que je suis tombé dans à peu près toutes les erreurs d'interprétations et tous les pièges possibles autour de cette discipline, que j'en suis arrivé à cette forme qui prends -vous le verrez- un peu de liberté avec la technique classique. Mais comme le dit Kent BECK:
 
 > “There are three phases to XP, out-of-the-box, adaptation, and transcendence” (Kent BECK)
 
-Je ne sais pas si j'en suis actuellement à la phase d'adaptation ou déjà à la phase de transcendence en ce qui concèrne le TDD, mais je sais juste que cela fonctionne très bien pour moi (pour être à la fois zen et efficace au travail). __Si vous débutez la pratique du TDD en revanche, je vous pousserai plutôt à systématiser une approche *by-the-book*__ (*out-of-the-box* pour reprendre les termes de Kent BECK) avant de faire -sans doute un jour- votre propre adaptation.
+Je ne sais pas si j'en suis actuellement à la phase d'adaptation ou déjà à la phase de transcendance en ce qui concerne le TDD, mais je sais juste que cela fonctionne très bien pour moi (pour être à la fois zen et efficace au travail). __Si vous débutez la pratique du TDD en revanche, je vous pousserai plutôt à systématiser une approche *by-the-book*__ (*out-of-the-box* pour reprendre les termes de Kent BECK) avant de faire -sans doute un jour- votre propre adaptation.
 
 ## Le code en support
 
-Pour décrire ma façon de travailler et mon interprétation personnelle de la double boucle de l'outside-in TDD, je me suis dit qu'il n'y aurait pas mieux que du code pour accompagner et clarifier mes propos. J'ai donc repris un kata que j'ai eu à faire il y a quelques mois en C# pour m'en servir de base pour mes explications. Celui-ci ayant été réalisé dans des conditions un peu particulières (plutôt tard le soir, et interrompu par de nombreux calins/biberons) et sans savoir que j'allais le  publier, je vous demanderai un peu d'indulgence quant aux design et aux termes métiers un peu approximatifs (je découvrais le sujet et ce kata pour la 1ere fois). L'intérêt de montrer ce code est surtout pour illustrer les tests que j'écris, ceux que je n'écris plus, et le type de cheminement que je prends pour faire "émerger" mes softs.
+Pour décrire ma façon de travailler et mon interprétation personnelle de la double boucle de l'outside-in TDD, je me suis dit qu'il n'y aurait pas mieux que du code pour accompagner et clarifier mes propos. J'ai donc repris un kata que j'ai eu à faire il y a quelques mois en C# pour m'en servir de base pour mes explications. Celui-ci ayant été réalisé dans des conditions un peu particulières (plutôt tard le soir, et interrompu par de nombreux câlins/biberons) et sans savoir que j'allais le publier, je vous demanderai un peu d'indulgence quant aux design et aux termes métiers un peu approximatifs (je découvrais le sujet et ce kata pour la 1ere fois). L'intérêt de montrer ce code est surtout pour illustrer les tests que j'écris, ceux que je n'écris plus, et le type de cheminement que je prends pour faire "émerger" mes softs.
 
 ## Quelques notes sur cet Outside-in frugal ;-)
 Quand je dois décrire rapidement à quelqu'un avec qui je vais pairer comment je travaille, j'ai l'habitude de dire que
@@ -30,23 +30,23 @@ Dans la forme classique, on part du centre du système (pour cela qu'on parle é
 
 ### Pour éviter le décrochage
 
-De mon point de vue, il y a un vrai risque de "décrochage" par rapport au besoin final avec l'approche classique du TDD. En effet, si on a mal jugé la situation (en imaginant une trajectoire vers le resultat final dans notre tête, qui n'est pas la bonne finalement) ou si on se laisse distraire voire perdre en route (et qui ne s'est pas laissé grisé par l'effet cathédrale/usine à gaz quand il était plus jeune...), on peut galérer et tatonner un peu plus que nécessaire avec cette approche.
+De mon point de vue, il y a un vrai risque de "décrochage" par rapport au besoin final avec l'approche classique du TDD. En effet, si on a mal jugé la situation (en imaginant une trajectoire vers le résultat final dans notre tête, qui n'est pas la bonne finalement) ou si on se laisse distraire voire perdre en route (et qui ne s'est pas laissé grisé par l'effet cathédrale/usine à gaz quand il était plus jeune...), on peut galérer et tâtonner un peu plus que nécessaire avec cette approche.
 
 C'est pour cette raison donc, que j'ai arrêté de faire du "classique" sur mes projets depuis quelques années, car j'y ai trouvé le risque de faire des trucs qui ne soient pas exactement alignés avec le besoin réel (voire de tomber dans le piège du "modélisme" quand on reste trop longtemps *au centre* de notre système). Un vrai risque *d'effet tunnel* par rapport à l'objectif final dans tous les cas.
 
 ### De l'extérieur, vers l'intérieur (tiens donc, c'est comme avec l'archi hexagonale ;-)
 Contrairement à l'*approche classique*, la pratique de __l'*Outside-in TDD*__ me force elle à __considérer mon système__ (ex: une WEB API, un service, etc.) __depuis l'extérieur, comme une grosse boite noire__. Celle-ci est vide pour commencer, et __on va faire emerger à la fois ses contours (APIs) et son comportement en y écrivant petit à petit des tests d'acceptance__. 
 
-On parle de double-boucle ici car le workflow sera le suivant: 
+On parle de double-boucle ici car le workflow sera le suivant : 
 
 ![outsideInDiagram](outside-in.png)
 
 __RED (acceptance test) - puis pleins de { RED - GREEN - REFACTOR au niveau (unit tests) } - GREEN (acceptance test) - REFACTOR (acceptance test)__ et on recommence ensuite avec le prochain test d'acceptance sur la boite noire.
 
-L'intérêt principal de cette technique est d'éviter de se perdre en route dans notre implémentation. Cela est rendu possible par __nos tests d'acceptance__ qui __vont cadrer et crystalliser dès le départ les contours et les conditions du succès de notre système__. En ce qui me concèrne, ça me pousse à rester concentré sur l'objectif final en m'évitant de dévier ou de m'éparpiller en route face à ce juge de paix minimaliste (le __[YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it)__ d'XP).
+L'intérêt principal de cette technique est d'éviter de se perdre en route dans notre implémentation. Cela est rendu possible par __nos tests d'acceptance__ qui __vont cadrer et cristalliser dès le départ les contours et les conditions du succès de notre système__. En ce qui me concerne, ça me pousse à rester concentré sur l'objectif final en m'évitant de dévier ou de m'éparpiller en route face à ce juge de paix minimaliste (le __[YAGNI](https://en.wikipedia.org/wiki/You_aren%27t_gonna_need_it)__ d'XP).
 
 ### Acceptance ? Cornichon toi même !
-Par test d'acceptance j'entends un __test gros-grain, qui va porter sur l'ensemble de mon système à l'exception des technnologies pour communiquer avec l'extérieur__ (j'exclue donc la persistance, les middlewares et autres stacks HTTP). __Ce n'est donc pas un test d'intégration__. Attention également, en lisant "*Acceptance*", certains d'entre-vous penseront tout de suite à du Gerkhin (le formalisme *Given-When-Then...*). Ce n'est pas mon cas, car je ne paie en général le prix de la surchouche correspondante (specflow /  Cucumber) que si et seulement si le métier est à portée de main et qu'il est à l'aise avec ce format (ce qui est assez rare en définitive). Comme vous le verrez dans les exemples ci-dessous, mes test d'acceptance sont donc __écrits comme des tests *unitaires* mais ils portent sur le système dans son ensemble au lieu de porter sur des toutes petites parties de celui-ci__.
+Par test d'acceptance j'entends un __test gros-grain, qui va porter sur l'ensemble de mon système à l'exception des technologies pour communiquer avec l'extérieur__ (j'exclue donc la persistance, les middlewares et autres stacks HTTP). __Ce n'est donc pas un test d'intégration__. Attention également, en lisant "*Acceptance*", certains d'entre vous penseront tout de suite à du Gerkhin (le formalisme *Given-When-Then...*). Ce n'est pas mon cas, car je ne paie en général le prix de la surcouche correspondante (specflow /  Cucumber) que si et seulement si le métier est à portée de main et qu'il est à l'aise avec ce format (ce qui est assez rare en définitive). Comme vous le verrez dans les exemples ci-dessous, mes test d'acceptance sont donc __écrits comme des tests *unitaires* mais ils portent sur le système dans son ensemble au lieu de porter sur des toutes petites parties de celui-ci__.
 
 ### Le bon comportement
 __Dans tous les cas, mes tests ne sont que des tests de comportements !__ et ne sont pas liés à des détails d'implémentations (une des nombreuses erreurs que j'ai pu faire au début de mon expérience du TDD, rendant mes tests pénibles car très fragiles à chaque fois que je voulais changer quelque chose dans mon implémentation ;-( 
@@ -60,7 +60,7 @@ Bon. Le mieux pour clarifier tout ça, serait de commencer à regarder un peu de
 ## Le kata utilisé
 Le kata mentionné plus haut est le __[Train Reservation d'Emily BACHE](https://github.com/emilybache/KataTrainReservation/blob/master/README.md)__. 
 
-L'objectif ? coder une application qui va permettre à des voyageurs de réserver des places dans un train dont ils connaissent déjà l'identifiant. Etant donné un train et sa topologie (récupérée auprès d'une Web API externe), le système à construire a pour but d'identifier les places les plus adaptées à la demande de reservation du voyageur en respectant quelques règles métiers du genre :
+L'objectif ? coder une application qui va permettre à des voyageurs de réserver des places dans un train dont ils connaissent déjà l'identifiant. Etant donné un train et sa topologie (récupérée auprès d'une Web API externe), le système à construire a pour but d'identifier les places les plus adaptées à la demande de réservation du voyageur en respectant quelques règles métiers du genre :
  - Remplir les trains jusqu'à 70% maximum de leur capacité
  - Attribuer toutes les places demandées pour une réservation dans la même voiture
 
@@ -76,13 +76,13 @@ Prêts ? Je vous propose qu'on commence par un premier test d'acceptance. Ah si 
 
 ## 1er test d'acceptance
 
-Pour mes premiers pas, je m'attaque en général au cas qui me parait le plus simple. En l'occurence ici, le cas où on veut réserver des sièges dans un train vide (avec toutes les places de disponibles donc). Je réfléchi donc 30 secondes, et pars sur un nom de test qui va m'aider à clarifier mon intention pour celui-ci : 
+Pour mes premiers pas, je m'attaque en général au cas qui me parait le plus simple. En l'occurrence ici, le cas où on veut réserver des sièges dans un train vide (avec toutes les places de disponibles donc). Je réfléchi donc 30 secondes, et pars sur un nom de test qui va m'aider à clarifier mon intention pour celui-ci : 
 
 ```c#
     Should_reserve_seats_when_unreserved_seats_are_available()
 ```
 
-Ensuite, j'ai fait comme à mon habitude une forme un peu particulière de __[TDD as if you meant it](https://gojko.net/2009/02/27/thought-provoking-tdd-exercise-at-the-software-craftsmanship-conference/)__. Celà signifie que je laisse l'implémentation émergente dans le même fichier que celui du test le temps d'y voir un plus clair, et de le déplacer ensuite dans un second temps ce code d'implémentation dans les bons projets/répertoires. C'est pour cette raison que mon 1er fichier de tests ci-dessous contient l'intégralité du test + implémentations nécessaires dans ces premières minutes.
+Ensuite, j'ai fait comme à mon habitude une forme un peu particulière de __[TDD as if you meant it](https://gojko.net/2009/02/27/thought-provoking-tdd-exercise-at-the-software-craftsmanship-conference/)__. Cela signifie que je laisse l'implémentation émergente dans le même fichier que celui du test le temps d'y voir un plus clair, et de le déplacer ensuite dans un second temps ce code d'implémentation dans les bons projets/répertoires. C'est pour cette raison que mon 1er fichier de tests ci-dessous contient l'intégralité du test + implémentations nécessaires dans ces premières minutes.
 
 Bien entendu, c'est un test qui échoue que j'ai commencé à écrire (__RED__-GREEN-REFACTOR). __Ecrire des tests qui échouent avant de commencer l'implémentation est un conseil qui reste valable quelque soit votre niveau de pratique du TDD.__
 
@@ -279,10 +279,10 @@ de la méthode __*TicketOffice.MakeReservation(...)*__ (qui ne s'appelle plus "*
     }
 
 ```
-Ici, l'écriture du code de cette méthode m'a paru suffisamment simple et rapide (10 minutes environs) pour que je ne ressente pas le besoin de faire une petite boucle avec un ou plusieurs tests unitaires intermédiaires.
+Ici, l'écriture du code de cette méthode m'a paru suffisamment simple et rapide (10 minutes environ) pour que je ne ressente pas le besoin de faire une petite boucle avec un ou plusieurs tests unitaires intermédiaires.
 
 #### Il y a quelques années...
-Il y a quelques années, j'aurai surement rajouté sur ma route un  test unitaire ou deux portant sur le comportement du type __*Seat*__ par exemple (notamment pour vérifier qu'il est bien comparable par "valeurs"). 
+Il y a quelques années, j'aurai surement rajouté sur ma route un test unitaire ou deux portant sur le comportement du type __*Seat*__ par exemple (notamment pour vérifier qu'il est bien comparable par "valeurs"). 
 
 #### Maintenant...
 Désormais, parce que j'ai déjà un test d'acceptance qui couvre mon action ET QUE le code ne me pose pas de problème (de design ni d'implémentation), j'ai plutôt tendance à avancer rapidement et à ne faire UNIQUEMENT des boucles intermédiaires de READ-GREEN-REFACTOR au niveau "unitaire" si je ressens la moindre difficulté sur ma route (ce qui n'a pas été le cas ici). 
@@ -290,7 +290,7 @@ Désormais, parce que j'ai déjà un test d'acceptance qui couvre mon action ET 
 #### Un test incomplet...
 Dès mes premiers pas sur l'implémentation de la méthode *MakeReservation()*, je me suis rendu compte que mon test d'acceptance était incomplet et que j'avais oublié d'y définir une topologie pour le train. J'ai donc du modifié celui-ci en cours de route pour mieux instruire mon stub de IProvideTrainData (l'interface qui abstrait les appels au service web TrainDataService de l'opérateur historique). 
 
-C'est ça pour moi le __*Design émergeant*__ : une amélioration constante obtenue à l'aide de tatonnements et d'améliorations progressives au fur et à mesure que l'on rentre dans le métier/fonctionnel.
+C'est ça pour moi le __*Design émergeant*__ : une amélioration constante obtenue à l'aide de tâtonnements et d'améliorations progressives au fur et à mesure que l'on rentre dans le métier/fonctionnel.
 
 Voici donc à quoi ressemble ma nouvelle version de la construction du Stub dans mon 1er test d'acceptance :
 
@@ -353,14 +353,14 @@ __Utiliser cette pico-librairie me permet alors de ne pas avoir à coder une imp
 ```
 
 #### L'avez-vous remarqué ?
-Quand on y regarde de plus près, cette première implémentation de la méthode *MakeReservation()* du type *TicketOffice* est vraiment naïve. En effet, elle agit presque comme un aspirateur à __Seats__ ;-) qui va réserver tous les sièges de libre même si on n'en veut que 2. Je ne l'ai pas vu de suite -surement à cause de mon état de fatigue de l'époque- mais surtout parce que mon 1er test d'acceptance était mal écrit et propice à ce type de bétise. En effet, celui-ci proposait déjà un train avec 3 places de libres alors même que je demandais à reserver 3 places... 
+Quand on y regarde de plus près, cette première implémentation de la méthode *MakeReservation()* du type *TicketOffice* est vraiment naïve. En effet, elle agit presque comme un aspirateur à __Seats__ ;-) qui va réserver tous les sièges de libre même si on n'en veut que 2. Je ne l'ai pas vu de suite -surement à cause de mon état de fatigue de l'époque- mais surtout parce que mon 1er test d'acceptance était mal écrit et propice à ce type de bêtise. En effet, celui-ci proposait déjà un train avec 3 places de libres alors même que je demandais à réserver 3 places... 
 
 #### Rome ne s'est pas fait en 1 jour
 On le verra, c'est en rajoutant de nouveaux cas de tests que je m'apercevrai plus tard de cette erreur d'implémentation et la rectifierai. Bon, on n'en est pas encore là. On passe au second test d'acceptance ?
 
 ## Au suivant ! (2nd test d'acceptance)
 
-Pour ce second test d'acceptance, j'ai choisi de continuer à explorer le "*Happy Path*" en écrivant un test qui vérifie - une fois qu'on a trouvé des places de libre- qu'on appelle bien l'API de l'opérateur historique pour leur demander de les reserver. Je réfléchis donc encore 30 secondes, et clarifie mes intentions en écrivant comme nom pour ce test :
+Pour ce second test d'acceptance, j'ai choisi de continuer à explorer le "*Happy Path*" en écrivant un test qui vérifie - une fois qu'on a trouvé des places de libre- qu'on appelle bien l'API de l'opérateur historique pour leur demander de les réserver. Je réfléchis donc encore 30 secondes, et clarifie mes intentions en écrivant comme nom pour ce test :
 
 > Should_mark_seats_as_reserved_once_reserved()
 
@@ -406,9 +406,9 @@ public interface IProvideTrainData
 
 Le test est bien RED, il est donc temps de le *mettre au vert*. Mais ça, on le verra dans le 2eme épisode de cette série.
 
+---
 
-
-*PS : Je tatonne un peu avec le format et le fond de cet article (est-ce utile ? lisible ?). N'hésitez pas à me laisser vos commentaires ou remarques sous forme d'issues sur ce projet github*
+*PS : Je tâtonne  un peu avec le format et le fond de cet article (est-ce utile ? lisible ?). N'hésitez pas à me laisser vos commentaires ou remarques sous forme d'issues sur ce projet github*
 
 
 Thomas PIERRAIN
