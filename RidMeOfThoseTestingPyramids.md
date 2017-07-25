@@ -39,7 +39,7 @@ Contrairement à l'*approche classique*, la pratique de __l'*Outside-in TDD*__ m
 
 On parle de double-boucle ici car le workflow sera le suivant : 
 
-![outsideInDiagram](outside-in.png)
+![outsideInDiagram](./images/outside-in.png)
 
 __RED (acceptance test) - puis pleins de { RED - GREEN - REFACTOR au niveau (unit tests) } - GREEN (acceptance test) - REFACTOR (acceptance test)__ et on recommence ensuite avec le prochain test d'acceptation sur la boite noire.
 
@@ -327,7 +327,7 @@ public class SeatWithBookingReference
 #### Value Type
 Dernier détail au sujet de cette première implémentation : vu que la seconde assertion de mon test d'acceptation en avait besoin, j'ai également rajouté les 4-5 classes de ma __[librairie *Value*](https://github.com/tpierrain/Value/blob/master/Readme.md)__ dans mon projet __pour__ m'aider à faire en sorte __que le type BookingReference devienne un *ValueType*__ (__[pour comprendre ce qu'est un Value Object -ou Value Type- voir les explications sur le readme de Value](https://github.com/tpierrain/Value/blob/master/Readme.md)__).
 
-![](Value-tiny.jpg)
+![](./images/Value-tiny.jpg)
 
 __Utiliser cette pico-librairie me permet alors de ne pas avoir à coder une implémentation correcte de la comparaison par valeur pour chaque Type Valeur de mon domaine__ (c'est elle qui va s'en charger et de manière fiable). Pour en bénéficier, j'ai juste à faire dériver mon objet du Domaine (ici BookingReference) de la classe concrète *ValueType*, ce qui me force ensuite à implémenter la méthode abstraite *GetAllAttributesToBeUsedForEquality()* dont se servira la libraire pour comparer deux instances du même type. Voici ce que cela donne : 
 
