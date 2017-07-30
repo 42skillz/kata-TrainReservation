@@ -32,7 +32,9 @@ Trop facile ! Je n'avais cette fois qu'à rajouter une seule ligne en plein mili
 et ce, uniquement dans le cas où on a effectivement trouvé le bon nombre de place dans le train par contre. Allez, Grand Prince je vous remet ici toute la méthode concernée :
 
 ```C#
-public class TicketOffice
+namespace TrainReservation.Domain
+{
+    public class TicketOffice
     {
         // Constructors, fields & Co ...
 
@@ -62,6 +64,7 @@ public class TicketOffice
             return new Reservation(request.TrainId, string.Empty, reservedSeats);
         }
     }
+}
 ```
 
 ### Et la double-boucle bordel ?!?
@@ -168,11 +171,11 @@ public void Should_not_reserve_more_than_70_percent_of_seats_for_overall_train()
 Au passage, j'en profite pour redéfinir le ToString() de la classe *Seat*, pour que mes assertions soient plus lisibles en cas d'erreur. Un truc simple du genre:
 
 ```C#
-    // Seat class ...
-    public override string ToString()
-    {
-        return $"{this.Coach}{this.SeatNumber}";
-    }
+// Seat class ...
+public override string ToString()
+{
+    return $"{this.Coach}{this.SeatNumber}";
+}
 ```
 
 Bon. A ce moment du récit, quelque chose devrait vous gêner  normalement. 
@@ -209,7 +212,7 @@ Quand on manipule un *Agrégat* on ne doit parler qu'à son objet racine (*Aggre
 
 Ici l'*AggregateRoot* *Train* va être en charge de faire respecter l'invariant métier : "*On ne doit pas réserver plus de 70% de la capacité totale d'un train*". Pour ce faire, il va agréger et manipuler en interne plusieurs instances de *Seat* qui ne seront elles pas accessibles directement par mon programme pour éviter qu'un autre bout de code ne vienne lui faire un enfant dans le dos et violer gaiement tous les invariants métiers qu'il s'escrime à garantir. Pour être plus concret, imaginez ici un autre bout de code qui irait en louzedé directement changer la Booking reference ou le IsAvailable d'un des sièges de l'Aggrégat *Train*, et violer ainsi la règle des 70%. Sad Panda. C'est pour éviter ça que l'objet racine de l'agrégat encapsule comme il se doit le reste de l'agrégat.
 
-### "Expliciter les implicites"
+### *Expliciter les implicites*
 L'autre concept de *ReservationOption* que j'ai rajouté à ce stade permet d'expliciter maintenant clairement que ce que mon système cherche avant tout à identifier au sein des *Trains*, c'est une "*possibilité de réservation*", une "*réservation en devenir*". En effet, tant que celle-ci n'a pas été confirmée auprès du back-end extérieur *TrainDataService* de *Hassen Cehef*, ce n'est qu'une hypothèse faite par mon système. "*Expliciter les implicites*" est un des mantras du DDD pour éviter les incompréhensions, les erreurs mais surtout pour coller au plus près au besoin du métier pour lequel on travaille (être pertinent en définitive).
 
 Pour reprendre le cas de la *ReservationOption*, celle-ci va remplacer nos instances de *List<Seat>* dans la classe principale *TicketOffice*. Son introduction va également nous permettre de remplacer le :
@@ -280,14 +283,14 @@ ReservationOption option = train.Reserve(request.SeatCount);
 Une fois cette méthode *Reserve* crée, je peux très facilement l'implémenter en copiant-collant la portion de code legacy ci-dessous qui je vous le rappelle est toujours l'implémentation officielle (enfin celle qui retourne le résultat final pour l'instant) :
 
 ```C#
-    var seats = trainDataProvider.GetSeats(request.TrainId);
-    foreach (var seatWithBookingReference in seats)
+var seats = trainDataProvider.GetSeats(request.TrainId);
+foreach (var seatWithBookingReference in seats)
+{
+    if (seatWithBookingReference.IsAvailable())
     {
-        if (seatWithBookingReference.IsAvailable())
-        {
-            reservedSeats.Add(seatWithBookingReference.Seat);
-        }
+        reservedSeats.Add(seatWithBookingReference.Seat);
     }
+}
 ```
 
 La seule chose à adapter pour finaliser l'implémentation de la méthode *Train.Reserve(..)* sera de ne pas retourner une liste de sièges, mais bel et bien une instance d'un nouveau type *ReservationOption* que je vais façonner dans les secondes qui suivent (toujours en utilisant activement le raccourci *Alt-Enter* pour y créer constructeurs, champs privés et Propriétés).
@@ -372,36 +375,43 @@ Ceux d'entre-vous qui sont les plus observateurs auront peut-être noté l'intro
 Voici donc pour le nouveau code qui pousse tout seul à côté de l'implémentation officielle. Maintenant si on regarde à quoi ressemble ma méthode *MakeReservation* du *TicketOffice* à ce moment-là de l'action, on a ça :
 
 ```C#
-    public Reservation MakeReservation(ReservationRequest request)
+namespace TrainReservation.Domain
+{
+    public class TicketOffice
     {
-        // New implementation that I'm currently making grow
-        var train = trainDataProvider.GetTrain(request.TrainId);
-        var option = train.Reserve(request.SeatCount);
-
-        // ----------------------------------------------------------
-        // The former implementation (still in charge here)
-        var reservedSeats = new List<Seat>();
-
-        var seats = trainDataProvider.GetSeats(request.TrainId);
-        foreach (var seatWithBookingReference in seats)
+        // ....
+        public Reservation MakeReservation(ReservationRequest request)
         {
-            if (seatWithBookingReference.IsAvailable())
+            // New implementation that I'm currently making grow
+            var train = trainDataProvider.GetTrain(request.TrainId);
+            var option = train.Reserve(request.SeatCount);
+
+            // ----------------------------------------------------------
+            // The former implementation (still in charge here)
+            var reservedSeats = new List<Seat>();
+
+            var seats = trainDataProvider.GetSeats(request.TrainId);
+            foreach (var seatWithBookingReference in seats)
             {
-                reservedSeats.Add(seatWithBookingReference.Seat);
+                if (seatWithBookingReference.IsAvailable())
+                {
+                    reservedSeats.Add(seatWithBookingReference.Seat);
+                }
             }
+
+            if (reservedSeats.Count > 0)
+            {
+                var bookingReference = bookingReferenceProvider.GetBookingReference();
+
+                trainDataProvider.MarkSeatsAsReserved(request.TrainId, bookingReference, reservedSeats);
+
+                return new Reservation(request.TrainId, bookingReference, reservedSeats);
+            }
+
+            return new Reservation(request.TrainId, string.Empty, reservedSeats);
         }
-
-        if (reservedSeats.Count > 0)
-        {
-            var bookingReference = bookingReferenceProvider.GetBookingReference();
-
-            trainDataProvider.MarkSeatsAsReserved(request.TrainId, bookingReference, reservedSeats);
-
-            return new Reservation(request.TrainId, bookingReference, reservedSeats);
-        }
-
-        return new Reservation(request.TrainId, string.Empty, reservedSeats);
     }
+}
 
 ```
 
@@ -421,28 +431,35 @@ Oui, après une dizaine de minutes à coder ces 2 nouveaux concepts à côté du
 Voici donc en cet instant à quoi ressemble la méthode *MakeReservation* de la classe *TicketOffice* :
 
 ```C#
-    public Reservation MakeReservation(ReservationRequest request)
+namespace TrainReservation.Domain
+{
+    public class TicketOffice
     {
-        var train = trainDataProvider.GetTrain(request.TrainId);
-        var option = train.Reserve(request.SeatCount);
 
-        if (option.IsFullfiled)
+        public Reservation MakeReservation(ReservationRequest request)
         {
-            var bookingReference = bookingReferenceProvider.GetBookingReference();
+            var train = trainDataProvider.GetTrain(request.TrainId);
+            var option = train.Reserve(request.SeatCount);
 
-            trainDataProvider.MarkSeatsAsReserved(request.TrainId, bookingReference, option.ReservedSeats);
-            return new Reservation(request.TrainId, bookingReference, option.ReservedSeats);
-        }
-        else
-        {
-            return new Reservation(request.TrainId);
+            if (option.IsFullfiled)
+            {
+                var bookingReference = bookingReferenceProvider.GetBookingReference();
+
+                trainDataProvider.MarkSeatsAsReserved(request.TrainId, bookingReference, option.ReservedSeats);
+                return new Reservation(request.TrainId, bookingReference, option.ReservedSeats);
+            }
+            else
+            {
+                return new Reservation(request.TrainId);
+            }
         }
     }
+}
 ```
 
 Plus clair, non ? Il va sans dire que si mon 3eme test d'acceptation est toujours rouge (je n'ai pas encore attaqué l'implémentation de la règle des 70%), les 2 premiers sont toujours verts.
 
-### "Mais c'est qu'il va même nous faire péter le RED-GREEN-REFACTOR maintenant ?!?"
+### "C'est le RED-GREEN-REFACTOR qu'il ne respecte plus maintenant ?!?"
 Vous l'aurez remarqué, j'ai introduit ici une étape intermédiaire avant de fixer mon test d'acceptance. J'ai fait ce que mon ami __[Philippe BOURGAU](https://twitter.com/pbourgau)__ explique très bien dans son récent post __[Don't Stick to TDD's Red-Green-Refactor Loop to the Letter](http://philippe.bourgau.net/dont-stick-to-tdds-red-green-refactor-loop-to-the-letter/
 )__ : un RED-REFACTOR-RED-GREEN ;-)
 
@@ -461,7 +478,7 @@ La question que j'aurai envie de vous objecter est : pensez-vous qu'il est néce
 
 Attention, je ne suis pas en train de dire que je ne vais pas en écrire, je suis juste en train de dire que ce n'était pas le bon moment pour moi : __je n'étais pas prêt à payer le prix d'une telle duplication alors même que mes idées sur le design du système n'étaient pas encore très matures ni arrêtées__. Je préférais pour l'heure concentrer mes efforts sur le comportement et les contours du système dans son ensemble, beaucoup plus rentable de mon point de vue.
 
-### Bon, on se l'implémente cette règle des 70% ?!?
+### Bon, on se l'implémente cette règle des 70% ?
 Oui, maintenant que le concept de *Train* (agrégat) existe et a remplacé le vieux code qui ne parlais que de *List<Seat>*, on va pouvoir enfin le faire implémenter la règle qui veut qu'on ne doit pas remplir un train à plus de 70% de sa capacité. Cool ! Sauf que...
 
 #### Er... I've made a huge mistake
