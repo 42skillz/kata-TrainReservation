@@ -1,7 +1,7 @@
 # Virez-moi cette pyramide de tests !
 __Thomas PIERRAIN__ (__[use case driven](https://twitter.com/tpierrain)__ on twitter)
 
-> __TL;DR:__ après plus de 12 ans de pratique du TDD, j'ai fini pas adopter presque exclusivement une forme d'*Outside-in* "économe" qui me fait écrire plus de tests d'acceptation que de tests unitaires. Je ne suis donc pas du tout à l'aise avec la pyramide de tests classique que nombreuses personnes revendiquent encore aujourd'hui et qui préconise d'avoir plus de tests unitaires que de tests d'acceptation. Cette série d'articles est une petite visite guidée dans ma tête -et avec du code en soutient - pour vous montrer comment je pratique cette forme d'Outside-In TDD au quotidien.
+> __TL;DR:__ après plus de 12 ans de pratique du TDD, j'ai fini pas adopter presque exclusivement une forme d'*Outside-in* "économe" qui me fait écrire plus de tests d'acceptation que de tests unitaires. Je ne suis donc pas du tout à l'aise avec la pyramide de tests classique que nombreuses personnes revendiquent encore aujourd'hui et qui préconise d'avoir plus de tests unitaires que de tests d'acceptation. Cette série d'articles est une petite visite guidée dans ma tête -et avec du code en soutient - pour vous montrer comment je pratique cette forme d'Outside-In TDD au quotidien. Au détours de l'implémentation de ce kata, cette série sera également l'occasion d'aborder quelques autres sujets autours de ma pratique plus large du développement (certains concepts du DDD notamment).
 
 # Episode 2: on continue de faire grandir le système
 
@@ -130,7 +130,7 @@ Jusqu'à maintenant, j'ai surtout utilisé mes tests d'acceptation pour dessiner
 ### Le moment "*vieux con*"
 *Quand j'étais plus jeune...* il m'arrivait de partir bille en tête dans l'écriture d'un test malgré le fait que son nom (et donc son comportement) ne soit pas clair. Dans ces moments là je tatonnais plus ou moins longtemps, jusqu'à ce que j'identifie clairement son objectif (par contre dites pas à ma mère que je faisais comme ça svp). Avec les années j'ai compris que ce n'étais pas optimal, et ai décidé de me munir plus souvent d'un petit bout de papier et d'un crayon à côté de moi quand je code, pour pouvoir clarifier certains points et trouver des exemples concrets (j'ai très souvent besoin de dessiner quelque chose pour pouvoir l'assimiler, le digérer). Ici, cela m'a servi à trouver l'exemple le plus simple possible pour vérifier cet invariant métier : un train avec une seule voiture de 10 places, dans lequel je ne peux réserver que 7 places. 
 
-> &gt; &gt; DESSIN ICI &lt;&lt;
+![7 places pour la 12](./images/train7places.jpg)
 
 ### Eviter l'effet *magic number*
 Autre point important ici : quand on fait du TDD, il est primordial de choisir les cas d'exemples les plus simples possibles pour qu'un nouvel arrivant sur le projet ne s'imagine pas des trucs en lisant nos tests. De s'imaginer par exemple qu'il y a un cas particulier implicite au delà de ce qu'on teste. En d'autres termes, on veut éviter des situations où le lecteur se dit: "*pourquoi ils ont utilisé le chiffre 3492 ici, est-ce que ce dernier correspond à un cas important pour le métier ?!?*" (alors que en fait non, c'était juste pour déconner ! ;-)
@@ -155,7 +155,7 @@ public void Should_not_reserve_more_than_70_percent_of_seats_for_overall_train()
 
     // act
     var ticketOffice = new TicketOffice(bookingReferenceProvider, trainDataProvider);
-    var reservation = ticketOffice.MakeReservation(new ReservationRequest(trainId, 10));
+    var reservation = ticketOffice.MakeReservation(new ReservationRequest(trainId, seatCount: 10));
 
     Check.That(reservation.TrainId).IsEqualTo(trainId);
     Check.That(reservation.BookingReference.Value).IsEqualTo(expectedBookingId);
@@ -184,7 +184,7 @@ En effet, si on y regarde à 2 fois, le précédent test est un peu stupide. Pou
 Vous voyez le problème maintenant ? C'est en effet le contrat de mon API qui est pourri. Ici, le père de famille nombreuse que je suis demande à reserver 10 places et se voit répondre par le système de réservation: "*on t'en a trouvé et réservé 7*"... Génial, et je fais quoi alors de mes autres enfants maintenant... En terme d'expérience utilisateur, je crois qu'il n'y a guère que le service de la Poste de mon quartier qui fait mieux (avec leurs avis de passages systématiquement mis dans notre boite à lettre alors qu'on a pris la journée pour les attendre à la maison ;(
 
 ### Pair programming
-Avec le recul, je suis persuadé que je n'aurai pas pris ce premier exemple un peu couillon si j'avais travaillé *en binôme* avec quelqu'un.
+Avec le recul, je suis persuadé que je n'aurai pas pris ce premier exemple un peu couillon si j'avais travaillé *en binôme* avec quelqu'un. Mais bon là, il était tard le soir, pas trop le choix.
 
 ### Le TDD est ton ami
 Mais ce n'est pas grave, car la force du TDD est de nous permettre d'avancer sereinement et d'améliorer notre système pas à pas, même en cas de moments d'absence comme ici. Avec le TDD, tous nos pas sont également tracés. On peut donc se libérer très facilement d'une grosse partie de la charge cognitive qu'on a parfois quand on travaille trop longtemps sur un truc qui tient uniquement dans notre tête (*REPL* si tu m'entends...), histoire de dédié sa propre CPU sur un problème local restreint, et donc gérable (le fameux "*diviser pour mieux régner*").
@@ -229,7 +229,7 @@ Je crois que j'ai été traumatisé dans mes experiences passées par des codeba
 
  De mon point de vue, celles-ci rendent plus compliquée la lecture et l'appréciation de la taille d'une codebase sans outil. En effet dans ce cas là, la hauteur d'un écran peut soit recouvrer pleins d'intentions/d'étapes, soit juste 2 ou 3 (quand on utilise intensivement ces line-wraps). Pour mon cerveau qui fait en permanence du pattern matching visuel, cette asymétrie est pénible. C'est donc pour celà que j'aime bien avoir 1 ligne de code = 1 intention. 
 
-Mais je m'égare un peu ici; nous parlions du fait de rendre notre code du domaine lisible par des non développeurs. Le :
+Mais je m'égare un peu; ici nous parlions du fait de rendre notre code du domaine lisible par des non développeurs. Le :
 ```C#
 if (reservationOption.IsFullfiled)
 ``` 
@@ -358,7 +358,7 @@ namespace TrainReservation.Domain
 }
 ```
 
-Ceux d'entre-vous qui sont les plus observateurs auront peut-être noté l'introduction d'un nouveau type au passage : *Seats* (et non pas le *Seat* existant). Ceci était juste un moyen pour moi d'exposer le resultat d'une Option de réservation en mode lecture seule (sans exposer la liste).
+Ceux d'entre-vous qui sont les plus observateurs auront peut-être noté l'introduction d'un nouveau type au passage : *Seats* (et non pas le *Seat* existant). Ceci était juste un moyen pour moi d'exposer __explicitement__ le resultat d'une Option de réservation en mode lecture seule (sans exposer de *List<Seat>*).
 
 Voici donc pour le nouveau code qui pousse tout seul à côté de l'implémentation officielle. Maintenant si on regarde à quoi ressemble ma méthode *MakeReservation* du *TicketOffice* à ce moment là de l'action, on a ça :
 
@@ -431,43 +431,223 @@ Voici donc à ce moment là à quoi ressemble la méthode *MakeReservation* de l
     }
 ```
 
-Mieux, non ? Il va s'en dire que si mon 3eme test d'acceptation est toujours rouge (je n'ai pas encore attaqué l'implémentation de la règle des 70%), les 2 premiers sont toujours verts.
+Plus clair, non ? Il va s'en dire que si mon 3eme test d'acceptation est toujours rouge (je n'ai pas encore attaqué l'implémentation de la règle des 70%), les 2 premiers sont toujours verts.
 
-Là, certains d'entre-vous se diront sans doute : va-t-il continuer à ne pas faire de test unitaire et à se reposer uniquement sur ses tests d'acceptation comme depuis le début ? 
+### Mais c'est qu'il va même nous péter le RED-GREEN-REFACTOR maintenant ?!?
+Vous l'aurez remarqué, j'ai introduis ici une étape intermédiaire avant de fixer mon test d'acceptance. J'ai fait ce que mon ami __[Philippe BOURGAU](https://twitter.com/pbourgau)__ explique très bien dans son récent post __[Don't Stick to TDD's Red-Green-Refactor Loop to the Letter](http://philippe.bourgau.net/dont-stick-to-tdds-red-green-refactor-loop-to-the-letter/
+)__ : un RED-REFACTOR-RED-GREEN ;-)
 
-Et bien dans le cas présent, je dois avouer que mon 3eme test d'acceptation me permet déjà très bien d'implémenter ma règle de gestion des 70% max de remplissage d'un train. On se le remet devant les yeux :
+#### Un moment de faiblesse (mais tout de même sous contrôle)
+D'habitude quand je fais ça, je commente le nouveau test (celui qui est rouge) pour pouvoir m'assurer que je ne pète pas les anciens pendant ma phase de refactoring (que je reste GREEN donc). Ici, j'ai fais une chose équivalente en monitorant visuellement l'outil qui m'execute en permanence mes tests tout au long de mes modifications du code: le très adictif __[NCrunch](http://www.ncrunch.net/)__ . J'étais bien ROUGE d'après lui, mais  celui-ci m'indiquait dans la marge de mon IDE que je n'avais toujours qu'un seul test qui échouait lors de mon introduction de ces nouveaux concepts à la marge (*Train* et *ReservationOptions*). Pas très orthodoxe je vous l'accorde, et à mon avis lié à l'heure tardive de mon intervention. Si c'était à refaire, je ferai plutôt comme d'habitude en ignorant le 3eme test d'acceptance pour rester GREEN tout au long de mon REFACTORING intermédiaire, avant de le réactiver -et donc de redevenir RED- au moment d'introduire véritablement la règle de gestion des 70%.
+
+Au passage, si vous n'avez pas encore découvert le blog de Philippe, je vous encourage vivement à le faire tant ce dernier regorge de nombreuses pépites dans la veine de l'ouvrage (indémodable) de référence : __[The Pragmatic Programmer](https://en.wikipedia.org/wiki/The_Pragmatic_Programmer)__.
+
+### Mais il va l'écrire son 1er test unitaire, ou bien ?!?
+C'est vrai qu'à ce stade d'avancement, certains d'entre-vous se diront sans doute : va-t-il continuer à ne pas faire de test unitaire et à se reposer uniquement sur ses tests d'acceptation comme depuis le début ? 
+
+La question que j'aurai envie de vous objecter est : pensez-vous qu'il est nécessaire à ce stade d'introduire un ou plusieurs tests unitaires sur le *Train* pour vérifier la même chose (mais au niveau plus bas, c.ad. sans l'utilisation préalable du *IProvideTrainData.GetTrain(string trainId)*) que ce qui est déjà illustré dans mon 3eme test d'acceptation ?
+
+Je ne suis pas en train de dire que je ne vais pas en écrire, je suis juste en train de dire que ce n'était pas le bon moment pour moi : __je n'étais pas prêt à payer le prix d'une telle duplication alors même que mes idées sur le design du système n'étaient pas encore très matures ni arrêtées__. Je préférais pour l'heure concentrer mes efforts sur le comportement et les contours du système dans son ensemble, beaucoup plus rentable de mon point de vue.
+
+### Bon, on se l'implémente cette règle des 70% ?!?
+Oui, maintenant que le concept de *Train* (agrégat) existe et a remplacé le vieux code qui ne parlais que de *List<Seat>*, on va pouvoir enfin le faire implémenter la règle qui veut qu'on ne doit pas remplir un train à plus de 70% de sa capacité. Cool ! Sauf que...
+
+#### Er... I've made a huge mistake
+Oui, c'est à ce moment là que je me suis rendu compte que mon 3eme test d'acceptation était vraiment stupide (vous vous rappelez, c'est celui qui préconisait qu'on devait quand même réserver 7 places alors que je lui en demandais 10 pour ma famille nombreuse).
+
+A ce moment là, j'ai donc :
+
+- Renommé et changé ce 3eme test d'acceptation pour qu'il ne soit plus stupide et qu'il vérifie juste qu'on est bien en mesure de réserver 7 places sur un train de 10 places vides.
+    - Déjà GREEN avant que je n'implémente la règle des 70%. Je l'ai laissé ici pour m'assurer que mon implémentation à venir ne cassera pas cet état de fait.
+- Rajouté un nouveau test d'acceptation plus pertinant qui illustre le fait que le système ne permette pas de réserver plus de 70% des places d'un train vide (de 10 places).
+
+Voici à quoi ressemble ce nouveau test d'acceptation :
 
 ```C#
-    [Test]
-    public void Should_be_able_to_reserve_70_percent_of_overall_train_seats_capacity()
+[Test]
+public void Should_fail_to_reserve_when_asking_more_seats_than_the_70_percent_limit()
+{
+    // setup mocks
+    var expectedBookingId = "75bcd15";
+    var bookingReferenceProvider = InstantiateBookingReferenceProviderMock(expectedBookingId);
+
+    var trainId = "express_2000";
+    var trainDataProvider = Substitute.For<IProvideTrainData>();
+    trainDataProvider.GetTrainSnapshot(trainId).Returns(TrainProviderHelper.GetTrainWith1CoachAnd10SeatsAvailable(trainId));
+
+    // act
+    var ticketOffice = new TicketOffice(bookingReferenceProvider, trainDataProvider);
+    var reservation = ticketOffice.MakeReservation(new ReservationRequest(trainId, seatCount: 8));
+
+    // note: reservation has failed here
+    Check.That(reservation.TrainId).IsEqualTo(trainId);
+    Check.That(reservation.BookingReference.Value).IsEmpty();
+    Check.That(reservation.Seats).IsEmpty();
+}
+
+```
+
+Et c'est bien le seul test qui échoue à ce moment là. Tout est donc  vraiment en place pour que j'implémente l'invariant métier des 70% dans mon aggrégat *Train*. 
+
+J'ai donc commencé cette implémentation en écrivant les 2 vérifications (__[guard clause](http://wiki.c2.com/?GuardClause)__) suivantes au début de la méthode *Train.Reserve* :
+
+```C#
+if (AvailableSeatsCount < requestedSeatCount)
+{
+    return option;
+}
+
+if (AvailableSeatsCount - requestedSeatCount > MaxReservableSeatsFollowingThePolicy)
+{
+    return option;
+}
+
+```
+
+C'est en écrivant ces 2 conditions portant sur les propriétés *AvailableSeatsCount* et *MaxReservableSeatsFollowingThePolicy*  jusqu'alors inexistantes sur le *Train* que j'ai ressenti le besoin d'écrire mon 1er test unitaire (sur l'agrégat *Train* donc).
+
+A ce moment là de l'histoire, j'ai juste fait compiler l'ensemble en utilisant R# (*Alt-Enter -> create property "AvailableSeatsCount"* et *Alt-Enter -> create property "MaxReservableSeatsFollowingThePolicy"*), et laissé à chaque fois les *NotImplementedException* par défaut.
+
+
+### Ah... enfin un test unitaire !
+
+Et oui, voici donc cette fameuse petite boucle qu'on évoque depuis le début et que j'ai attendu si longtemps à mettre en oeuvre. Ici, ce n'est pas la complexité de l'implémentation de ces propriétés du *Train* (assez triviales) qui m'ont fait écrire ce petit test unitaire, mais plutôt :
+ 
+ - __la pérénité du type *Train*:__ le fait que ce sujet à tester soit à la fois un concept du domaine et un aggregat est un gage de pérénité. Tester un agrégat est en général plus pérenne que de tester une toute petite classe dont on ne sait pas si elle va survivre ou pas à notre travail quotidien sur l'implémentation.
+ - __mon besoin de baby steps à ce moment là__ : je pense que mon état de fatigue du moment a du jouer sur ma volonté de dé-composer un peu plus mes actions en baby-steps. 
+
+Voici donc à quoi ressemblait ce 1er test unitaire : 
+
+```C#
+using NFluent;
+using NUnit.Framework;
+using TrainReservation.Tests.Helpers;
+
+namespace TrainReservation.Tests
+{
+    [TestFixture]
+    public class TrainTests
     {
-        // setup mocks
-        var expectedBookingId = "75bcd15";
-        var bookingReferenceProvider = Substitute.For<IProvideBookingReferences>();
-        bookingReferenceProvider.GetBookingReference().Returns(new BookingReference(expectedBookingId));
-
-        var trainId = "express_2000";
-        var trainDataProvider = Substitute.For<IProvideTrainData>();
-        trainDataProvider.GetTrain(trainId).Returns(TrainProviderHelper.GetTrainWith1CoachAnd10SeatsAvailable(trainId));
-
-        // act
-        var ticketOffice = new TicketOffice(bookingReferenceProvider, trainDataProvider);
-        var reservation = ticketOffice.MakeReservation(new ReservationRequest(trainId, 7));
-
-        Check.That(reservation.TrainId).IsEqualTo(trainId);
-        Check.That(reservation.BookingReference.Value).IsEqualTo(expectedBookingId);
-        Check.That(reservation.Seats).ContainsExactly(new Seat("A", 1), new Seat("A", 2), new Seat("A", 3), new Seat("A", 4), new Seat("A", 5), new Seat("A", 6), new Seat("A", 7));
+        [Test]
+        public void Should_return_70_percent_of_OverallTrainCapacity_as_MaxReservableSeatsFollowingThePolicy()
+        {
+            var train = TrainProviderHelper.GetTrainWith1CoachAnd10SeatsAvailable("trainId42");
+            Check.That(train.OverallTrainCapacity).IsEqualTo(10);
+            Check.That(train.MaxReservableSeatsFollowingThePolicy).IsEqualTo(7);
+        }
     }
+}
+```
+
+qui m'a permit d'implémenter à la fois l'*OverallTrainCapacity* d'un *Train*, mais aussi sa propriété *MaxReservableSeatsFollowingThePolicy*. Voici leur code à l'époque :
+
+```C#
+// new private fields
+private const double SeventyPercent = 0.70d;
+private readonly List<SeatWithBookingReference> seatsWithBookingReferences;
+        
+// New properties
+public int OverallTrainCapacity  => seatsWithBookingReferences.Count; 
+
+public int MaxReservableSeatsFollowingThePolicy => (int)Math.Round(OverallTrainCapacity * SeventyPercent);
+
+```
+
+Note: en C#, on peut remplacer les propriétés de type *get* par la notation *expression-bodied Property* avec un formalisme utilisant une lambda (=>). C'est très exactement ce que j'ai utilisé ici pour les 2 propriétés.
+
+Mettre au vert ce test unitaire fut un premier pas pour que mon dernier test d'acceptation passe au vert lui aussi, mais pas suffisant. Pour cela, il m'a fallu remplacer le *NotImplementedException* de la propriété *AvailableSeatsCount* par le code suivant :
+
+```C#
+
+public int AvailableSeatsCount
+{
+    get
+    {
+        var availableSeatsCount = 0;
+        foreach (var seatWithBookingReference in seatsWithBookingReferences)
+        {
+            if (seatWithBookingReference.IsAvailable)
+            {
+                availableSeatsCount++;
+            }
+        }
+
+        return availableSeatsCount;
+    }
+}
+
+```
+
+C'est suite à cet ajout que mon dernier test d'acceptation (*Should_fail_to_reserve_when_asking_more_seats_than_the_70_percent_limit()*) passa au vert.
+
+On l'a dit plus tôt, on ne badine pas avec le refactoring dans ma famille, alors ici j'ai profité que tous mes tests soient vert pour remplacer le code procédural que je venais de rajouté pour la propriété *AvailableSeatsCount* par du code plus fonctionnel à l'aide d'opérateurs LINQ (l'équivalent des streams pour ceux qui feraient du java). Voici donc la nouvelle forme de cette propriété : 
+
+```C#
+public int AvailableSeatsCount => seatsWithBookingReferences.Count(seatWithBookingReference => seatWithBookingReference.IsAvailable);
+
+``` 
+
+### Auto-critique
+Même si elle était déjà couverte au niveau global par mes tests d'acceptation, j'avoue que j'aurai pu ici tester cette propriété *AvailableSeatsCount* en mode unitaire avant d'écrire son implémentation dans la classe *Train*. Si c'était à refaire, c'est ce que je ferai.
+
+Le fait d'avoir désormais une classe de test dédiée au *Train* me permettra à l'avenir d'améliorer celui-ci en mode unitaire pour continuer à le faire grandir. Mais tout ça, je vous propose de le voir ensemble dans un prochain épisode.
+
+D'ici là, je vous livre la version complète de mon agrégat *Train* au moment où mes 4 premiers tests d'acceptation étaient GREEN :
+
+```C#
+namespace TrainReservation.Domain
+{
+    public class Train
+    {
+        private const double SeventyPercent = 0.70d;
+        private readonly List<SeatWithBookingReference> seatsWithBookingReferences;
+        public string TrainId { get; }
+
+        public Train(string trainId, List<SeatWithBookingReference> seatsWithBookingReferences)
+        {
+            this.seatsWithBookingReferences = seatsWithBookingReferences;
+            TrainId = trainId;
+        }
+
+        public ReservationOption Reserve(int requestedSeatCount)
+        {
+            var option = new ReservationOption(TrainId, requestedSeatCount);
+
+            if (AvailableSeatsCount < requestedSeatCount)
+            {
+                return option;
+            }
+
+            if (AvailableSeatsCount - requestedSeatCount > MaxReservableSeatsFollowingThePolicy)
+            {
+                return option;
+            }
+
+            foreach (var seat in seatsWithBookingReferences)
+            {
+                if (seat.IsAvailable)
+                {
+                    option.AddSeatReservation(seat.Seat);
+                    if (option.IsFullfiled)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return option;
+        }
+
+        public int OverallTrainCapacity { get { return seatsWithBookingReferences.Count; } }
+
+        public int MaxReservableSeatsFollowingThePolicy => (int)Math.Round(OverallTrainCapacity * SeventyPercent);
+
+        public int AvailableSeatsCount => seatsWithBookingReferences.Count(seatWithBookingReference => seatWithBookingReference.IsAvailable);
+    }
+}
 ```
 
 
-Jusqu'à maintenant, mon test d'acceptation :
-
-
-
----
-
-### Un enjeu d'apprentissage
 
 ---
 

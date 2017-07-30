@@ -121,7 +121,7 @@ namespace TrainReservation.Tests.Acceptance
             var ticketOffice = new TicketOffice(bookingReferenceProvider, trainDataProvider);
 
             var trainId = "express_2000";
-            var reservationRequest = new ReservationRequest(trainId, 3);
+            var reservationRequest = new ReservationRequest(trainId, seatCount: 3);
             var reservation = ticketOffice.Reserve(reservationRequest);
 
             // Assert   
@@ -384,7 +384,7 @@ public void Should_mark_seats_as_reserved_once_reserved()
 
     // act
     var ticketOffice = new TicketOffice(bookingReferenceProvider, trainDataProvider);
-    var reservation = ticketOffice.MakeReservation(new ReservationRequest(trainId, 1));
+    var reservation = ticketOffice.MakeReservation(new ReservationRequest(trainId, seatCount: 1));
 
     Check.That(reservation.TrainId).IsEqualTo(trainId);
     Check.That(reservation.BookingId).IsEqualTo(expectedBookingId);
