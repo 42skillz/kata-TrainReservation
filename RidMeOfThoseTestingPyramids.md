@@ -406,6 +406,8 @@ public interface IProvideTrainData
 
 Le test est bien RED, il est donc temps de le *mettre au vert*. Mais ça, on le verra dans le 2eme épisode de cette série.
 
+#### __[Episode 2 : on continue de faire grandir le système](./RidMeOfThoseTestingPyramids-ep2.md)__
+
 ---
 
 *PS : Je tâtonne  un peu avec le format et le fond de cet article (est-ce utile ? lisible ?). N'hésitez pas à me laisser vos commentaires ou remarques sous forme d'issues sur ce projet github*
