@@ -191,7 +191,7 @@ Vous voyez le problème maintenant ? C'est en effet le contrat de mon API qui es
 Avec le recul, je suis persuadé que je n'aurais pas pris ce premier exemple un peu couillon si j'avais travaillé *en binôme* avec quelqu'un. Mais bon là, il était tard le soir, pas trop le choix.
 
 ### Le TDD est ton ami
-Mais ce n'est pas grave, car la force du TDD est de nous permettre d'avancer sereinement et d'améliorer notre système pas à pas, même en cas de moments d'absence comme ici. Avec le TDD, tous nos pas sont également tracés. On peut donc se libérer très facilement d'une grosse partie de la charge cognitive qu'on a parfois quand on travaille trop longtemps sur un truc qui tient uniquement dans notre tête (*REPL* si tu m'entends...), histoire de dédier sa propre CPU sur un problème local restreint, et donc gérable (le fameux "*diviser pour mieux régner*").
+Mais ce n'est pas grave, car la force du TDD est de nous permettre d'avancer sereinement et d'améliorer notre système pas à pas, même en cas de moments d'absence comme ici. Avec le TDD, tous nos pas sont également tracés. On peut donc se libérer très facilement d'une grosse partie de la charge cognitive qu'on a parfois quand on travaille trop longtemps sur un truc qui tient uniquement dans notre tête (*REPL* si tu m'entends...), histoire de dédier sa propre CPU sur un problème local restreint, et donc gérable (le fameux "*diviser pour mieux régner*" si cher a Edsger Dijkstra).
 
 Bon. Ce qui est fait est fait, et comme je me sers d'une expérience passée pour rédiger cet article (__[voir les détails ici dans le 1er épisode](.RidMeOfThoseTestingPyramids.md)__), continuons d'avancer. Et puis on va pouvoir rectifier cette bêtise assez vite par la suite.
 
