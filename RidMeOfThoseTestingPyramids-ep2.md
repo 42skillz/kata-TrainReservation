@@ -9,7 +9,7 @@ Quand on s'est quitté __[la dernière fois](./RidMeOfThoseTestingPyramids.md)__
 
 > Should_mark_seats_as_reserved_once_reserved()
 
-Celui-ci avait pour but de vérifier qu'on notifiait bien l'opérateur historique des trains (genre: Hassen Cehef ;-) de notre volonté de réserver des sièges de libre que l'on avait identifié dans un de ses trains. On avait donc pour cela rajouté une nouvelle méthode à l'interface *IProvideTrainData* qui représente l'API de Hassen Cehef et que je rappelle ici :
+Celui-ci avait pour but de vérifier qu'on notifiait bien l'opérateur historique des trains (genre: Hassen Cehef ;-) de notre volonté de réserver des sièges de libre que l'on avait identifié dans un de ses trains. On avait donc pour cela rajouté une nouvelle méthode à l'interface *IProvideTrainData* qui représente l'API de Hassen Cehef (que l'on nommerait "port" en architecture hexagonale) et que je rappelle ici :
 
 ```C#
 public interface IProvideTrainData
