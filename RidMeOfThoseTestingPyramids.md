@@ -67,7 +67,7 @@ L'objectif ? coder une application qui va permettre à des voyageurs de réserve
 Pour ce faire, notre système doit composer avec quelques back-ends de l'opérateur historiques des trains (genre SNCF), à savoir : 
  - Une Web API qui fournit la topologie d'un train à partir de son identifiant (__Train Data Service__)
  - Une Web API qui ne fournit que des identifiants uniques valables de Booking Reference (contrainte réglementaire semble-t-il) (__Booking Reference Service__)
- - Une Web API qui permet de réserver officiellement les places que notre système aura identifiées dans un train donné (__Train Data Service__). Il est à noter qu'il s'agit de la même API que celle qui fournit la topologie des trains (un choix contestable de l'opérateur historique)
+ - Une Web API qui permet de réserver officiellement les places que notre système aura identifiées dans un train donné (__Train Data Service__). Il est à noter qu'il s'agit de la même API que celle qui fournit la topologie des trains (un choix contestable de l'opérateur historique, mais avec lequel on va devoir composer)
 
 
 De notre côté, __c'est le Train Reservation Service que nous devons implémenter__. 
